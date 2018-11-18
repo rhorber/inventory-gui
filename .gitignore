@@ -78,4 +78,4 @@ dist
 .serverless
 
 # IDE
-.idea
+.idea/workspace.xml
