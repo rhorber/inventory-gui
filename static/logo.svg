@@ -1,0 +1,19 @@
+<svg viewBox="0 0 832 232" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        <![CDATA[
+        line.blue {
+          stroke: #333399;
+          stroke-width: 22px;
+          stroke-linecap: round;
+          stroke-opacity: 0.88;
+        }
+        ]]>
+    </style>
+    <line x1="216" y1="16" x2="16" y2="216" class="blue" />
+    <line x1="216" y1="16" x2="316" y2="116" class="blue" />
+    <line x1="116" y1="116" x2="216" y2="216" class="blue" />
+    <line x1="116" y1="116" x2="716" y2="116" class="blue" />
+    <line x1="416" y1="16" x2="216" y2="216" class="blue" />
+    <line x1="416" y1="16" x2="616" y2="216" class="blue" />
+    <line x1="616" y1="16" x2="816" y2="216" class="blue" />
+</svg>

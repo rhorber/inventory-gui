@@ -1,5 +1,6 @@
 <template>
   <div>
+    <navigation/>
     <div class="container pt-4">
       <b-table
         :fields="tableFields"
