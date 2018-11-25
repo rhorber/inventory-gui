@@ -78,4 +78,5 @@ dist
 .serverless
 
 # IDE
+.idea/deployment.xml
 .idea/workspace.xml
