@@ -5,7 +5,7 @@
         Add Item
       </h2>
       <item-form
-        item="{name: '', stock: 0}"
+        :item="{name: '', stock: 0}"
         @formSubmitted="addItem"
       />
     </div>
@@ -22,8 +22,9 @@ export default {
   methods: {
     addItem(data){
       const item = {name: data.name, stock: data.stock};
-      console.log(item);
-      this.$router.push({path: '/'});
+      this.$axios.$post('/api/item', item)
+        .then(() => this.$router.push({path: '/'}))
+        .catch(console.error);
     }
   }
 }

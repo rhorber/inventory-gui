@@ -6,7 +6,7 @@
     >
       <b-form-input
         id="name"
-        v-model="item.name"
+        v-model="dataItem.name"
         type="text"
         required
       />
@@ -18,7 +18,7 @@
     >
       <b-form-input
         id="stock"
-        v-model="item.stock"
+        v-model="dataItem.stock"
         type="number"
         required
       />
@@ -41,7 +41,7 @@
 <script>
 export default {
   props: {
-    initialItem: {
+    item: {
       type: Object,
       default: function () {
         return {name: '', stock: 0};
@@ -50,13 +50,13 @@ export default {
   },
   data() {
     return {
-      item: this.initialItem
+      dataItem: this.item
     }
   },
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      this.$emit('formSubmitted', this.item);
+      this.$emit('formSubmitted', this.dataItem);
     }
   }
 }
