@@ -53,35 +53,42 @@
 
 <script>
 export default {
+  asyncData({app}) {
+    return app.$axios.$get('/api/inventory')
+      .then((result) => {
+        return {items: result.items}
+      });
+  },
   data() {
     return {
       tableFields: [
         {key: 'name', label: 'Name'},
         {key: 'stock', label: 'Anzahl'},
         {key: 'actions', label: 'Aktionen'},
-      ],
-      items: [
-        {id: 1, name: "Item 1", stock: 1},
-        {id: 2, name: "Item 2", stock: 42},
-        {id: 3, name: "Item 3", stock: 88},
       ]
     };
   },
   methods: {
     decreaseStock(item) {
       item.stock--;
+      this.$axios.$get('/api/item/decrement/' + item.id)
+        .then(console.log)
+        .catch(console.error);
       // TODO: Save to database/send to API.
-      console.log(item);
     },
     increaseStock(item) {
       item.stock++;
+      this.$axios.$get('/api/item/increment/' + item.id)
+        .then(console.log)
+        .catch(console.error);
       // TODO: Save to database/send to API.
-      console.log(item);
     },
     resetStock(item) {
       item.stock = 0;
+      this.$axios.$get('/api/item/resetStock/' + item.id)
+        .then(console.log)
+        .catch(console.error);
       // TODO: Save to database/send to API.
-      console.log(item);
     }
   }
 }
