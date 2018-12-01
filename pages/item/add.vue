@@ -22,7 +22,7 @@ export default {
   methods: {
     addItem(data){
       const item = {name: data.name, stock: data.stock};
-      this.$axios.$post('/api/item', item)
+      this.$axios.$post('/item', item)
         .then(() => this.$router.push({path: '/'}))
         .catch(console.error);
     }

@@ -20,8 +20,3 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
-
-## Idea
-
-The idea is to create a Nuxt.js application with a PHP backend.
-At this point the app persists the data in a file (so they are at least persisted).

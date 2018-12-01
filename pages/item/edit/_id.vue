@@ -23,7 +23,7 @@ export default {
     return /^\d+$/.test(params.id);
   },
   asyncData({app, params}) {
-    return app.$axios.$get('/api/item/' + params.id)
+    return app.$axios.$get('/item/' + params.id)
       .then((result) => {
         return {item: result}
       });
@@ -36,7 +36,7 @@ export default {
   methods: {
     saveItem(data) {
       const item = {name: data.name, stock: data.stock};
-      this.$axios.$put('/api/item/' + this.itemId, item)
+      this.$axios.$put('/item/' + this.itemId, item)
         .then(() => this.$router.push({path: '/'}))
         .catch(console.error);
     }

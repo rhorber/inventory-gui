@@ -1,4 +1,9 @@
-const pkg = require('./package')
+const pkg = require('./package');
+const isProduction = (process.env.NODE_ENV === 'production');
+
+if (isProduction === false) {
+  require('dotenv').config();
+}
 
 module.exports = {
   mode: 'spa',
@@ -51,6 +56,8 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    https: isProduction,
+    debug: !isProduction
   },
 
   /*
@@ -72,4 +79,4 @@ module.exports = {
       }
     }
   }
-}
+};
