@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     addItem(data){
-      const item = {name: data.name, stock: data.stock};
+      const item = {name: data.name, stock: data.stock, size: data.size, unit: data.unit};
       this.$axios.$post('/item', item)
         .then(() => this.$router.push({path: '/'}))
         .catch(console.error);

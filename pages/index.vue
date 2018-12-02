@@ -7,6 +7,14 @@
       hover
     >
       <template
+        slot="size"
+        slot-scope="data"
+      >
+        <span v-if="data.item.unit !== 'N/A'">
+          {{ data.item.size + '&nbsp;' + data.item.unit }}
+        </span>
+      </template>
+      <template
         slot="stock"
         slot-scope="data"
       >
@@ -63,6 +71,7 @@ export default {
     return {
       tableFields: [
         {key: 'name', label: 'Name'},
+        {key: 'size', label: 'Grösse'},
         {key: 'stock', label: 'Anzahl'},
         {key: 'actions', label: 'Aktionen'},
       ]
