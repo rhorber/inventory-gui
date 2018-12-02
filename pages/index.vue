@@ -71,19 +71,19 @@ export default {
   methods: {
     decreaseStock(item) {
       item.stock--;
-      this.$axios.$get('/item/decrement/' + item.id)
+      this.$axios.$get(`/item/${item.id}/decrement`)
         .then(console.log)
         .catch(console.error);
     },
     increaseStock(item) {
       item.stock++;
-      this.$axios.$get('/item/increment/' + item.id)
+      this.$axios.$get(`/item/${item.id}/increment`)
         .then(console.log)
         .catch(console.error);
     },
     resetStock(item) {
       item.stock = 0;
-      this.$axios.$get('/item/resetStock/' + item.id)
+      this.$axios.$get(`/item/${item.id}/reset-stock`)
         .then(console.log)
         .catch(console.error);
     }
