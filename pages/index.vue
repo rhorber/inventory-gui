@@ -2,7 +2,7 @@
   <div>
     <b-table
       :fields="tableFields"
-      :items="items"
+      :items="sortedItems"
       striped
       hover
     >
@@ -20,14 +20,14 @@
       >
         <b-button
           variant="outline-secondary"
-          @click="decreaseStock(data.item.id)"
+          @click="decreaseStock(data.item)"
         >
           <i class="fa fa-minus"/>
         </b-button>
         <span class="amount">{{ data.value }}</span>
         <b-button
           variant="outline-secondary"
-          @click="increaseStock(data.item.id)"
+          @click="increaseStock(data.item)"
         >
           <i class="fa fa-plus"/>
         </b-button>
@@ -39,16 +39,16 @@
         <div class="d-none d-sm-block">
           <b-button
             v-if="data.index < items.length "
-            :class="{ invisible: data.index === items.length - 1 }"
+            :class="{ invisible: data.item.position === nofItems }"
             variant="outline-secondary"
-            @click="moveDown(data.item.id)"
+            @click="moveDown(data.item)"
           >
             <i class="fa fa-angle-down"/>
           </b-button>
           <b-button
             v-if="data.index > 0"
             variant="outline-secondary"
-            @click="moveUp(data.item.id)"
+            @click="moveUp(data.item)"
           >
             <i class="fa fa-angle-up"/>
           </b-button>
@@ -65,7 +65,7 @@
         </nuxt-link>
         <b-button
           variant="danger"
-          @click="resetStock(data.item.id)"
+          @click="resetStock(data.item)"
         >
           <i class="fa fa-trash-o"/>
         </b-button>
@@ -86,8 +86,7 @@ export default {
   asyncData({app}) {
     return app.$axios.$get('/inventory')
       .then((result) => {
-        let sortedItems = result.items.sort((item1, item2) => item1.position - item2.position);
-        return {items: sortedItems}
+        return {items: result.items}
       });
   },
   data() {
@@ -101,33 +100,60 @@ export default {
       ]
     };
   },
+  computed: {
+    sortedItems() {
+      return [...this.items].sort((item1, item2) => item1.position - item2.position);
+    },
+    nofItems() {
+      return this.items.length;
+    }
+  },
   methods: {
-    decreaseStock(itemId) {
-      this.$axios.$get(`/item/${itemId}/decrement`)
-        .catch(console.error);
-    },
-    increaseStock(itemId) {
-      this.$axios.$get(`/item/${itemId}/increment`)
-        .catch(console.error);
-    },
-    moveDown(itemId) {
-      this.$axios.$get(`/item/${itemId}/move-down`)
+    decreaseStock(item) {
+      this.$axios.$get(`/item/${item.id}/decrement`)
         .then((_result) => {
-          // TODO: Maybe there is a faster/simpler way..
-          window.location.reload(true);
+          item.stock--;
         })
         .catch(console.error);
     },
-    moveUp(itemId) {
-      this.$axios.$get(`/item/${itemId}/move-up`)
+    increaseStock(item) {
+      this.$axios.$get(`/item/${item.id}/increment`)
         .then((_result) => {
-          // TODO: Maybe there is a faster/simpler way..
-          window.location.reload(true);
+          item.stock++;
         })
         .catch(console.error);
     },
-    resetStock(itemId) {
-      this.$axios.$get(`/item/${itemId}/reset-stock`)
+    moveDown(item) {
+      this.$axios.$get(`/item/${item.id}/move-down`)
+        .then((_result) => {
+          let newPosition = parseInt(item.position) + 1;
+          let otherItem = this.items.find((i) => parseInt(i.position) === newPosition);
+
+          otherItem.position--;
+          item.position++;
+
+          // TODO: Maybe there is a better way.. (use store)
+        })
+        .catch(console.error);
+    },
+    moveUp(item) {
+      this.$axios.$get(`/item/${item.id}/move-up`)
+        .then((_result) => {
+          let newPosition = parseInt(item.position) - 1;
+          let otherItem = this.items.find((i) => parseInt(i.position) === newPosition);
+
+          otherItem.position++;
+          item.position--;
+
+          // TODO: Maybe there is a better way.. (use store)
+        })
+        .catch(console.error);
+    },
+    resetStock(item) {
+      this.$axios.$get(`/item/${item.id}/reset-stock`)
+        .then((_result) => {
+          item.stock = 0;
+        })
         .catch(console.error);
     }
   }
