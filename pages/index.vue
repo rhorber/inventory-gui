@@ -20,17 +20,39 @@
       >
         <b-button
           variant="outline-secondary"
-          @click="decreaseStock(data.item)"
+          @click="decreaseStock(data.item.id)"
         >
           <i class="fa fa-minus"/>
         </b-button>
         <span class="amount">{{ data.value }}</span>
         <b-button
           variant="outline-secondary"
-          @click="increaseStock(data.item)"
+          @click="increaseStock(data.item.id)"
         >
           <i class="fa fa-plus"/>
         </b-button>
+      </template>
+      <template
+        slot="sorting"
+        slot-scope="data"
+      >
+        <div class="d-none d-sm-block">
+          <b-button
+            v-if="data.index < items.length "
+            :class="{ invisible: data.index === items.length - 1 }"
+            variant="outline-secondary"
+            @click="moveDown(data.item.id)"
+          >
+            <i class="fa fa-angle-down"/>
+          </b-button>
+          <b-button
+            v-if="data.index > 0"
+            variant="outline-secondary"
+            @click="moveUp(data.item.id)"
+          >
+            <i class="fa fa-angle-up"/>
+          </b-button>
+        </div>
       </template>
       <template
         slot="actions"
@@ -43,7 +65,7 @@
         </nuxt-link>
         <b-button
           variant="danger"
-          @click="resetStock(data.item)"
+          @click="resetStock(data.item.id)"
         >
           <i class="fa fa-trash-o"/>
         </b-button>
@@ -64,7 +86,8 @@ export default {
   asyncData({app}) {
     return app.$axios.$get('/inventory')
       .then((result) => {
-        return {items: result.items}
+        let sortedItems = result.items.sort((item1, item2) => item1.position - item2.position);
+        return {items: sortedItems}
       });
   },
   data() {
@@ -73,27 +96,38 @@ export default {
         {key: 'name', label: 'Name'},
         {key: 'size', label: 'Grösse'},
         {key: 'stock', label: 'Anzahl'},
+        {key: 'sorting', label: ''},
         {key: 'actions', label: 'Aktionen'},
       ]
     };
   },
   methods: {
-    decreaseStock(item) {
-      item.stock--;
-      this.$axios.$get(`/item/${item.id}/decrement`)
-        .then(console.log)
+    decreaseStock(itemId) {
+      this.$axios.$get(`/item/${itemId}/decrement`)
         .catch(console.error);
     },
-    increaseStock(item) {
-      item.stock++;
-      this.$axios.$get(`/item/${item.id}/increment`)
-        .then(console.log)
+    increaseStock(itemId) {
+      this.$axios.$get(`/item/${itemId}/increment`)
         .catch(console.error);
     },
-    resetStock(item) {
-      item.stock = 0;
-      this.$axios.$get(`/item/${item.id}/reset-stock`)
-        .then(console.log)
+    moveDown(itemId) {
+      this.$axios.$get(`/item/${itemId}/move-down`)
+        .then((_result) => {
+          // TODO: Maybe there is a faster/simpler way..
+          window.location.reload(true);
+        })
+        .catch(console.error);
+    },
+    moveUp(itemId) {
+      this.$axios.$get(`/item/${itemId}/move-up`)
+        .then((_result) => {
+          // TODO: Maybe there is a faster/simpler way..
+          window.location.reload(true);
+        })
+        .catch(console.error);
+    },
+    resetStock(itemId) {
+      this.$axios.$get(`/item/${itemId}/reset-stock`)
         .catch(console.error);
     }
   }
