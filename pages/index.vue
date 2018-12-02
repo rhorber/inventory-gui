@@ -54,7 +54,7 @@
 <script>
 export default {
   asyncData({app}) {
-    return app.$axios.$get('/api/inventory')
+    return app.$axios.$get('/inventory')
       .then((result) => {
         return {items: result.items}
       });
@@ -71,24 +71,21 @@ export default {
   methods: {
     decreaseStock(item) {
       item.stock--;
-      this.$axios.$get('/api/item/decrement/' + item.id)
+      this.$axios.$get(`/item/${item.id}/decrement`)
         .then(console.log)
         .catch(console.error);
-      // TODO: Save to database/send to API.
     },
     increaseStock(item) {
       item.stock++;
-      this.$axios.$get('/api/item/increment/' + item.id)
+      this.$axios.$get(`/item/${item.id}/increment`)
         .then(console.log)
         .catch(console.error);
-      // TODO: Save to database/send to API.
     },
     resetStock(item) {
       item.stock = 0;
-      this.$axios.$get('/api/item/resetStock/' + item.id)
+      this.$axios.$get(`/item/${item.id}/reset-stock`)
         .then(console.log)
         .catch(console.error);
-      // TODO: Save to database/send to API.
     }
   }
 }
