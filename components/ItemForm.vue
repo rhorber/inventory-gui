@@ -24,6 +24,30 @@
       />
     </b-form-group>
 
+    <b-form-group
+      label="Grösse"
+      label-for="size"
+    >
+      <b-form-input
+        id="size"
+        v-model="dataItem.size"
+        type="text"
+        required
+      />
+    </b-form-group>
+
+    <b-form-group
+      label="Einheit"
+      label-for="unit"
+    >
+      <div>
+        <b-form-select
+          v-model="dataItem.unit"
+          :options="units"
+        />
+      </div>
+    </b-form-group>
+
     <nuxt-link to="/">
       <b-button variant="outline-danger">
         Cancel
@@ -44,13 +68,14 @@ export default {
     item: {
       type: Object,
       default: function () {
-        return {name: '', stock: 0};
+        return {name: '', stock: 0, size: 0, unit: 'Stk'};
       }
     }
   },
   data() {
     return {
-      dataItem: this.item
+      dataItem: this.item,
+      units: ['', 'cl', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk']
     }
   },
   methods: {

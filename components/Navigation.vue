@@ -7,7 +7,7 @@
     <b-navbar-nav>
       <h4>
         Inventory
-        <small class="text-muted">
+        <small class="text-muted d-none d-md-inline">
           Little helper application to manage (cellar) inventory.
         </small>
       </h4>

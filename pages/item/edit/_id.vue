@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     saveItem(data) {
-      const item = {name: data.name, stock: data.stock};
+      const item = {name: data.name, stock: data.stock, size: data.size, unit: data.unit};
       this.$axios.$put('/item/' + this.itemId, item)
         .then(() => this.$router.push({path: '/'}))
         .catch(console.error);
