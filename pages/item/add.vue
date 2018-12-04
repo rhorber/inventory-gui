@@ -5,7 +5,7 @@
         Add Item
       </h2>
       <item-form
-        :item="{name: '', stock: 0}"
+        :item="{name: '', stock: 0, size: 0, unit: 'Stk'}"
         @formSubmitted="addItem"
       />
     </div>
