@@ -1,7 +1,10 @@
 <template>
   <div>
     <navigation />
-    <div class="container pt-4">
+    <div class="d-block d-lg-none container-fluid pt-4">
+      <nuxt />
+    </div>
+    <div class="d-none d-lg-block container pt-4">
       <nuxt />
     </div>
   </div>
