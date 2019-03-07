@@ -73,7 +73,10 @@
     </b-table>
     <div>
       <nuxt-link to="/item/add">
-        <b-button variant="primary">
+        <b-button
+          variant="primary"
+          class="mb-2"
+        >
           New Item
         </b-button>
       </nuxt-link>
