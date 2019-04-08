@@ -5,7 +5,7 @@
   "author": "Raphael Horber (raphael.horber@gmail.com)",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -23,7 +23,6 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.16",
     "cross-env": "^5.2.0",
-    "express": "^4.16.3",
     "jquery": "^3.3.1",
     "nuxt": "^2.5.1"
   },
