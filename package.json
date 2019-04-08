@@ -1,11 +1,11 @@
 {
   "name": "inventory",
   "version": "1.1.0",
-  "description": "Little helper application to (manage) cellar inventory.",
+  "description": "Little helper application to manage (cellar) inventory.",
   "author": "Raphael Horber (raphael.horber@gmail.com)",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
@@ -21,16 +21,15 @@
     "@nuxtjs/axios": "^5.4.1",
     "@nuxtjs/font-awesome": "^1.0.3",
     "bootstrap": "^4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.14",
+    "bootstrap-vue": "^2.0.0-rc.16",
     "cross-env": "^5.2.0",
-    "express": "^4.16.3",
     "jquery": "^3.3.1",
-    "nuxt": "^2.4.5"
+    "nuxt": "^2.5.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
     "dotenv": "^6.2.0",
-    "eslint": "^5.15.1",
+    "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-vue": "^4.0.0",
     "event-stream": "3.3.4",

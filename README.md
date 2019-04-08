@@ -1,6 +1,6 @@
 # Inventory
 
-> Little helper application to manage cellar inventory.
+> Little helper application to manage (cellar) inventory.
 
 ## Build Setup
 

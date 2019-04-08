@@ -1,12 +1,19 @@
-const pkg = require('./package');
+import pkg from './package'
+
 const isProduction = (process.env.NODE_ENV === 'production');
 
 if (isProduction === false) {
   require('dotenv').config();
 }
 
-module.exports = {
+export default {
   mode: 'spa',
+
+  vue: {
+    config: {
+      productionTip: false
+    }
+  },
 
   /*
   ** Headers of the page
