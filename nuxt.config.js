@@ -8,6 +8,12 @@ if (isProduction === false) {
 module.exports = {
   mode: 'spa',
 
+  vue: {
+    config: {
+      productionTip: false
+    }
+  },
+
   /*
   ** Headers of the page
   */
