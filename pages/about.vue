@@ -1,7 +1,7 @@
 <template>
   <div>
     <img
-      src="logo.svg"
+      src="~/assets/logo.svg"
       style="height: 150px;"
     >
     <h1 class="title">
