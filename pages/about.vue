@@ -10,8 +10,19 @@
     <h2 class="subtitle">
       Little helper application to manage (cellar) inventory.
     </h2>
+    <h5>Access Token: {{ accessToken }}</h5>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      accessToken: this.$store.state.accessToken
+    };
+  }
+};
+</script>
 
 <style scoped>
 .title {
