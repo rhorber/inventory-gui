@@ -1,6 +1,6 @@
 <template>
   <img
-    src="logo.svg"
+    src="~/assets/logo.svg"
     style="height: 26px;"
   >
 </template>
