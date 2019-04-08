@@ -1,11 +1,11 @@
 <template>
   <div>
-    <navigation />
+    <navigation/>
     <div class="d-block d-lg-none container-fluid pt-4">
-      <nuxt />
+      <nuxt/>
     </div>
     <div class="d-none d-lg-block container pt-4">
-      <nuxt />
+      <nuxt/>
     </div>
   </div>
 </template>
@@ -14,6 +14,7 @@
 import Navigation from "../components/Navigation";
 
 export default {
+  middleware: 'loadAccessToken',
   components: {
     Navigation
   }

@@ -39,7 +39,7 @@
         <div class="d-none d-sm-block">
           <b-button
             v-if="data.index < items.length "
-            :class="{ invisible: data.item.position === nofItems }"
+            :class="{ invisible: data.item.position == nofItems }"
             variant="outline-secondary"
             @click="moveDown(data.item)"
           >
