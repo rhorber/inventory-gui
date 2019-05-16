@@ -22,10 +22,10 @@
     "@nuxtjs/axios": "^5.4.1",
     "@nuxtjs/font-awesome": "^1.0.3",
     "bootstrap": "^4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.16",
+    "bootstrap-vue": "^2.0.0-rc.20",
     "cross-env": "^5.2.0",
-    "jquery": "^3.3.1",
-    "nuxt": "^2.5.1"
+    "jquery": "^3.4.1",
+    "nuxt": "^2.7.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
@@ -34,6 +34,6 @@
     "eslint-loader": "^2.1.2",
     "eslint-plugin-vue": "^4.0.0",
     "event-stream": "3.3.4",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.19.0"
   }
 }
