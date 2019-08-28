@@ -11,6 +11,8 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "ncu": "node_modules/.bin/ncu",
+    "ncu-u": "node_modules/.bin/ncu -u",
     "precommit": "npm run lint",
     "heroku-postbuild": "npm run build"
   },
@@ -19,23 +21,24 @@
     "npm": "6.x"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.5.4",
+    "@nuxtjs/axios": "^5.6.0",
     "@nuxtjs/font-awesome": "^1.0.4",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.26",
     "cross-env": "^5.2.0",
     "jquery": "^3.4.1",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.15",
     "lodash.template": "^4.5.0",
     "nuxt": "2.9.2"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "dotenv": "^6.2.0",
-    "eslint": "^5.16.0",
-    "eslint-loader": "^2.2.1",
-    "eslint-plugin-vue": "^4.0.0",
-    "event-stream": "3.3.4",
-    "nodemon": "^1.19.1"
+    "babel-eslint": "^10.0.3",
+    "dotenv": "^8.1.0",
+    "eslint": "^6.2.2",
+    "eslint-loader": "^3.0.0",
+    "eslint-plugin-vue": "^5.2.3",
+    "event-stream": "4.0.1",
+    "nodemon": "^1.19.1",
+    "npm-check-updates": "^3.1.21"
   }
 }
