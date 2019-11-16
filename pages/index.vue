@@ -7,7 +7,7 @@
       hover
     >
       <template
-        slot="size"
+        slot="cell(size)"
         slot-scope="data"
       >
         <span v-if="data.item.unit !== 'N/A'">
@@ -15,7 +15,7 @@
         </span>
       </template>
       <template
-        slot="stock"
+        slot="cell(stock)"
         slot-scope="data"
       >
         <b-button
@@ -33,7 +33,7 @@
         </b-button>
       </template>
       <template
-        slot="sorting"
+        slot="cell(sorting)"
         slot-scope="data"
       >
         <div class="d-none d-sm-block">
@@ -55,7 +55,7 @@
         </div>
       </template>
       <template
-        slot="actions"
+        slot="cell(actions)"
         slot-scope="data"
       >
         <nuxt-link :to="'/item/edit/' + data.item.id">
