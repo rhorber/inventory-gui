@@ -22,14 +22,14 @@
           variant="outline-secondary"
           @click="decreaseStock(data.item)"
         >
-          <i class="fa fa-minus"/>
+          <i class="fa fa-minus" />
         </b-button>
         <span class="amount">{{ data.value }}</span>
         <b-button
           variant="outline-secondary"
           @click="increaseStock(data.item)"
         >
-          <i class="fa fa-plus"/>
+          <i class="fa fa-plus" />
         </b-button>
       </template>
       <template
@@ -43,14 +43,14 @@
             variant="outline-secondary"
             @click="moveDown(data.item)"
           >
-            <i class="fa fa-angle-down"/>
+            <i class="fa fa-angle-down" />
           </b-button>
           <b-button
             v-if="data.index > 0"
             variant="outline-secondary"
             @click="moveUp(data.item)"
           >
-            <i class="fa fa-angle-up"/>
+            <i class="fa fa-angle-up" />
           </b-button>
         </div>
       </template>
@@ -60,14 +60,14 @@
       >
         <nuxt-link :to="'/item/edit/' + data.item.id">
           <b-button variant="primary">
-            <i class="fa fa-edit"/>
+            <i class="fa fa-edit" />
           </b-button>
         </nuxt-link>
         <b-button
           variant="danger"
           @click="resetStock(data.item)"
         >
-          <i class="fa fa-trash-o"/>
+          <i class="fa fa-trash-o" />
         </b-button>
       </template>
     </b-table>

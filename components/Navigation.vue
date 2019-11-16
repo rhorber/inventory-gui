@@ -15,7 +15,7 @@
 
     <b-navbar-nav class="ml-auto">
       <b-navbar-brand href="#">
-        <Logo/>
+        <Logo />
       </b-navbar-brand>
     </b-navbar-nav>
   </b-navbar>
