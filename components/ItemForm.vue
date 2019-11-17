@@ -1,25 +1,13 @@
 <template>
   <b-form @submit="onSubmit">
     <b-form-group
-      label="Name"
+      label="Name *"
       label-for="name"
     >
       <b-form-input
         id="name"
         v-model="dataItem.name"
         type="text"
-        required
-      />
-    </b-form-group>
-
-    <b-form-group
-      label="Anzahl"
-      label-for="stock"
-    >
-      <b-form-input
-        id="stock"
-        v-model="dataItem.stock"
-        type="number"
         required
       />
     </b-form-group>
@@ -32,7 +20,6 @@
         id="size"
         v-model="dataItem.size"
         type="text"
-        required
       />
     </b-form-group>
 
@@ -46,6 +33,32 @@
           :options="units"
         />
       </div>
+    </b-form-group>
+
+    <b-form-group
+      label="Mindestens haltbar bis"
+      label-for="best-before"
+    >
+      <b-form-input
+        id="best-before"
+        v-model="dataItem.best_before"
+        type="text"
+      />
+      <b-form-text id="best-before-help">
+        Format: dd.mm.YYYY oder mm.YYYY
+      </b-form-text>
+    </b-form-group>
+
+    <b-form-group
+      label="Anzahl *"
+      label-for="stock"
+    >
+      <b-form-input
+        id="stock"
+        v-model="dataItem.stock"
+        type="number"
+        required
+      />
     </b-form-group>
 
     <nuxt-link to="/">
@@ -67,9 +80,7 @@ export default {
   props: {
     item: {
       type: Object,
-      default: function () {
-        return {name: '', stock: 0, size: 0, unit: 'Stk'};
-      }
+      required: true
     }
   },
   data() {

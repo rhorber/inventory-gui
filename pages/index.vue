@@ -7,7 +7,20 @@
       hover
     >
       <template
-        slot="size"
+        slot="cell(name)"
+        slot-scope="data"
+      >
+        {{ data.item.name }}
+        <br class="d-inline d-md-none">
+        <span
+          v-if="data.item.best_before !== ''"
+          class="d-inline d-lg-none"
+        >
+          ({{ data.item.best_before }})
+        </span>
+      </template>
+      <template
+        slot="cell(size)"
         slot-scope="data"
       >
         <span v-if="data.item.unit !== 'N/A'">
@@ -15,59 +28,57 @@
         </span>
       </template>
       <template
-        slot="stock"
+        slot="cell(stock)"
         slot-scope="data"
       >
         <b-button
           variant="outline-secondary"
           @click="decreaseStock(data.item)"
         >
-          <i class="fa fa-minus"/>
+          <i class="fa fa-minus" />
         </b-button>
         <span class="amount">{{ data.value }}</span>
         <b-button
           variant="outline-secondary"
           @click="increaseStock(data.item)"
         >
-          <i class="fa fa-plus"/>
+          <i class="fa fa-plus" />
         </b-button>
       </template>
       <template
-        slot="sorting"
+        slot="cell(sorting)"
         slot-scope="data"
       >
-        <div class="d-none d-sm-block">
-          <b-button
-            v-if="data.index < items.length "
-            :class="{ invisible: data.item.position == nofItems }"
-            variant="outline-secondary"
-            @click="moveDown(data.item)"
-          >
-            <i class="fa fa-angle-down"/>
-          </b-button>
-          <b-button
-            v-if="data.index > 0"
-            variant="outline-secondary"
-            @click="moveUp(data.item)"
-          >
-            <i class="fa fa-angle-up"/>
-          </b-button>
-        </div>
+        <b-button
+          v-if="data.index < items.length "
+          :class="{ invisible: data.item.position == nofItems }"
+          variant="outline-secondary"
+          @click="moveDown(data.item)"
+        >
+          <i class="fa fa-angle-down" />
+        </b-button>
+        <b-button
+          v-if="data.index > 0"
+          variant="outline-secondary"
+          @click="moveUp(data.item)"
+        >
+          <i class="fa fa-angle-up" />
+        </b-button>
       </template>
       <template
-        slot="actions"
+        slot="cell(actions)"
         slot-scope="data"
       >
         <nuxt-link :to="'/item/edit/' + data.item.id">
           <b-button variant="primary">
-            <i class="fa fa-edit"/>
+            <i class="fa fa-edit" />
           </b-button>
         </nuxt-link>
         <b-button
           variant="danger"
           @click="resetStock(data.item)"
         >
-          <i class="fa fa-trash-o"/>
+          <i class="fa fa-trash-o" />
         </b-button>
       </template>
     </b-table>
@@ -97,8 +108,9 @@ export default {
       tableFields: [
         {key: 'name', label: 'Name'},
         {key: 'size', label: 'Grösse'},
+        {key: 'best_before', label: 'MHD', class: ['d-none', 'd-lg-table-cell']},
         {key: 'stock', label: 'Anzahl'},
-        {key: 'sorting', label: ''},
+        {key: 'sorting', label: '', class: ['d-none', 'd-sm-table-cell']},
         {key: 'actions', label: 'Aktionen'},
       ]
     };
