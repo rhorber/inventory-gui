@@ -7,6 +7,19 @@
       hover
     >
       <template
+        slot="cell(name)"
+        slot-scope="data"
+      >
+        {{ data.item.name }}
+        <br class="d-inline d-md-none">
+        <span
+          v-if="data.item.best_before !== ''"
+          class="d-inline d-lg-none"
+        >
+          ({{ data.item.best_before }})
+        </span>
+      </template>
+      <template
         slot="cell(size)"
         slot-scope="data"
       >
@@ -36,23 +49,21 @@
         slot="cell(sorting)"
         slot-scope="data"
       >
-        <div class="d-none d-sm-block">
-          <b-button
-            v-if="data.index < items.length "
-            :class="{ invisible: data.item.position == nofItems }"
-            variant="outline-secondary"
-            @click="moveDown(data.item)"
-          >
-            <i class="fa fa-angle-down" />
-          </b-button>
-          <b-button
-            v-if="data.index > 0"
-            variant="outline-secondary"
-            @click="moveUp(data.item)"
-          >
-            <i class="fa fa-angle-up" />
-          </b-button>
-        </div>
+        <b-button
+          v-if="data.index < items.length "
+          :class="{ invisible: data.item.position == nofItems }"
+          variant="outline-secondary"
+          @click="moveDown(data.item)"
+        >
+          <i class="fa fa-angle-down" />
+        </b-button>
+        <b-button
+          v-if="data.index > 0"
+          variant="outline-secondary"
+          @click="moveUp(data.item)"
+        >
+          <i class="fa fa-angle-up" />
+        </b-button>
       </template>
       <template
         slot="cell(actions)"
@@ -97,8 +108,9 @@ export default {
       tableFields: [
         {key: 'name', label: 'Name'},
         {key: 'size', label: 'Grösse'},
+        {key: 'best_before', label: 'MHD', class: ['d-none', 'd-lg-table-cell']},
         {key: 'stock', label: 'Anzahl'},
-        {key: 'sorting', label: ''},
+        {key: 'sorting', label: '', class: ['d-none', 'd-sm-table-cell']},
         {key: 'actions', label: 'Aktionen'},
       ]
     };
