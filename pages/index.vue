@@ -1,5 +1,15 @@
 <template>
   <div>
+    <div>
+      <nuxt-link to="/item/add">
+        <b-button
+          variant="primary"
+          class="mt-2 mb-3"
+        >
+          Artikel hinzufügen
+        </b-button>
+      </nuxt-link>
+    </div>
     <b-table
       :fields="tableFields"
       :items="sortedItems"
