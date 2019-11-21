@@ -63,14 +63,14 @@
 
     <nuxt-link to="/">
       <b-button variant="outline-danger">
-        Cancel
+        Abbrechen
       </b-button>
     </nuxt-link>
     <b-button
       variant="primary"
       type="submit"
     >
-      Save
+      Speichern
     </b-button>
   </b-form>
 </template>
@@ -97,7 +97,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
