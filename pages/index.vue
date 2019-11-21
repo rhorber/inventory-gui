@@ -149,7 +149,7 @@ export default {
         .catch(console.error);
     },
     moveDown(item) {
-      this.$axios.$get(`/item/${item.id}/move-down`)
+      this.$axios.$get(`/v1/item/${item.id}/move-down`)
         .then((_result) => {
           let newPosition = parseInt(item.position) + 1;
           let otherItem = this.items.find((i) => parseInt(i.position) === newPosition);
