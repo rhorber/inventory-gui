@@ -1,5 +1,15 @@
 <template>
   <div>
+    <div>
+      <nuxt-link to="/item/add">
+        <b-button
+          variant="primary"
+          class="mt-2 mb-3"
+        >
+          Artikel hinzufügen
+        </b-button>
+      </nuxt-link>
+    </div>
     <b-table
       :fields="tableFields"
       :items="sortedItems"
@@ -88,7 +98,7 @@
           variant="primary"
           class="mb-2"
         >
-          New Item
+          Artikel hinzufügen
         </b-button>
       </nuxt-link>
     </div>
@@ -98,7 +108,7 @@
 <script>
 export default {
   asyncData({app}) {
-    return app.$axios.$get('/inventory')
+    return app.$axios.$get('/v1/inventory')
       .then((result) => {
         return {items: result.items}
       });
@@ -125,14 +135,14 @@ export default {
   },
   methods: {
     decreaseStock(item) {
-      this.$axios.$get(`/item/${item.id}/decrement`)
+      this.$axios.$get(`/v1/item/${item.id}/decrement`)
         .then((_result) => {
           item.stock--;
         })
         .catch(console.error);
     },
     increaseStock(item) {
-      this.$axios.$get(`/item/${item.id}/increment`)
+      this.$axios.$get(`/v1/item/${item.id}/increment`)
         .then((_result) => {
           item.stock++;
         })
@@ -152,7 +162,7 @@ export default {
         .catch(console.error);
     },
     moveUp(item) {
-      this.$axios.$get(`/item/${item.id}/move-up`)
+      this.$axios.$get(`/v1/item/${item.id}/move-up`)
         .then((_result) => {
           let newPosition = parseInt(item.position) - 1;
           let otherItem = this.items.find((i) => parseInt(i.position) === newPosition);
@@ -165,7 +175,7 @@ export default {
         .catch(console.error);
     },
     resetStock(item) {
-      this.$axios.$get(`/item/${item.id}/reset-stock`)
+      this.$axios.$get(`/v1/item/${item.id}/reset-stock`)
         .then((_result) => {
           item.stock = 0;
         })
