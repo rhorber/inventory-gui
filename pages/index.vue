@@ -88,7 +88,7 @@
           variant="primary"
           class="mb-2"
         >
-          New Item
+          Artikel hinzufügen
         </b-button>
       </nuxt-link>
     </div>

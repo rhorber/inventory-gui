@@ -6,9 +6,9 @@
   >
     <b-navbar-nav>
       <h4>
-        Inventory
+        Inventar
         <small class="text-muted d-none d-md-inline">
-          Little helper application to manage (cellar) inventory.
+          Kleine Hilfs-Applikation zum Verwalten des (Keller-) Inventars.
         </small>
       </h4>
     </b-navbar-nav>

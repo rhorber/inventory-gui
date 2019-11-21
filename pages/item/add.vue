@@ -2,7 +2,7 @@
   <section class="container">
     <div>
       <h2 class="subtitle">
-        Add Item
+        Artikel hinzufügen
       </h2>
       <item-form
         :item="{name: '', size: '', unit: '', best_before: '', stock: 0}"

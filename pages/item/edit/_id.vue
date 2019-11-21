@@ -2,7 +2,7 @@
   <section class="container">
     <div>
       <h2 class="subtitle">
-        Edit Item {{ itemId }}
+        Artikel bearbeiten ({{ itemId }})
       </h2>
       <item-form
         :item="item"
