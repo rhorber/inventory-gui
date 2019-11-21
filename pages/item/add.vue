@@ -29,7 +29,7 @@ export default {
         stock: data.stock
       };
 
-      this.$axios.$post('/item', item)
+      this.$axios.$post('/v1/item', item)
         .then(() => this.$router.push({path: '/'}))
         .catch(console.error);
     }

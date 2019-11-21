@@ -23,7 +23,7 @@ export default {
     return /^\d+$/.test(params.id);
   },
   asyncData({app, params}) {
-    return app.$axios.$get('/item/' + params.id)
+    return app.$axios.$get('/v1/item/' + params.id)
       .then((result) => {
         return {item: result}
       });
@@ -43,7 +43,7 @@ export default {
         stock: data.stock
       };
 
-      this.$axios.$put('/item/' + this.itemId, item)
+      this.$axios.$put('/v1/item/' + this.itemId, item)
         .then(() => this.$router.push({path: '/'}))
         .catch(console.error);
     }
