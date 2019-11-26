@@ -1,7 +1,6 @@
 <template>
   <b-navbar
-    toggleable="md"
-    type="dark"
+    type="light"
     variant="light"
   >
     <b-navbar-nav>
@@ -13,7 +12,21 @@
       </h4>
     </b-navbar-nav>
 
-    <b-navbar-nav class="ml-auto">
+    <b-navbar-nav class="ml-auto pr-4">
+      <b-nav-item-dropdown
+        text="Menu"
+        right
+        size="lg"
+      >
+        <b-nav-item>
+          <nuxt-link to="/">
+            Alle Artikel
+          </nuxt-link>
+        </b-nav-item>
+      </b-nav-item-dropdown>
+    </b-navbar-nav>
+
+    <b-navbar-nav>
       <b-navbar-brand href="#">
         <Logo />
       </b-navbar-brand>
