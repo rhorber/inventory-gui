@@ -14,7 +14,7 @@
 import Navigation from "../components/Navigation";
 
 export default {
-  middleware: 'loadAccessToken',
+  middleware: 'populateStore',
   components: {
     Navigation
   }

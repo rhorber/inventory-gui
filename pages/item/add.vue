@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 import ItemForm from '~/components/ItemForm'
 
 export default {
@@ -20,6 +22,7 @@ export default {
     ItemForm
   },
   methods: {
+    ...mapMutations(['setItems']),
     addItem(data){
       const item = {
         name: data.name,
@@ -30,7 +33,10 @@ export default {
       };
 
       this.$axios.$post('/v1/item', item)
-        .then(() => this.$router.push({path: '/'}))
+        .then(() => {
+          this.setItems(null);
+          this.$router.push({path: '/'})
+        })
         .catch(console.error);
     }
   }

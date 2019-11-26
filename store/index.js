@@ -1,7 +1,8 @@
 // Initial state
 const state = function () {
   return {
-    accessToken: null
+    accessToken: null,
+    items: null
   };
 };
 
@@ -12,6 +13,13 @@ const getters = {};
 const mutations = {
   setAccessToken(state, accessToken) {
     state.accessToken = accessToken;
+  },
+  setItems(state, items) {
+    state.items = items;
+  },
+  mutateItem(state, {itemId, consumer}) {
+    const item = state.items.find((i) => i.id === itemId);
+    consumer(item, state.items);
   }
 };
 

@@ -106,13 +106,9 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 export default {
-  asyncData({app}) {
-    return app.$axios.$get('/v1/inventory')
-      .then((result) => {
-        return {items: result.items}
-      });
-  },
   data() {
     return {
       tableFields: [
@@ -126,6 +122,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['items']),
     sortedItems() {
       return [...this.items].sort((item1, item2) => item1.position - item2.position);
     },
@@ -134,28 +131,41 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['mutateItem']),
     decreaseStock(item) {
       this.$axios.$get(`/v1/item/${item.id}/decrement`)
         .then((_result) => {
-          item.stock--;
+          let consumer = function (item, _items) {
+            item.stock--;
+          };
+
+          this.mutateItem({itemId: item.id, consumer: consumer});
         })
         .catch(console.error);
     },
     increaseStock(item) {
       this.$axios.$get(`/v1/item/${item.id}/increment`)
         .then((_result) => {
-          item.stock++;
+          let consumer = function (item, _items) {
+            item.stock++;
+          };
+
+          this.mutateItem({itemId: item.id, consumer: consumer});
         })
         .catch(console.error);
     },
     moveDown(item) {
       this.$axios.$get(`/v1/item/${item.id}/move-down`)
         .then((_result) => {
-          let newPosition = parseInt(item.position) + 1;
-          let otherItem = this.items.find((i) => parseInt(i.position) === newPosition);
+          let consumer = function (item, items) {
+            let newPosition = parseInt(item.position) + 1;
+            let otherItem = items.find((i) => parseInt(i.position) === newPosition);
 
-          otherItem.position--;
-          item.position++;
+            otherItem.position--;
+            item.position++;
+          };
+
+          this.mutateItem({itemId: item.id, consumer: consumer});
 
           // TODO: Maybe there is a better way.. (use store)
         })
@@ -164,11 +174,15 @@ export default {
     moveUp(item) {
       this.$axios.$get(`/v1/item/${item.id}/move-up`)
         .then((_result) => {
-          let newPosition = parseInt(item.position) - 1;
-          let otherItem = this.items.find((i) => parseInt(i.position) === newPosition);
+          let consumer = function (item, items) {
+            let newPosition = parseInt(item.position) - 1;
+            let otherItem = items.find((i) => parseInt(i.position) === newPosition);
 
-          otherItem.position++;
-          item.position--;
+            otherItem.position++;
+            item.position--;
+          };
+
+          this.mutateItem({itemId: item.id, consumer: consumer});
 
           // TODO: Maybe there is a better way.. (use store)
         })
@@ -177,7 +191,11 @@ export default {
     resetStock(item) {
       this.$axios.$get(`/v1/item/${item.id}/reset-stock`)
         .then((_result) => {
-          item.stock = 0;
+          let consumer = function (item, _items) {
+            item.stock = 0;
+          };
+
+          this.mutateItem({itemId: item.id, consumer: consumer});
         })
         .catch(console.error);
     }
