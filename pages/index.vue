@@ -1,12 +1,13 @@
 <template>
   <div>
+    <h2>Artikel</h2>
     <div>
       <nuxt-link to="/item/add">
         <b-button
           variant="primary"
           class="mt-2 mb-3"
         >
-          Artikel hinzufügen
+          Artikel erstellen
         </b-button>
       </nuxt-link>
     </div>
@@ -98,7 +99,7 @@
           variant="primary"
           class="mb-2"
         >
-          Artikel hinzufügen
+          Artikel erstellen
         </b-button>
       </nuxt-link>
     </div>
@@ -106,7 +107,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   data() {

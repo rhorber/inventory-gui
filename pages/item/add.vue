@@ -1,9 +1,7 @@
 <template>
   <section class="container">
     <div>
-      <h2 class="subtitle">
-        Artikel hinzufügen
-      </h2>
+      <h2>Artikel erstellen</h2>
       <item-form
         :item="{name: '', size: '', unit: '', best_before: '', stock: 0}"
         @formSubmitted="addItem"

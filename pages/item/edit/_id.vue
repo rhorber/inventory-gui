@@ -1,9 +1,7 @@
 <template>
   <section class="container">
     <div>
-      <h2 class="subtitle">
-        Artikel bearbeiten ({{ itemId }})
-      </h2>
+      <h2>Artikel bearbeiten ({{ itemId }})</h2>
       <item-form
         :item="item"
         @formSubmitted="saveItem"
