@@ -42,8 +42,10 @@ export default {
       };
 
       this.$axios.$put('/v2/categories/' + this.categoryId, category)
-        .then(() => this.resetCategories())
-        .then(() => this.$router.push({path: '/categories'}))
+        .then(() => {
+          this.resetCategories();
+          this.$router.push({path: '/categories'});
+        })
         .catch(console.error);
     }
   }

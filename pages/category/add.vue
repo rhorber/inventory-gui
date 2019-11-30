@@ -28,8 +28,10 @@ export default {
       };
 
       this.$axios.$post('/v2/categories', category)
-        .then(() => this.resetCategories())
-        .then(() => this.$router.push({path: '/categories'}))
+        .then(() => {
+          this.resetCategories();
+          this.$router.push({path: '/categories'});
+        })
         .catch(console.error);
     }
   }
