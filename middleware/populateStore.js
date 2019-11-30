@@ -1,7 +1,9 @@
-function loadAndSetInventory(axios, store) {
+function populateInventory(axios, store) {
   return axios.$get('/v1/inventory')
     .then((result) => {
       store.commit('setItems', result.items);
+
+      return store.dispatch('fetchCategories');
     });
 }
 
@@ -9,11 +11,18 @@ export default function ({app, store}) {
   if (store.state.accessToken === null) {
     return store.dispatch('loadAccessToken')
       .then((_result) => {
-        return loadAndSetInventory(app.$axios, store);
+        return populateInventory(app.$axios, store);
       });
   }
 
+  let promises = [];
+
   if (store.state.items === null) {
-    return loadAndSetInventory(app.$axios, store);
+    promises.push(populateInventory(app.$axios, store));
   }
+  if (store.state.categories === null) {
+    promises.push(store.dispatch('fetchCategories'));
+  }
+
+  return Promise.all(promises);
 }

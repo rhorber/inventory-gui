@@ -23,6 +23,12 @@
             Alle Artikel
           </nuxt-link>
         </b-nav-item>
+        <b-dropdown-divider />
+        <b-nav-item>
+          <nuxt-link to="/categories">
+            Kategorien verwalten
+          </nuxt-link>
+        </b-nav-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
 

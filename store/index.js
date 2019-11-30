@@ -2,7 +2,8 @@
 const state = function () {
   return {
     accessToken: null,
-    items: null
+    items: null,
+    categories: null
   };
 };
 
@@ -20,6 +21,18 @@ const mutations = {
   mutateItem(state, {itemId, consumer}) {
     const item = state.items.find((i) => i.id === itemId);
     consumer(item, state.items);
+  },
+  setCategories(state, categories) {
+    state.categories = categories;
+  },
+  replaceCategory(state, category) {
+    state.categories = [
+      ...state.categories.filter((c) => c.id !== category.id),
+      category
+    ];
+  },
+  resetCategories(state) {
+    state.categories = null;
   }
 };
 
@@ -34,6 +47,12 @@ const actions = {
     window.localStorage.setItem('accessToken', accessToken);
     commit('setAccessToken', accessToken);
     return Promise.resolve();
+  },
+  fetchCategories({commit}) {
+    return this.$axios.$get('/v2/categories')
+      .then((result) => {
+        commit('setCategories', result.categories);
+      });
   }
 };
 
