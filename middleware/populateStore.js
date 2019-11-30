@@ -1,24 +1,12 @@
-function populateInventory(axios, store) {
-  return axios.$get('/v1/inventory')
-    .then((result) => {
-      store.commit('setItems', result.items);
-
-      return store.dispatch('fetchCategories');
-    });
-}
-
-export default function ({app, store}) {
-  if (store.state.accessToken === null) {
-    return store.dispatch('loadAccessToken')
-      .then((_result) => {
-        return populateInventory(app.$axios, store);
-      });
-  }
-
+export default async function ({store}) {
   let promises = [];
 
-  if (store.state.items === null) {
-    promises.push(populateInventory(app.$axios, store));
+  if (store.state.accessToken === null) {
+    await store.dispatch('loadAccessToken');
+  }
+
+  if (store.state.articles === null) {
+    promises.push(store.dispatch('fetchArticles'));
   }
   if (store.state.categories === null) {
     promises.push(store.dispatch('fetchCategories'));

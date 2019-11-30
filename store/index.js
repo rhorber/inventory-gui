@@ -2,7 +2,7 @@
 const state = function () {
   return {
     accessToken: null,
-    items: null,
+    articles: null,
     categories: null
   };
 };
@@ -15,12 +15,17 @@ const mutations = {
   setAccessToken(state, accessToken) {
     state.accessToken = accessToken;
   },
-  setItems(state, items) {
-    state.items = items;
+  setArticles(state, articles) {
+    state.articles = articles;
   },
-  mutateItem(state, {itemId, consumer}) {
-    const item = state.items.find((i) => i.id === itemId);
-    consumer(item, state.items);
+  replaceArticle(state, article) {
+    state.articles = [
+      ...state.articles.filter((a) => a.id !== article.id),
+      article
+    ];
+  },
+  resetArticles(state) {
+    state.articles = null;
   },
   setCategories(state, categories) {
     state.categories = categories;
@@ -47,6 +52,12 @@ const actions = {
     window.localStorage.setItem('accessToken', accessToken);
     commit('setAccessToken', accessToken);
     return Promise.resolve();
+  },
+  fetchArticles({commit}) {
+    return this.$axios.$get('/v2/articles')
+      .then((result) => {
+        commit('setArticles', result.articles);
+      });
   },
   fetchCategories({commit}) {
     return this.$axios.$get('/v2/categories')

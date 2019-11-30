@@ -61,8 +61,7 @@
         slot-scope="data"
       >
         <b-button
-          v-if="data.index < items.length "
-          :class="{ invisible: data.item.position == nofItems }"
+          :class="{ invisible: data.index === highestArticleIndex }"
           variant="outline-secondary"
           @click="moveDown(data.item)"
         >
@@ -87,7 +86,7 @@
         </nuxt-link>
         <b-button
           variant="danger"
-          @click="resetStock(data.item)"
+          @click="resetArticle(data.item)"
         >
           <i class="fa fa-trash-o" />
         </b-button>
@@ -122,83 +121,52 @@ export default {
       ]
     };
   },
+
   computed: {
-    ...mapState(['items']),
+    ...mapState(['articles']),
     sortedItems() {
-      return [...this.items].sort((item1, item2) => item1.position - item2.position);
+      return [...this.articles].sort(
+        (item1, item2) => item1.position - item2.position
+      );
     },
-    nofItems() {
-      return this.items.length;
+    highestArticleIndex() {
+      return (this.articles.length - 1);
     }
   },
-  methods: {
-    ...mapMutations(['mutateItem']),
-    decreaseStock(item) {
-      this.$axios.$get(`/v1/item/${item.id}/decrement`)
-        .then((_result) => {
-          let consumer = function (item, _items) {
-            item.stock--;
-          };
 
-          this.mutateItem({itemId: item.id, consumer: consumer});
-        })
+  methods: {
+    ...mapMutations(['replaceArticle']),
+    decreaseStock(item) {
+      this.$axios.$put(`/v2/articles/${item.id}/decrement`)
+        .then(this.replaceArticle)
         .catch(console.error);
     },
     increaseStock(item) {
-      this.$axios.$get(`/v1/item/${item.id}/increment`)
-        .then((_result) => {
-          let consumer = function (item, _items) {
-            item.stock++;
-          };
-
-          this.mutateItem({itemId: item.id, consumer: consumer});
-        })
+      this.$axios.$put(`/v2/articles/${item.id}/increment`)
+        .then(this.replaceArticle)
         .catch(console.error);
     },
     moveDown(item) {
-      this.$axios.$get(`/v1/item/${item.id}/move-down`)
-        .then((_result) => {
-          let consumer = function (item, items) {
-            let newPosition = parseInt(item.position) + 1;
-            let otherItem = items.find((i) => parseInt(i.position) === newPosition);
-
-            otherItem.position--;
-            item.position++;
-          };
-
-          this.mutateItem({itemId: item.id, consumer: consumer});
-
-          // TODO: Maybe there is a better way.. (use store)
+      this.$axios.$put(`/v2/articles/${item.id}/move-down`)
+        .then((result) => {
+          this.replaceArticles(result.articles);
         })
         .catch(console.error);
     },
     moveUp(item) {
-      this.$axios.$get(`/v1/item/${item.id}/move-up`)
-        .then((_result) => {
-          let consumer = function (item, items) {
-            let newPosition = parseInt(item.position) - 1;
-            let otherItem = items.find((i) => parseInt(i.position) === newPosition);
-
-            otherItem.position++;
-            item.position--;
-          };
-
-          this.mutateItem({itemId: item.id, consumer: consumer});
-
-          // TODO: Maybe there is a better way.. (use store)
+      this.$axios.$put(`/v2/articles/${item.id}/move-up`)
+        .then((result) => {
+          this.replaceArticles(result.articles);
         })
         .catch(console.error);
     },
-    resetStock(item) {
-      this.$axios.$get(`/v1/item/${item.id}/reset-stock`)
-        .then((_result) => {
-          let consumer = function (item, _items) {
-            item.stock = 0;
-          };
-
-          this.mutateItem({itemId: item.id, consumer: consumer});
-        })
+    resetArticle(item) {
+      this.$axios.$put(`/v2/articles/${item.id}/reset`)
+        .then(this.replaceArticle)
         .catch(console.error);
+    },
+    replaceArticles(articles) {
+      articles.forEach(this.replaceArticle);
     }
   }
 }
