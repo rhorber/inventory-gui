@@ -2,6 +2,7 @@
   <b-navbar
     type="light"
     variant="light"
+    sticky
   >
     <b-navbar-nav>
       <h4>
