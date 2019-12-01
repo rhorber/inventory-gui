@@ -1,10 +1,10 @@
 <template>
   <section class="container">
     <div>
-      <h2>Artikel bearbeiten ({{ itemId }})</h2>
-      <item-form
-        :item="item"
-        @formSubmitted="saveItem"
+      <h2>Artikel bearbeiten ({{ articleId }})</h2>
+      <article-form
+        :article="article"
+        @formSubmitted="saveArticle"
       />
     </div>
   </section>
@@ -13,11 +13,11 @@
 <script>
 import { mapMutations } from 'vuex'
 
-import ItemForm from '~/components/ItemForm'
+import ArticleForm from '~/components/ArticleForm'
 
 export default {
   components: {
-    ItemForm
+    ArticleForm
   },
   validate({params}) {
     return /^\d+$/.test(params.id);
@@ -25,19 +25,19 @@ export default {
   asyncData({app, params}) {
     return app.$axios.$get('/v2/articles/' + params.id)
       .then((result) => {
-        return {item: result}
+        return {article: result}
       });
   },
   data() {
     return {
-      itemId: this.$route.params.id
+      articleId: this.$route.params.id
     };
   },
   methods: {
     ...mapMutations(['resetArticles']),
-    saveItem(data) {
-      // TODO: Can that be combined with the addItem method in the add page?
-      const item = {
+    saveArticle(data) {
+      // TODO: Can that be combined with the addArticle method in the add page?
+      const article = {
         category: 1,
         name: data.name,
         size: data.size,
@@ -46,7 +46,7 @@ export default {
         stock: data.stock
       };
 
-      this.$axios.$put('/v2/articles/' + this.itemId, item)
+      this.$axios.$put('/v2/articles/' + this.articleId, article)
         .then(() => {
           this.resetArticles();
           this.$router.push({path: '/'});

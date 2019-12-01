@@ -2,9 +2,9 @@
   <section class="container">
     <div>
       <h2>Artikel erstellen</h2>
-      <item-form
-        :item="emptyItem"
-        @formSubmitted="addItem"
+      <article-form
+        :article="emptyArticle"
+        @formSubmitted="addArticle"
       />
     </div>
   </section>
@@ -13,16 +13,16 @@
 <script>
 import { mapMutations } from 'vuex'
 
-import ItemForm from '~/components/ItemForm'
+import ArticleForm from '~/components/ArticleForm'
 
 export default {
   components: {
-    ItemForm
+    ArticleForm
   },
 
   data() {
     return {
-      emptyItem: {
+      emptyArticle: {
         category: 0,
         name: '',
         size: '',
@@ -35,9 +35,9 @@ export default {
 
   methods: {
     ...mapMutations(['resetArticles']),
-    addItem(data) {
-      // TODO: Can that be combined with the saveItem method in the edit page?
-      const item = {
+    addArticle(data) {
+      // TODO: Can that be combined with the saveArticle method in the edit page?
+      const article = {
         category: 1,
         name: data.name,
         size: data.size,
@@ -46,7 +46,7 @@ export default {
         stock: data.stock
       };
 
-      this.$axios.$post('/v2/articles', item)
+      this.$axios.$post('/v2/articles', article)
         .then(() => {
           this.resetArticles();
           this.$router.push({path: '/'});

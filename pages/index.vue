@@ -2,7 +2,7 @@
   <div>
     <h2>Artikel</h2>
     <div>
-      <nuxt-link to="/item/add">
+      <nuxt-link to="/article/add">
         <b-button
           variant="primary"
           class="mt-2 mb-3"
@@ -13,7 +13,7 @@
     </div>
     <b-table
       :fields="tableFields"
-      :items="sortedItems"
+      :items="sortedArticles"
       striped
       hover
     >
@@ -79,7 +79,7 @@
         slot="cell(actions)"
         slot-scope="data"
       >
-        <nuxt-link :to="'/item/edit/' + data.item.id">
+        <nuxt-link :to="'/article/edit/' + data.item.id">
           <b-button variant="primary">
             <i class="fa fa-edit" />
           </b-button>
@@ -93,7 +93,7 @@
       </template>
     </b-table>
     <div>
-      <nuxt-link to="/item/add">
+      <nuxt-link to="/article/add">
         <b-button
           variant="primary"
           class="mb-2"
@@ -124,9 +124,9 @@ export default {
 
   computed: {
     ...mapState(['articles']),
-    sortedItems() {
+    sortedArticles() {
       return [...this.articles].sort(
-        (item1, item2) => item1.position - item2.position
+        (article1, article2) => article1.position - article2.position
       );
     },
     highestArticleIndex() {
@@ -136,32 +136,32 @@ export default {
 
   methods: {
     ...mapMutations(['replaceArticle']),
-    decreaseStock(item) {
-      this.$axios.$put(`/v2/articles/${item.id}/decrement`)
+    decreaseStock(article) {
+      this.$axios.$put(`/v2/articles/${article.id}/decrement`)
         .then(this.replaceArticle)
         .catch(console.error);
     },
-    increaseStock(item) {
-      this.$axios.$put(`/v2/articles/${item.id}/increment`)
+    increaseStock(article) {
+      this.$axios.$put(`/v2/articles/${article.id}/increment`)
         .then(this.replaceArticle)
         .catch(console.error);
     },
-    moveDown(item) {
-      this.$axios.$put(`/v2/articles/${item.id}/move-down`)
+    moveDown(article) {
+      this.$axios.$put(`/v2/articles/${article.id}/move-down`)
         .then((result) => {
           this.replaceArticles(result.articles);
         })
         .catch(console.error);
     },
-    moveUp(item) {
-      this.$axios.$put(`/v2/articles/${item.id}/move-up`)
+    moveUp(article) {
+      this.$axios.$put(`/v2/articles/${article.id}/move-up`)
         .then((result) => {
           this.replaceArticles(result.articles);
         })
         .catch(console.error);
     },
-    resetArticle(item) {
-      this.$axios.$put(`/v2/articles/${item.id}/reset`)
+    resetArticle(article) {
+      this.$axios.$put(`/v2/articles/${article.id}/reset`)
         .then(this.replaceArticle)
         .catch(console.error);
     },

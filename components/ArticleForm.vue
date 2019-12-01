@@ -6,7 +6,7 @@
     >
       <b-form-input
         id="name"
-        v-model="dataItem.name"
+        v-model="dataArticle.name"
         type="text"
         required
       />
@@ -18,7 +18,7 @@
     >
       <b-form-input
         id="size"
-        v-model="dataItem.size"
+        v-model="dataArticle.size"
         type="text"
       />
     </b-form-group>
@@ -29,7 +29,7 @@
     >
       <div>
         <b-form-select
-          v-model="dataItem.unit"
+          v-model="dataArticle.unit"
           :options="units"
         />
       </div>
@@ -41,7 +41,7 @@
     >
       <b-form-input
         id="best-before"
-        v-model="dataItem.best_before"
+        v-model="dataArticle.best_before"
         type="text"
       />
       <b-form-text id="best-before-help">
@@ -55,7 +55,7 @@
     >
       <b-form-input
         id="stock"
-        v-model="dataItem.stock"
+        v-model="dataArticle.stock"
         type="number"
         required
       />
@@ -78,21 +78,21 @@
 <script>
 export default {
   props: {
-    item: {
+    article: {
       type: Object,
       required: true
     }
   },
   data() {
     return {
-      dataItem: this.item,
+      dataArticle: this.article,
       units: ['', 'cl', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk']
     }
   },
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      this.$emit('formSubmitted', this.dataItem);
+      this.$emit('formSubmitted', this.dataArticle);
     }
   }
 }
