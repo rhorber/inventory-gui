@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Artikel</h2>
+    <h2>{{ pageTitle }}</h2>
     <div>
       <nuxt-link to="/article/add">
         <b-button
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
   data() {
@@ -124,13 +124,46 @@ export default {
 
   computed: {
     ...mapState(['articles']),
+    ...mapGetters(['categoriesMap']),
+    selectedCategory() {
+      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'category')) {
+        return this.categoriesMap[(this.$route.query.category)];
+      } else {
+        return null;
+      }
+    },
+    pageTitle() {
+      if (this.selectedCategory === null) {
+        return 'Alle Artikel';
+      } else {
+        return 'Artikel: ' + this.selectedCategory.name;
+      }
+    },
+    filteredArticles() {
+      if (this.selectedCategory === null) {
+        return this.articles;
+      } else {
+        return this.articles.filter(
+          (article) => article.category === this.selectedCategory.id
+        );
+      }
+    },
     sortedArticles() {
-      return [...this.articles].sort(
-        (article1, article2) => article1.position - article2.position
+      return [...this.filteredArticles].sort(
+        (article1, article2) => {
+          if (article1.category === article2.category) {
+            return (article1.position - article2.position);
+          } else {
+            let category1 = this.categoriesMap[article1.category];
+            let category2 = this.categoriesMap[article2.category];
+
+            return (category1.position - category2.position);
+          }
+        }
       );
     },
     highestArticleIndex() {
-      return (this.articles.length - 1);
+      return (this.filteredArticles.length - 1);
     }
   },
 

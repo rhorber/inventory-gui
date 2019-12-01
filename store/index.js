@@ -8,7 +8,16 @@ const state = function () {
 };
 
 // Getters
-const getters = {};
+const getters = {
+  // Object with categoryId as key and category as value.
+  categoriesMap(state) {
+    let map = {};
+    state.categories.forEach((category) => {
+      map[category.id] = category;
+    });
+    return map;
+  }
+};
 
 // Mutations (setters; synchronous operations, preferably on one state property)
 const mutations = {

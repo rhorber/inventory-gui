@@ -18,12 +18,23 @@
         right
         size="lg"
       >
+        <b-nav-item
+          v-for="category in categories"
+          :key="category.id"
+        >
+          <nuxt-link :to="'/?category=' + category.id">
+            {{ category.name }}
+          </nuxt-link>
+        </b-nav-item>
+        <b-dropdown-divider />
+
         <b-nav-item>
           <nuxt-link to="/">
             Alle Artikel
           </nuxt-link>
         </b-nav-item>
         <b-dropdown-divider />
+
         <b-nav-item>
           <nuxt-link to="/categories">
             Kategorien verwalten
@@ -41,11 +52,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import Logo from './Logo'
 
 export default {
   components: {
     Logo
+  },
+  computed: {
+    ...mapState(['categories'])
   }
 }
 </script>
