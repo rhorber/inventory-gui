@@ -1,6 +1,20 @@
 <template>
   <b-form @submit="onSubmit">
     <b-form-group
+      label="Kategorie *"
+      label-for="category"
+    >
+      <b-form-select
+        id="category"
+        v-model="dataArticle.category"
+        :options="categories"
+        value-field="id"
+        text-field="name"
+        required
+      />
+    </b-form-group>
+
+    <b-form-group
       label="Name *"
       label-for="name"
     >
@@ -76,6 +90,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
     article: {
@@ -88,6 +104,9 @@ export default {
       dataArticle: this.article,
       units: ['', 'cl', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk']
     }
+  },
+  computed: {
+    ...mapState(['categories'])
   },
   methods: {
     onSubmit(event) {

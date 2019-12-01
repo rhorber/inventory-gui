@@ -38,7 +38,7 @@ export default {
     saveArticle(data) {
       // TODO: Can that be combined with the addArticle method in the add page?
       const article = {
-        category: 1,
+        category: data.category,
         name: data.name,
         size: data.size,
         unit: data.unit,

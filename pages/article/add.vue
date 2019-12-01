@@ -38,7 +38,7 @@ export default {
     addArticle(data) {
       // TODO: Can that be combined with the saveArticle method in the edit page?
       const article = {
-        category: 1,
+        category: data.category,
         name: data.name,
         size: data.size,
         unit: data.unit,
