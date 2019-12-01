@@ -19,36 +19,32 @@
         right
         size="lg"
       >
-        <b-nav-item
+        <b-dropdown-item
           v-for="category in categories"
           :key="category.id"
+          :to="'/?category=' + category.id"
         >
-          <nuxt-link :to="'/?category=' + category.id">
-            {{ category.name }}
-          </nuxt-link>
-        </b-nav-item>
+          {{ category.name }}
+        </b-dropdown-item>
         <b-dropdown-divider />
 
-        <b-nav-item>
-          <nuxt-link to="/">
-            Alle Artikel
-          </nuxt-link>
-        </b-nav-item>
+        <b-dropdown-item to="/">
+          Alle Artikel
+        </b-dropdown-item>
         <b-dropdown-divider />
 
-        <b-nav-item>
-          <nuxt-link to="/categories">
-            Kategorien verwalten
-          </nuxt-link>
-        </b-nav-item>
+        <b-dropdown-item
+          to="/categories"
+          no-prefetch
+        >
+          Kategorien verwalten
+        </b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
 
-    <b-navbar-nav>
-      <b-navbar-brand href="#">
-        <Logo />
-      </b-navbar-brand>
-    </b-navbar-nav>
+    <b-navbar-brand href="#">
+      <Logo />
+    </b-navbar-brand>
   </b-navbar>
 </template>
 
