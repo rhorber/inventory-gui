@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Alle Artikel</h2>
+    <h2>{{ pageTitle }}</h2>
     <div>
       <nuxt-link to="/article/add">
         <b-button
@@ -37,17 +37,33 @@ export default {
     ArticleTable
   },
 
+  validate({params}) {
+    return /^\d+$/.test(params.id);
+  },
+
+  data() {
+    return {
+      categoryId: this.$route.params.id
+    };
+  },
+
   computed: {
     ...mapState(['articles']),
     ...mapGetters(['categoriesMap']),
+    selectedCategory() {
+      return this.categoriesMap[this.categoryId];
+    },
+    pageTitle() {
+      return 'Kategorie: ' + this.selectedCategory.name;
+    },
+    filteredArticles() {
+      return this.articles.filter(
+        (article) => (article.category === this.selectedCategory.id)
+      );
+    },
     sortedArticles() {
-      return [...this.articles].sort(
-        (article1, article2) => {
-          let category1 = this.categoriesMap[article1.category];
-          let category2 = this.categoriesMap[article2.category];
-
-          return (category1.position - category2.position);
-        }
+      return [...this.filteredArticles].sort(
+        (article1, article2) => (article1.position - article2.position)
       );
     }
   }

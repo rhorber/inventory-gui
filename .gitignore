@@ -80,3 +80,4 @@ dist
 # IDE
 .idea/deployment.xml
 .idea/workspace.xml
+.idea/shelf/
