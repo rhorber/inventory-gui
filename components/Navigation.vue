@@ -22,7 +22,7 @@
         <b-dropdown-item
           v-for="category in categories"
           :key="category.id"
-          :to="'/?category=' + category.id"
+          :to="'/category/' + category.id"
         >
           {{ category.name }}
         </b-dropdown-item>
