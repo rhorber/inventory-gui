@@ -33,6 +33,12 @@ export default {
     };
   },
 
+  mounted() {
+    if (Object.prototype.hasOwnProperty.call(this.$route.query, 'category')) {
+      this.emptyArticle.category = this.$route.query.category;
+    }
+  },
+
   methods: {
     ...mapMutations(['resetArticles']),
     addArticle(data) {
@@ -48,8 +54,10 @@ export default {
 
       this.$axios.$post('/v2/articles', article)
         .then(() => {
+          let path = `/category/${data.category}`;
+
           this.resetArticles();
-          this.$router.push({path: '/'});
+          this.$router.push({path: path});
         })
         .catch(console.error);
     }

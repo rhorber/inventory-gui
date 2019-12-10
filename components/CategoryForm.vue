@@ -12,11 +12,11 @@
       />
     </b-form-group>
 
-    <nuxt-link to="/categories">
+    <a @click="back()">
       <b-button variant="outline-danger">
         Abbrechen
       </b-button>
-    </nuxt-link>
+    </a>
     <b-button
       variant="primary"
       type="submit"
@@ -40,6 +40,9 @@ export default {
     }
   },
   methods: {
+    back(_event) {
+      this.$router.go(-1);
+    },
     onSubmit(event) {
       event.preventDefault();
       this.$emit('formSubmitted', this.dataCategory);

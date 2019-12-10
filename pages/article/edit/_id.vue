@@ -19,15 +19,18 @@ export default {
   components: {
     ArticleForm
   },
+
   validate({params}) {
     return /^\d+$/.test(params.id);
   },
+
   asyncData({app, params}) {
     return app.$axios.$get('/v2/articles/' + params.id)
       .then((result) => {
         return {article: result}
       });
   },
+
   data() {
     return {
       articleId: this.$route.params.id
@@ -48,8 +51,10 @@ export default {
 
       this.$axios.$put('/v2/articles/' + this.articleId, article)
         .then(() => {
+          let path = `/category/${data.category}`;
+
           this.resetArticles();
-          this.$router.push({path: '/'});
+          this.$router.push({path: path});
         })
         .catch(console.error);
     }

@@ -2,7 +2,7 @@
   <div>
     <h2>{{ pageTitle }}</h2>
     <div>
-      <nuxt-link to="/article/add">
+      <nuxt-link :to="'/article/add?category=' + categoryId">
         <b-button
           variant="primary"
           class="mt-2 mb-3"
@@ -15,7 +15,7 @@
       :articles="sortedArticles"
     />
     <div>
-      <nuxt-link to="/article/add">
+      <nuxt-link :to="'/article/add?category=' + categoryId">
         <b-button
           variant="primary"
           class="mb-2"
