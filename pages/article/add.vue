@@ -33,6 +33,12 @@ export default {
     };
   },
 
+  mounted() {
+    if (Object.prototype.hasOwnProperty.call(this.$route.query, 'category')) {
+      this.emptyArticle.category = this.$route.query.category;
+    }
+  },
+
   methods: {
     ...mapMutations(['resetArticles']),
     addArticle(data) {
