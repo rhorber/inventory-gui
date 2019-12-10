@@ -48,8 +48,10 @@ export default {
 
       this.$axios.$post('/v2/articles', article)
         .then(() => {
+          let path = `/category/${data.category}`;
+
           this.resetArticles();
-          this.$router.push({path: '/'});
+          this.$router.push({path: path});
         })
         .catch(console.error);
     }
