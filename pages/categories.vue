@@ -13,7 +13,7 @@
     </div>
     <b-table
       :fields="tableFields"
-      :items="sortedCategories"
+      :items="categories"
       striped
       hover
     >
@@ -76,11 +76,6 @@ export default {
 
   computed: {
     ...mapState(['categories']),
-    sortedCategories() {
-      return [...this.categories].sort(
-        (category1, category2) => category1.position - category2.position
-      );
-    },
     highestCategoryIndex() {
       return (this.categories.length - 1);
     }

@@ -1,6 +1,6 @@
 {
   "name": "inventory",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Little helper application to manage (cellar) inventory.",
   "author": "Raphael Horber (raphael.horber@gmail.com)",
   "private": true,
