@@ -43,6 +43,7 @@
     >
       <div>
         <b-form-select
+          id="unit"
           v-model="dataArticle.unit"
           :options="units"
         />
