@@ -43,10 +43,14 @@ export default {
     sortedArticles() {
       return [...this.articles].sort(
         (article1, article2) => {
-          let category1 = this.categoriesMap[article1.category];
-          let category2 = this.categoriesMap[article2.category];
+          if (article1.category === article2.category) {
+            return (article1.position - article2.position)
+          } else {
+            let category1 = this.categoriesMap[article1.category];
+            let category2 = this.categoriesMap[article2.category];
 
-          return (category1.position - category2.position);
+            return (category1.position - category2.position);
+          }
         }
       );
     }
