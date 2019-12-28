@@ -37,13 +37,18 @@ const mutations = {
     state.articles = null;
   },
   setCategories(state, categories) {
-    state.categories = categories;
+    state.categories = categories.sort(
+      (category1, category2) => (category1.position - category2.position)
+    );
   },
   replaceCategory(state, category) {
     state.categories = [
       ...state.categories.filter((c) => c.id !== category.id),
       category
     ];
+    state.categories.sort(
+      (category1, category2) => (category1.position - category2.position)
+    );
   },
   resetCategories(state) {
     state.categories = null;
