@@ -1,15 +1,27 @@
 <template>
   <div>
     <h2>Alle Artikel</h2>
-    <div>
-      <nuxt-link to="/article/add">
-        <b-button
-          variant="primary"
-          class="mt-2 mb-3"
-        >
-          Artikel erstellen
-        </b-button>
-      </nuxt-link>
+    <div class="container-fluid">
+      <div class="row justify-content-between align-items-center">
+        <div class="column">
+          <nuxt-link to="/article/add">
+            <b-button
+              variant="primary"
+              class="mt-2 mb-3"
+            >
+              Artikel erstellen
+            </b-button>
+          </nuxt-link>
+        </div>
+        <div class="column">
+          <b-form-checkbox
+            v-model="hideStockZero"
+            name="hide-stock-zero"
+          >
+            Artikel ohne Bestand ausblenden
+          </b-form-checkbox>
+        </div>
+      </div>
     </div>
     <article-table
       :articles="sortedArticles"
@@ -37,11 +49,22 @@ export default {
     ArticleTable
   },
 
+  data() {
+    return {
+      hideStockZero: false
+    };
+  },
+
   computed: {
     ...mapState(['articles']),
     ...mapGetters(['categoriesMap']),
+    filteredArticles() {
+      return this.articles.filter(
+        (article) => (this.hideStockZero === false || article.stock > 0)
+      );
+    },
     sortedArticles() {
-      return [...this.articles].sort(
+      return [...this.filteredArticles].sort(
         (article1, article2) => {
           if (article1.category === article2.category) {
             return (article1.position - article2.position)

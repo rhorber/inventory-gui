@@ -1,15 +1,27 @@
 <template>
   <div>
     <h2>{{ pageTitle }}</h2>
-    <div>
-      <nuxt-link :to="'/article/add?category=' + categoryId">
-        <b-button
-          variant="primary"
-          class="mt-2 mb-3"
-        >
-          Artikel erstellen
-        </b-button>
-      </nuxt-link>
+    <div class="container-fluid">
+      <div class="row justify-content-between align-items-center">
+        <div class="column">
+          <nuxt-link :to="'/article/add?category=' + categoryId">
+            <b-button
+              variant="primary"
+              class="mt-2 mb-3"
+            >
+              Artikel erstellen
+            </b-button>
+          </nuxt-link>
+        </div>
+        <div class="column">
+          <b-form-checkbox
+            v-model="hideStockZero"
+            name="hide-stock-zero"
+          >
+            Artikel ohne Bestand ausblenden
+          </b-form-checkbox>
+        </div>
+      </div>
     </div>
     <article-table
       :articles="sortedArticles"
@@ -43,7 +55,8 @@ export default {
 
   data() {
     return {
-      categoryId: this.$route.params.id
+      categoryId: this.$route.params.id,
+      hideStockZero: false
     };
   },
 
@@ -58,7 +71,12 @@ export default {
     },
     filteredArticles() {
       return this.articles.filter(
-        (article) => (article.category === this.selectedCategory.id)
+        (article) => {
+          if (article.category !== this.selectedCategory.id) {
+            return false;
+          }
+          return (this.hideStockZero === false || article.stock > 0);
+        }
       );
     },
     sortedArticles() {
