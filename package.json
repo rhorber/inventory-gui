@@ -21,23 +21,23 @@
     "npm": "6.x"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.6.0",
+    "@nuxtjs/axios": "^5.9.7",
     "@nuxtjs/font-awesome": "^1.0.4",
     "bootstrap": "^4.4.1",
-    "bootstrap-vue": "^2.1.0",
+    "bootstrap-vue": "^2.10.1",
     "cross-env": "^6.0.3",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "lodash.template": "^4.5.0",
-    "nuxt": "2.11.0",
+    "nuxt": "2.12.2",
     "serialize-javascript": "^2.1.1"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.1.0",
     "dotenv": "^8.1.0",
     "eslint": "^6.7.2",
-    "eslint-loader": "^3.0.3",
-    "eslint-plugin-vue": "^6.0.1",
+    "eslint-loader": "^3.0.4",
+    "eslint-plugin-vue": "^6.2.2",
     "event-stream": "4.0.1",
     "nodemon": "^1.19.1",
     "npm-check-updates": "^3.2.2"
