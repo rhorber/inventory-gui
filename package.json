@@ -39,6 +39,7 @@
     "eslint-loader": "^3.0.4",
     "eslint-plugin-vue": "^6.2.2",
     "event-stream": "4.0.1",
+    "minimist": "^1.2.5",
     "nodemon": "^1.19.1",
     "npm-check-updates": "^3.2.2"
   }
