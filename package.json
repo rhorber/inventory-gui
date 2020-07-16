@@ -27,7 +27,7 @@
     "bootstrap-vue": "^2.10.1",
     "cross-env": "^6.0.3",
     "jquery": "^3.5.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lodash.template": "^4.5.0",
     "nuxt": "2.12.2",
     "serialize-javascript": "^2.1.1"
