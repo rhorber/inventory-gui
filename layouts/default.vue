@@ -1,6 +1,12 @@
 <template>
   <div>
     <navigation />
+    <b-alert
+      :show="$nuxt.isOffline"
+      variant="danger"
+    >
+      Du bist offline.
+    </b-alert>
     <div class="d-block d-lg-none container-fluid pt-4">
       <nuxt />
     </div>
