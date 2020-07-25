@@ -53,20 +53,16 @@ export default {
     async synchronize() {
       this.setIsSyncing(true);
 
-      let promises = [];
-      let queue = await this.getSyncQueue();
-      let request;
-      let data;
+      const queue = await this.getSyncQueue();
 
-      // TODO: Replace with array map.
-      queue.forEach((job) => {
-        data = Object.assign(job.payload, {timestamp: job.timestamp});
-        request = this.$axios({
+      const promises = queue.map((job) => {
+        const data = Object.assign(job.payload, {timestamp: job.timestamp});
+
+        return this.$axios({
           url: job.url,
           method: job.method,
           data: data
         });
-        promises.push(request);
       });
 
       try {
