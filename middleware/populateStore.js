@@ -5,6 +5,10 @@ export default async function ({store}) {
     await store.dispatch('loadAccessToken');
   }
 
+  if (store.state.isSyncPending === null) {
+    await store.dispatch('loadIsSyncPending');
+  }
+
   if (store.state.articles === null) {
     promises.push(store.dispatch('fetchArticles'));
   }

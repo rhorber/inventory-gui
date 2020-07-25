@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 import ArticleForm from '~/components/ArticleForm'
 
@@ -40,7 +40,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['resetArticles']),
+    ...mapMutations({resetArticles: 'resetArticles', addToStore: 'addArticle'}),
+    ...mapActions(['addToSyncQueue']),
     addArticle(data) {
       // TODO: Can that be combined with the saveArticle method in the edit page?
       const article = {
@@ -52,14 +53,21 @@ export default {
         stock: data.stock
       };
 
-      this.$axios.$post('/v2/articles', article)
-        .then(() => {
-          let path = `/category/${data.category}`;
+      const url = '/v2/articles';
+      const path = `/category/${data.category}`;
 
-          this.resetArticles();
-          this.$router.push({path: path});
-        })
-        .catch(console.error);
+      if ($nuxt.isOnline) {
+        this.$axios.$post(url, article)
+          .then(() => {
+            this.resetArticles();
+            this.$router.push({path: path});
+          })
+          .catch(console.error);
+      } else {
+        this.addToSyncQueue({method: 'post', url: url, payload: article});
+        this.addToStore(article);
+        this.$router.push({path: path});
+      }
     }
   }
 }

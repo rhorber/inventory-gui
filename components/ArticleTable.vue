@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   props: {
@@ -117,6 +117,7 @@ export default {
 
   methods: {
     ...mapMutations(['replaceArticle']),
+    ...mapActions(['addToSyncQueue']),
     decreaseStock(article) {
       this.$axios.$put(`/v2/articles/${article.id}/decrement`)
         .then(this.replaceArticle)
@@ -142,9 +143,18 @@ export default {
         .catch(console.error);
     },
     resetArticle(article) {
-      this.$axios.$put(`/v2/articles/${article.id}/reset`)
-        .then(this.replaceArticle)
-        .catch(console.error);
+      const url = `/v2/articles/${article.id}/reset`;
+      if ($nuxt.isOnline) {
+        this.$axios.$put(url)
+          .then(this.replaceArticle)
+          .catch(console.error);
+      } else {
+        this.addToSyncQueue({method: 'put', url: url, payload: {}});
+        let newArticle = Object.assign({}, article);
+        newArticle.stock = 0;
+        newArticle.best_before = '';
+        this.replaceArticle(newArticle);
+      }
     },
     replaceArticles(articles) {
       articles.forEach(this.replaceArticle);
