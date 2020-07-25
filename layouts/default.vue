@@ -8,7 +8,7 @@
       Du bist offline.
     </b-alert>
     <b-alert
-      :show="$nuxt.isOnline && isSyncPending"
+      :show="$nuxt.isOnline && isSyncPending && isSyncing === false"
       variant="warning"
     >
       <b-button
