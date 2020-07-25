@@ -29,6 +29,7 @@ const mutations = {
   setArticles(state, articles) {
     state.articles = articles.map((article) => {
       article.id = parseInt(article.id, 10);
+      return article;
     });
   },
   replaceArticle(state, article) {
