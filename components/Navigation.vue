@@ -34,6 +34,7 @@
         <b-dropdown-divider />
 
         <b-dropdown-item
+          :disabled="$nuxt.isOffline"
           to="/categories"
           no-prefetch
         >

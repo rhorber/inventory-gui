@@ -31,6 +31,7 @@
       slot-scope="data"
     >
       <b-button
+        v-if="$nuxt.isOnline"
         variant="outline-secondary"
         @click="decreaseStock(data.item)"
       >
@@ -38,6 +39,7 @@
       </b-button>
       <span class="amount">{{ data.value }}</span>
       <b-button
+        v-if="$nuxt.isOnline"
         variant="outline-secondary"
         @click="increaseStock(data.item)"
       >
@@ -49,6 +51,7 @@
       slot-scope="data"
     >
       <b-button
+        v-if="$nuxt.isOnline"
         :class="{ invisible: data.index === highestArticleIndex }"
         variant="outline-secondary"
         @click="moveDown(data.item)"
@@ -56,7 +59,7 @@
         <i class="fa fa-angle-down" />
       </b-button>
       <b-button
-        v-if="data.index > 0"
+        v-if="$nuxt.isOnline && data.index > 0"
         variant="outline-secondary"
         @click="moveUp(data.item)"
       >
@@ -83,7 +86,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   props: {
@@ -114,6 +117,7 @@ export default {
 
   methods: {
     ...mapMutations(['replaceArticle']),
+    ...mapActions(['addToSyncQueue']),
     decreaseStock(article) {
       this.$axios.$put(`/v2/articles/${article.id}/decrement`)
         .then(this.replaceArticle)
@@ -139,9 +143,18 @@ export default {
         .catch(console.error);
     },
     resetArticle(article) {
-      this.$axios.$put(`/v2/articles/${article.id}/reset`)
-        .then(this.replaceArticle)
-        .catch(console.error);
+      const url = `/v2/articles/${article.id}/reset`;
+      if ($nuxt.isOnline) {
+        this.$axios.$put(url)
+          .then(this.replaceArticle)
+          .catch(console.error);
+      } else {
+        this.addToSyncQueue({method: 'put', url: url, payload: {}});
+        let newArticle = Object.assign({}, article);
+        newArticle.stock = 0;
+        newArticle.best_before = '';
+        this.replaceArticle(newArticle);
+      }
     },
     replaceArticles(articles) {
       articles.forEach(this.replaceArticle);

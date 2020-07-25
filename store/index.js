@@ -3,7 +3,9 @@ const state = function () {
   return {
     accessToken: null,
     articles: null,
-    categories: null
+    categories: null,
+    isSyncPending: null,
+    isSyncing: false
   };
 };
 
@@ -33,6 +35,9 @@ const mutations = {
       article
     ];
   },
+  addArticle(state, article) {
+    state.articles.push(article);
+  },
   resetArticles(state) {
     state.articles = null;
   },
@@ -52,6 +57,12 @@ const mutations = {
   },
   resetCategories(state) {
     state.categories = null;
+  },
+  setIsSyncPending(state, isSyncPending) {
+    state.isSyncPending = isSyncPending;
+  },
+  setIsSyncing(state, isSyncing) {
+    state.isSyncing = isSyncing;
   }
 };
 
@@ -61,6 +72,12 @@ const actions = {
     const accessToken = window.localStorage.getItem('accessToken');
     commit('setAccessToken', accessToken);
     return Promise.resolve(accessToken);
+  },
+  loadIsSyncPending({commit}) {
+    const lastIndex = window.localStorage.getItem('syncQueue.lastIndex');
+    const isPending = lastIndex !== null;
+    commit('setIsSyncPending', isPending);
+    return Promise.resolve(isPending);
   },
   saveAccessToken({commit}, accessToken) {
     window.localStorage.setItem('accessToken', accessToken);
@@ -78,6 +95,48 @@ const actions = {
       .then((result) => {
         commit('setCategories', result.categories);
       });
+  },
+  getSyncQueue() {
+    const lastIndex = window.localStorage.getItem('syncQueue.lastIndex');
+    let queue = [];
+    let item;
+    let parsesd;
+
+    for (let index = 0; index <= lastIndex; index++) {
+      item = window.localStorage.getItem(`syncQueue.${index}`);
+      parsesd = JSON.parse(item);
+      queue.push(parsesd);
+    }
+
+    return Promise.resolve(queue);
+  },
+  addToSyncQueue({commit}, {method, url, payload}) {
+    const currentLastIndex = window.localStorage.getItem('syncQueue.lastIndex');
+    const timestamp = Date.now();
+    const content = JSON.stringify({method, url, payload, timestamp});
+    let newLastIndex;
+
+    if (currentLastIndex === null) {
+      newLastIndex = 0;
+    } else {
+      newLastIndex = parseInt(currentLastIndex, 10) + 1;
+    }
+
+    window.localStorage.setItem(`syncQueue.${newLastIndex}`, content);
+    window.localStorage.setItem('syncQueue.lastIndex', newLastIndex.toString());
+    commit('setIsSyncPending', true);
+    return Promise.resolve();
+  },
+  resetSyncQueue({commit}) {
+    const lastIndex = window.localStorage.getItem('syncQueue.lastIndex');
+
+    for (let index = 0; index <= lastIndex; index++) {
+      window.localStorage.removeItem(`syncQueue.${index}`);
+    }
+    window.localStorage.removeItem('syncQueue.lastIndex')
+
+    commit('setIsSyncPending', false);
+    return Promise.resolve();
   }
 };
 
