@@ -11,19 +11,13 @@
       :show="$nuxt.isOnline && isSyncPending"
       variant="warning"
     >
-      <b-row align-v="center">
-        <b-col>Du bist wieder online und die Synchronisations-Warteschlange ist nicht leer.</b-col>
-        <b-col>
-          <b-button
-            variant="warning"
-            :disabled="isSyncing"
-            class="float-right"
-            @click="synchronize"
-          >
-            Synchronisieren
-          </b-button>
-        </b-col>
-      </b-row>
+      <b-button
+        variant="warning"
+        :disabled="isSyncing"
+        @click="synchronize"
+      >
+        Synchronisieren
+      </b-button>
     </b-alert>
     <b-alert
       :show="isSyncing"
