@@ -117,7 +117,7 @@ const actions = {
   },
   addToSyncQueue({commit}, {method, url, payload}) {
     const currentLastIndex = window.localStorage.getItem('syncQueue.lastIndex');
-    const timestamp = Date.now();
+    const timestamp = Math.floor(Date.now() / 1000);
     const content = JSON.stringify({method, url, payload, timestamp});
     let newLastIndex;
 
