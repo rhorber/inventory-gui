@@ -25,14 +25,16 @@ export default {
   },
 
   asyncData({app, store, params}) {
+    const articleId = parseInt(params.id, 10);
+
     if ($nuxt.isOnline) {
-      return app.$axios.$get('/v2/articles/' + params.id)
+      return app.$axios.$get(`/v2/articles/${articleId}`)
         .then((result) => {
           return {article: result}
         });
     } else {
       let articles = store.state.articles.filter((article) => {
-        return (article.id == params.id);
+        return (article.id === articleId);
       });
       let article = Object.assign({}, articles[0]);
       return {article: article};
@@ -44,6 +46,7 @@ export default {
       articleId: this.$route.params.id
     };
   },
+
   methods: {
     ...mapMutations(['resetArticles', 'replaceArticle']),
     ...mapActions(['addToSyncQueue']),
