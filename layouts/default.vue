@@ -8,7 +8,7 @@
       Du bist offline.
     </b-alert>
     <b-alert
-      :show="isSyncPending"
+      :show="$nuxt.isOnline && isSyncPending"
       variant="warning"
     >
       <b-row align-v="center">
