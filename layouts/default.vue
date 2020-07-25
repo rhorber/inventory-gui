@@ -15,7 +15,7 @@
         <b-col>Du bist wieder online und die Synchronisations-Warteschlange ist nicht leer.</b-col>
         <b-col>
           <b-button
-            variant="danger"
+            variant="warning"
             :disabled="isSyncing"
             class="float-right"
             @click="synchronize"
