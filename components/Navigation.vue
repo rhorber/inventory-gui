@@ -1,7 +1,7 @@
 <template>
   <b-navbar
+    :variant="variant"
     type="light"
-    variant="light"
     sticky
   >
     <b-navbar-nav>
@@ -59,7 +59,14 @@ export default {
     Logo
   },
   computed: {
-    ...mapState(['categories'])
+    ...mapState(['categories']),
+    variant() {
+      if ($nuxt.isOnline) {
+        return 'light';
+      } else {
+        return 'warning';
+      }
+    }
   }
 }
 </script>
