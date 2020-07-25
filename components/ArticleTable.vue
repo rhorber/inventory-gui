@@ -31,6 +31,7 @@
       slot-scope="data"
     >
       <b-button
+        v-if="$nuxt.isOnline"
         variant="outline-secondary"
         @click="decreaseStock(data.item)"
       >
@@ -38,6 +39,7 @@
       </b-button>
       <span class="amount">{{ data.value }}</span>
       <b-button
+        v-if="$nuxt.isOnline"
         variant="outline-secondary"
         @click="increaseStock(data.item)"
       >
@@ -49,6 +51,7 @@
       slot-scope="data"
     >
       <b-button
+        v-if="$nuxt.isOnline"
         :class="{ invisible: data.index === highestArticleIndex }"
         variant="outline-secondary"
         @click="moveDown(data.item)"
@@ -56,7 +59,7 @@
         <i class="fa fa-angle-down" />
       </b-button>
       <b-button
-        v-if="data.index > 0"
+        v-if="$nuxt.isOnline && data.index > 0"
         variant="outline-secondary"
         @click="moveUp(data.item)"
       >
