@@ -32,7 +32,7 @@ export default {
         });
     } else {
       let articles = store.state.articles.filter((article) => {
-        return (article.id === params.id);
+        return (article.id == params.id);
       });
       let article = Object.assign({}, articles[0]);
       return {article: article};
