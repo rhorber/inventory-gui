@@ -27,15 +27,19 @@ const mutations = {
     state.accessToken = accessToken;
   },
   setArticles(state, articles) {
-    state.articles = articles;
+    state.articles = articles.map((article) => {
+      article.id = parseInt(article.id, 10);
+    });
   },
   replaceArticle(state, article) {
+    article.id = parseInt(article.id, 10);
     state.articles = [
       ...state.articles.filter((a) => a.id !== article.id),
       article
     ];
   },
   addArticle(state, article) {
+    article.id = parseInt(article.id, 10);
     state.articles.push(article);
   },
   resetArticles(state) {

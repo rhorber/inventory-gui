@@ -4,7 +4,7 @@ export default function ({$axios, redirect, store}) {
   });
 
   $axios.onError((error) => {
-    const code = parseInt(error.response && error.response.status);
+    const code = parseInt(error.response && error.response.status, 10);
     if (code === 401) {
       redirect('/login');
     }
