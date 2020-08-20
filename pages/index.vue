@@ -59,8 +59,23 @@ export default {
     ...mapState(['articles']),
     ...mapGetters(['categoriesMap']),
     filteredArticles() {
+      if (this.hideStockZero === false) {
+        return this.articles;
+      }
+
       return this.articles.filter(
-        (article) => (this.hideStockZero === false || article.stock > 0)
+        (article) => {
+          if (article.hasOwnProperty('lots') === false) {
+            return false;
+          }
+
+          let stock = article.lots.reduce(
+            (value, lot) => (parseInt(lot.stock, 10) + value),
+            0
+          );
+
+          return stock > 0;
+        }
       );
     },
     sortedArticles() {
