@@ -84,14 +84,14 @@ export default {
   methods: {
     ...mapMutations(['replaceCategory']),
     moveDown(category) {
-      this.$axios.$put(`/v2/categories/${category.id}/move-down`)
+      this.$axios.$put(`/v3/categories/${category.id}/move-down`)
         .then((result) => {
           this.replaceCategories(result.categories);
         })
         .catch(console.error);
     },
     moveUp(category) {
-      this.$axios.$put(`/v2/categories/${category.id}/move-up`)
+      this.$axios.$put(`/v3/categories/${category.id}/move-up`)
         .then((result) => {
           this.replaceCategories(result.categories);
         })
