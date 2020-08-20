@@ -28,7 +28,7 @@ export default {
     const articleId = parseInt(params.id, 10);
 
     if ($nuxt.isOnline) {
-      return app.$axios.$get(`/v2/articles/${articleId}`)
+      return app.$axios.$get(`/v3/articles/${articleId}`)
         .then((result) => {
           return {article: result}
         });
@@ -57,11 +57,10 @@ export default {
         name: data.name,
         size: data.size,
         unit: data.unit,
-        best_before: data.best_before,
-        stock: data.stock
+        lots: data.lots
       };
 
-      const url = `/v2/articles/${this.articleId}`;
+      const url = `/v3/articles/${this.articleId}`;
       const path = `/category/${data.category}`;
 
       if ($nuxt.isOnline) {

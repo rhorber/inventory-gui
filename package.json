@@ -1,6 +1,6 @@
 {
   "name": "inventory",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "description": "Little helper application to manage (cellar) inventory.",
   "author": "Raphael Horber (raphael.horber@gmail.com)",
   "private": true,
@@ -29,7 +29,7 @@
     "jquery": "^3.5.1",
     "lodash": "^4.17.19",
     "lodash.template": "^4.5.0",
-    "nuxt": "2.14.0"
+    "nuxt": "2.14.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

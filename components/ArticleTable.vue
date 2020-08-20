@@ -1,6 +1,6 @@
 <template>
   <b-table
-    :fields="tableFields"
+    :fields="articlesTableFields"
     :items="articles"
     striped
     hover
@@ -12,10 +12,10 @@
       {{ data.item.name }}
       <br class="d-inline d-md-none">
       <span
-        v-if="data.item.best_before !== ''"
+        v-if="hasBestBefore(data.item)"
         class="d-inline d-lg-none"
       >
-        ({{ data.item.best_before }})
+        ({{ data.item.lots[0].best_before }})
       </span>
     </template>
     <template
@@ -27,24 +27,47 @@
       </span>
     </template>
     <template
-      slot="cell(stock)"
-      slot-scope="data"
+      slot="cell(lots)"
+      slot-scope="articleData"
     >
-      <b-button
-        v-if="$nuxt.isOnline"
-        variant="outline-secondary"
-        @click="decreaseStock(data.item)"
+      <b-table
+        :fields="lotsTableFields"
+        :items="articleData.item.lots"
+        sort-by="position"
+        small
+        thead-class="d-none"
+        striped
+        hover
       >
-        <i class="fa fa-minus" />
-      </b-button>
-      <span class="amount">{{ data.value }}</span>
-      <b-button
-        v-if="$nuxt.isOnline"
-        variant="outline-secondary"
-        @click="increaseStock(data.item)"
-      >
-        <i class="fa fa-plus" />
-      </b-button>
+        <template
+          slot="cell(best_before)"
+          slot-scope="lotData"
+        >
+          <span class="text-nowrap">
+            {{ lotData.item.best_before }}
+          </span>
+        </template>
+        <template
+          slot="cell(stock)"
+          slot-scope="lotData"
+        >
+          <b-button
+            v-if="$nuxt.isOnline"
+            variant="outline-secondary"
+            @click="decreaseStock(lotData.item)"
+          >
+            <i class="fa fa-minus" />
+          </b-button>
+          <span class="amount">{{ lotData.value }}</span>
+          <b-button
+            v-if="$nuxt.isOnline"
+            variant="outline-secondary"
+            @click="increaseStock(lotData.item)"
+          >
+            <i class="fa fa-plus" />
+          </b-button>
+        </template>
+      </b-table>
     </template>
     <template
       slot="cell(sorting)"
@@ -98,13 +121,16 @@ export default {
 
   data() {
     return {
-      tableFields: [
+      articlesTableFields: [
         {key: 'name', label: 'Name'},
         {key: 'size', label: 'Grösse'},
-        {key: 'best_before', label: 'MHD', class: ['d-none', 'd-lg-table-cell']},
-        {key: 'stock', label: 'Anzahl'},
+        {key: 'lots', label: 'Charge(n)'},
         {key: 'sorting', label: '', class: ['d-none', 'd-sm-table-cell']},
         {key: 'actions', label: 'Aktionen'},
+      ],
+      lotsTableFields: [
+        {key: 'best_before', label: 'MHD', class: ['d-none', 'd-lg-table-cell']},
+        {key: 'stock', label: 'Anzahl', tdAttr: {style: 'width: 140px'}},
       ]
     };
   },
@@ -116,34 +142,40 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['replaceArticle']),
+    ...mapMutations(['replaceArticle', 'replaceLot']),
     ...mapActions(['addToSyncQueue']),
-    decreaseStock(article) {
-      this.$axios.$put(`/v2/articles/${article.id}/decrement`)
-        .then(this.replaceArticle)
+    hasBestBefore(article) {
+      return (article.hasOwnProperty('lots')
+        && article.lots.length > 0
+        && article.lots[0].best_before !== null
+      );
+    },
+    decreaseStock(lot) {
+      this.$axios.$put(`/v3/lots/${lot.id}/decrement`)
+        .then(this.replaceLot)
         .catch(console.error);
     },
-    increaseStock(article) {
-      this.$axios.$put(`/v2/articles/${article.id}/increment`)
-        .then(this.replaceArticle)
+    increaseStock(lot) {
+      this.$axios.$put(`/v3/lots/${lot.id}/increment`)
+        .then(this.replaceLot)
         .catch(console.error);
     },
     moveDown(article) {
-      this.$axios.$put(`/v2/articles/${article.id}/move-down`)
+      this.$axios.$put(`/v3/articles/${article.id}/move-down`)
         .then((result) => {
           this.replaceArticles(result.articles);
         })
         .catch(console.error);
     },
     moveUp(article) {
-      this.$axios.$put(`/v2/articles/${article.id}/move-up`)
+      this.$axios.$put(`/v3/articles/${article.id}/move-up`)
         .then((result) => {
           this.replaceArticles(result.articles);
         })
         .catch(console.error);
     },
     resetArticle(article) {
-      const url = `/v2/articles/${article.id}/reset`;
+      const url = `/v3/articles/${article.id}/reset`;
       if ($nuxt.isOnline) {
         this.$axios.$put(url)
           .then(this.replaceArticle)

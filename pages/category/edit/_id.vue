@@ -23,7 +23,7 @@ export default {
     return /^\d+$/.test(params.id);
   },
   asyncData({app, params}) {
-    return app.$axios.$get('/v2/categories/' + params.id)
+    return app.$axios.$get('/v3/categories/' + params.id)
       .then((result) => {
         return {category: result}
       });
@@ -41,7 +41,7 @@ export default {
         name: data.name
       };
 
-      this.$axios.$put('/v2/categories/' + this.categoryId, category)
+      this.$axios.$put('/v3/categories/' + this.categoryId, category)
         .then(() => {
           this.resetCategories();
           this.$router.push({path: '/categories'});

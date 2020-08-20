@@ -27,8 +27,7 @@ export default {
         name: '',
         size: '',
         unit: '',
-        best_before: '',
-        stock: 0
+        lots: []
       }
     };
   },
@@ -49,11 +48,10 @@ export default {
         name: data.name,
         size: data.size,
         unit: data.unit,
-        best_before: data.best_before,
-        stock: data.stock
+        lots: data.lots
       };
 
-      const url = '/v2/articles';
+      const url = '/v3/articles';
       const path = `/category/${data.category}`;
 
       if ($nuxt.isOnline) {

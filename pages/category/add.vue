@@ -27,7 +27,7 @@ export default {
         name: data.name
       };
 
-      this.$axios.$post('/v2/categories', category)
+      this.$axios.$post('/v3/categories', category)
         .then(() => {
           this.resetCategories();
           this.$router.push({path: '/categories'});

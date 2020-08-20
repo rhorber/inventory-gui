@@ -46,6 +46,17 @@ const mutations = {
   resetArticles(state) {
     state.articles = null;
   },
+  replaceLot(state, lot) {
+    lot.article = parseInt(lot.article, 10);
+    let article = state.articles.find((a) => a.id === lot.article);
+
+    if (article !== undefined) {
+      let lotIndex = article.lots.findIndex((l) => l.id === lot.id);
+      if (lotIndex !== -1) {
+        article.lots.splice(lotIndex, 1, lot);
+      }
+    }
+  },
   setCategories(state, categories) {
     state.categories = categories.sort(
       (category1, category2) => (category1.position - category2.position)
@@ -90,13 +101,13 @@ const actions = {
     return Promise.resolve();
   },
   fetchArticles({commit}) {
-    return this.$axios.$get('/v2/articles')
+    return this.$axios.$get('/v3/articles')
       .then((result) => {
         commit('setArticles', result.articles);
       });
   },
   fetchCategories({commit}) {
-    return this.$axios.$get('/v2/categories')
+    return this.$axios.$get('/v3/categories')
       .then((result) => {
         commit('setCategories', result.categories);
       });
