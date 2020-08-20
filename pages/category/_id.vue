@@ -75,7 +75,21 @@ export default {
           if (article.category !== this.selectedCategory.id) {
             return false;
           }
-          return (this.hideStockZero === false || article.stock > 0);
+
+          if (this.hideStockZero === false) {
+            return true;
+          }
+
+          if (article.hasOwnProperty('lots') === false) {
+            return false;
+          }
+
+          let stock = article.lots.reduce(
+            (value, lot) => (parseInt(lot.stock, 10) + value),
+            0
+          );
+
+          return stock > 0;
         }
       );
     },
