@@ -164,7 +164,7 @@ export default {
   data() {
     return {
       dataArticle: this.article,
-      units: ['', 'cl', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk'],
+      units: ['', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk'],
       tableFields: [
         {key: 'best_before', label: 'Mindestens haltbar bis'},
         {key: 'stock', label: 'Anzahl *'},
