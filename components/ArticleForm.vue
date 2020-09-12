@@ -164,11 +164,11 @@ export default {
   data() {
     return {
       dataArticle: this.article,
-      units: ['', 'cl', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk'],
+      units: ['', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk'],
       tableFields: [
-        {key: 'best_before', label: 'Mindestens haltbar bis'},
+        {key: 'best_before', label: 'Mindestens haltbar bis', class: 'best-before'},
         {key: 'stock', label: 'Anzahl *'},
-        {key: 'sorting', label: ''},
+        {key: 'sorting', label: '', class: ['d-none', 'd-sm-table-cell']},
         {key: 'actions', label: 'Aktionen'},
       ]
     }
@@ -243,3 +243,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.table th.best-before, .table td.best-before {
+  min-width: 8.5rem;
+}
+</style>

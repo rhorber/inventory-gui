@@ -183,8 +183,7 @@ export default {
       } else {
         this.addToSyncQueue({method: 'put', url: url, payload: {}});
         let newArticle = Object.assign({}, article);
-        newArticle.stock = 0;
-        newArticle.best_before = '';
+        newArticle.lots = [];
         this.replaceArticle(newArticle);
       }
     },
