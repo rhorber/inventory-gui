@@ -72,10 +72,27 @@
         slot="cell(best_before)"
         slot-scope="data"
       >
-        <b-form-input
-          v-model="data.item.best_before"
-          type="text"
-        />
+        <!-- Looks not so nice as with input-append, but no duplicated code -->
+        <div class="row no-gutters">
+          <div class="col-12 col-sm-10">
+            <b-form-input
+              v-model="data.item.best_before"
+              type="text"
+            />
+          </div>
+          <div class="col-12 col-sm-2">
+            <b-form-datepicker
+              v-model="data.item.best_before_datepicker"
+              button-only
+              hide-header
+              right
+              offset="100"
+              locale="de-CH"
+              start-weekday="1"
+              @input="onDateChange(data.item)"
+            />
+          </div>
+        </div>
       </template>
       <template
         slot="cell(stock)"
@@ -180,6 +197,11 @@ export default {
     }
   },
   methods: {
+    onDateChange(lot) {
+      const parts = lot.best_before_datepicker.split('-');
+
+      lot.best_before = `${parts[2]}.${parts[1]}.${parts[0]}`;
+    },
     moveDown(lot) {
       const filterCandidatesCallback = (l) => l.position > lot.position;
       const sortCandidatesCallback = (lot1, lot2) => lot1.position - lot2.position;
@@ -233,6 +255,7 @@ export default {
       const timestamp = Math.floor(Date.now() / 1000);
       this.dataArticle.lots.forEach((lot) => {
         lot.timestamp = timestamp;
+        delete lot.best_before_datepicker;
       });
       this.dataArticle.lots.sort(
         (lot1, lot2) => lot1.position - lot2.position
