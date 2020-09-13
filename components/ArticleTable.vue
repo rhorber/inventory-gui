@@ -147,7 +147,7 @@ export default {
     hasBestBefore(article) {
       return (article.hasOwnProperty('lots')
         && article.lots.length > 0
-        && article.lots[0].best_before !== null
+        && article.lots[0].best_before !== ''
       );
     },
     decreaseStock(lot) {
