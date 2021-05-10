@@ -7,7 +7,7 @@ if (isProduction === false) {
 }
 
 export default {
-  mode: 'spa',
+  ssr: false,
 
   vue: {
     config: {
