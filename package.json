@@ -17,29 +17,28 @@
     "heroku-postbuild": "npm run build"
   },
   "engines": {
-    "node": "10.x || 12.x",
+    "node": "12.x || 14.x",
     "npm": "6.x"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.12.5",
+    "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/font-awesome": "^1.0.4",
-    "bootstrap": "^4.5.0",
-    "bootstrap-vue": "^2.15.0",
-    "cross-env": "^7.0.2",
-    "jquery": "^3.5.1",
-    "lodash": "^4.17.19",
+    "bootstrap-vue": "^2.21.2",
+    "cross-env": "^7.0.3",
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.21",
     "lodash.template": "^4.5.0",
-    "nuxt": "2.14.12"
+    "nuxt": "2.15.5"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "dotenv": "^8.2.0",
-    "eslint": "^7.5.0",
+    "dotenv": "^9.0.1",
+    "eslint": "^7.26.0",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "^7.9.0",
     "event-stream": "4.0.1",
     "minimist": "^1.2.5",
-    "nodemon": "^2.0.4",
-    "npm-check-updates": "^11.1.1"
+    "nodemon": "^2.0.7",
+    "npm-check-updates": "^11.5.10"
   }
 }
