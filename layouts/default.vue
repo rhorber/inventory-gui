@@ -40,10 +40,10 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import Navigation from "../components/Navigation";
 
 export default {
-  middleware: 'populateStore',
   components: {
     Navigation
   },
+  middleware: 'populateStore',
   computed: {
     ...mapState(['isSyncPending', 'isSyncing'])
   },
