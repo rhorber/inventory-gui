@@ -21,24 +21,24 @@
     "yarn": "1.x"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/font-awesome": "^1.0.4",
     "bootstrap-vue": "^2.21.2",
     "cross-env": "^7.0.3",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "lodash.template": "^4.5.0",
-    "nuxt": "2.15.5"
+    "nuxt": "2.15.7"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "dotenv": "^9.0.1",
-    "eslint": "^7.26.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.29.0",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-vue": "^7.9.0",
+    "eslint-plugin-vue": "^7.11.1",
     "event-stream": "4.0.1",
     "minimist": "^1.2.5",
     "nodemon": "^2.0.7",
-    "npm-check-updates": "^11.5.10"
+    "npm-check-updates": "^11.7.1"
   }
 }
