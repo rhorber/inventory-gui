@@ -13,8 +13,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "ncu": "node_modules/.bin/ncu",
     "ncu-u": "node_modules/.bin/ncu -u",
-    "precommit": "npm run lint",
-    "heroku-postbuild": "npm run build"
+    "precommit": "npm run lint"
   },
   "engines": {
     "node": "12.x || 14.x",
