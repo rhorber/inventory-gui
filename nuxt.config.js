@@ -39,6 +39,7 @@ export default {
   ** Global CSS
   */
   css: [
+    'buefy/dist/buefy.css',
     '~/assets/main.css'
   ],
 
@@ -46,7 +47,9 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/axios'
+    '~/plugins/axios',
+    // Doc: https://buefy.org/documentation/
+    '~/plugins/buefy'
   ],
 
   /*
