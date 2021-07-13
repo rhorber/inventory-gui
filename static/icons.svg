@@ -1,18 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-alert" viewBox="0 0 32 32">
+    <path d="M16 3 L30 29 2 29 Z M16 11 L16 19 M16 23 L16 25"/>
+  </symbol>
   <symbol id="i-chevron-bottom" viewBox="0 0 32 32">
     <path d="M30 12 L16 24 2 12"/>
   </symbol>
   <symbol id="i-chevron-left" viewBox="0 0 32 32">
-    <path d="M20 30 L8 16 20 2" />
+    <path d="M20 30 L8 16 20 2"/>
   </symbol>
   <symbol id="i-chevron-right" viewBox="0 0 32 32">
-      <path d="M12 30 L24 16 12 2" />
+    <path d="M12 30 L24 16 12 2"/>
   </symbol>
   <symbol id="i-chevron-top" viewBox="0 0 32 32">
     <path d="M30 20 L16 8 2 20"/>
   </symbol>
   <symbol id="i-edit" viewBox="0 0 32 32">
     <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 32 32">
+    <path d="M16 14 L16 23 M16 8 L16 10"/>
+    <circle cx="16" cy="16" r="14"/>
   </symbol>
   <symbol id="i-minus" viewBox="0 0 32 32">
     <path d="M2 16 L30 16"/>
