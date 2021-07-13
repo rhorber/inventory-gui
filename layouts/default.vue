@@ -1,36 +1,41 @@
 <template>
   <div>
     <navigation />
-    <b-alert
-      :show="$nuxt.isOffline"
-      variant="warning"
-    >
-      Du bist offline.
-    </b-alert>
-    <b-alert
-      :show="$nuxt.isOnline && isSyncPending"
-      variant="warning"
-    >
-      <b-button
-        variant="warning"
-        :disabled="isSyncing"
-        @click="synchronize"
+    <section class="mx-3">
+      <b-message
+        v-if="$nuxt.isOffline"
+        type="is-warning"
+        has-icon
+        icon-size="is-medium"
       >
-        Synchronisieren
-      </b-button>
-    </b-alert>
-    <b-alert
-      :show="isSyncing"
-      variant="primary"
-    >
-      Synchronisation läuft...
-    </b-alert>
-    <div class="d-block d-lg-none container-fluid pt-4">
-      <nuxt />
-    </div>
-    <div class="d-none d-lg-block container pt-4">
-      <nuxt />
-    </div>
+        Du bist offline.
+      </b-message>
+      <b-message
+        v-if="$nuxt.isOnline && isSyncPending"
+        type="is-warning"
+      >
+        <b-button
+          type="is-warning"
+          :disabled="isSyncing"
+          @click="synchronize"
+        >
+          Synchronisieren
+        </b-button>
+      </b-message>
+      <b-message
+        v-if="isSyncing"
+        type="is-info"
+        has-icon
+        icon-size="is-medium"
+      >
+        Synchronisation läuft...
+      </b-message>
+    </section>
+    <section>
+      <div class="container p-5">
+        <nuxt />
+      </div>
+    </section>
   </div>
 </template>
 
