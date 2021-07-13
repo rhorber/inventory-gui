@@ -1,40 +1,29 @@
 <template>
   <div>
-    <h2>Alle Artikel</h2>
-    <div class="container-fluid">
-      <div class="row justify-content-between align-items-center">
-        <div class="column">
-          <nuxt-link to="/article/add">
-            <b-button
-              variant="primary"
-              class="mt-2 mb-3"
-            >
-              Artikel erstellen
-            </b-button>
-          </nuxt-link>
-        </div>
-        <div class="column">
-          <b-form-checkbox
-            v-model="hideStockZero"
-            name="hide-stock-zero"
-          >
-            Artikel ohne Bestand ausblenden
-          </b-form-checkbox>
-        </div>
-      </div>
+    <p class="is-size-3">Alle Artikel</p>
+    <div class="is-flex is-justify-content-space-between is-align-items-center py-4">
+      <b-button
+        type="is-info"
+        tag="nuxt-link"
+        to="/article/add"
+      >
+        Artikel erstellen
+      </b-button>
+      <b-checkbox v-model="hideStockZero">
+        Artikel ohne Bestand ausblenden
+      </b-checkbox>
     </div>
     <article-table
       :articles="sortedArticles"
     />
-    <div>
-      <nuxt-link to="/article/add">
-        <b-button
-          variant="primary"
-          class="mb-2"
-        >
-          Artikel erstellen
-        </b-button>
-      </nuxt-link>
+    <div class="py-4">
+      <b-button
+        type="is-info"
+        tag="nuxt-link"
+        to="/article/add"
+      >
+        Artikel erstellen
+      </b-button>
     </div>
   </div>
 </template>
