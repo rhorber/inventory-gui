@@ -4,7 +4,7 @@
       v-if="isKnownIcon"
       :class="size"
     >
-      <use :xlink:href="'icons.svg#' + iconId"></use>
+      <use :xlink:href="'icons.svg#' + iconId" />
     </svg>
     <span v-else>N/A</span>
   </span>
@@ -21,14 +21,12 @@ export default {
     },
     size: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     }
   },
 
   computed: {
-    iconSize() {
-      return (this.size === undefined) ? '' : this.size;
-    },
     iconPack() {
       return (this.icon === undefined) ? undefined : this.icon[0];
     },
@@ -52,18 +50,20 @@ export default {
   methods: {
     getIconId(iconName) {
       const knownIcons = [
-        'chevron-bottom',
-        'chevron-left',
-        'chevron-right',
-        'chevron-top',
-        'edit',
-        'minus',
-        'plus',
-        'trash',
+        'i-alert',
+        'i-chevron-bottom',
+        'i-chevron-left',
+        'i-chevron-right',
+        'i-chevron-top',
+        'i-edit',
+        'i-info',
+        'i-minus',
+        'i-plus',
+        'i-trash',
       ];
 
       if (knownIcons.includes(iconName)) {
-        return 'i-' + iconName;
+        return iconName;
       }
       return undefined;
     }
@@ -83,8 +83,6 @@ svg {
   vertical-align: top;
 }
 
-/*
-// Not used, yet?
 svg.is-small {
   width: 16px;
   height: 16px;
@@ -97,5 +95,4 @@ svg.is-large {
   width: 48px;
   height: 48px;
 }
-*/
 </style>

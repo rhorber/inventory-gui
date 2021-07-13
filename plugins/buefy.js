@@ -7,6 +7,20 @@ Vue.use(Buefy, {
     defaultIconPack: 'bitesize',
     defaultIconComponent: BaseIcon,
     defaultLocale: 'de-CH',
-    defaultFirstDayOfWeek: 1
+    defaultFirstDayOfWeek: 1,
+    customIconPacks: {
+      'bitesize': {
+        iconPrefix: 'i-',
+        internalIcons: {
+          'information': 'info',
+        },
+        sizes: {
+          'default': '',
+          'is-small': 'is-small',
+          'is-medium': 'is-medium',
+          'is-large': 'is-large',
+        }
+      }
+    }
   }
 );
