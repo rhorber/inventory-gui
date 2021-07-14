@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span :class="size">
     <svg
       v-if="isKnownIcon"
       :class="size"
@@ -78,19 +78,25 @@ svg {
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
-  width: 24px;
-  height: 24px;
   vertical-align: top;
 }
 
+span,
+svg {
+  width: 24px;
+  height: 24px;
+}
+span.is-small,
 svg.is-small {
   width: 16px;
   height: 16px;
 }
+span.is-medium,
 svg.is-medium {
   width: 32px;
   height: 32px;
 }
+span.is-large,
 svg.is-large {
   width: 48px;
   height: 48px;
