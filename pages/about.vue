@@ -4,14 +4,14 @@
       src="~/assets/logo.svg"
       style="height: 100px;"
     >
-    <h1 class="title">
+    <p class="title">
       Inventory
-    </h1>
-    <h2 class="subtitle">
+    </p>
+    <p class="subtitle">
       Little helper application to manage (cellar) inventory.
-    </h2>
-    <h5>Access Token: {{ accessToken }}</h5>
-    <h5>Sync Pending: {{ isSyncPending }}</h5>
+    </p>
+    <p class="is-size-5">Access Token: {{ accessToken }}</p>
+    <p class="is-size-5">Sync Pending: {{ isSyncPending }}</p>
   </div>
 </template>
 
@@ -32,14 +32,14 @@ export default {
   'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 80px;
+  font-size: 5rem;
   color: #35495e;
   letter-spacing: 1px;
 }
 
 .subtitle {
   font-weight: 300;
-  font-size: 36px;
+  font-size: 2.25rem;
   color: #526488;
   word-spacing: 5px;
   padding-bottom: 15px;
