@@ -1,110 +1,120 @@
 <template>
   <b-table
-    :fields="articlesTableFields"
-    :items="articles"
+    :data="articles"
     striped
-    hover
+    hoverable
+    sort-icon="chevron-bottom"
   >
-    <template
-      slot="cell(name)"
-      slot-scope="data"
+
+    <b-table-column
+      v-slot="data"
+      field="name"
+      label="Name"
     >
-      {{ data.item.name }}
-      <br class="d-inline d-md-none">
+      {{ data.row.name }}
       <span
-        v-if="hasBestBefore(data.item)"
-        class="d-inline d-lg-none"
+        v-if="hasBestBefore(data.row)"
+        class="is-hidden-desktop"
       >
-        ({{ data.item.lots[0].best_before }})
+        ({{ data.row.lots[0].best_before }})
       </span>
-    </template>
-    <template
-      slot="cell(size)"
-      slot-scope="data"
+    </b-table-column>
+
+    <b-table-column
+      v-slot="data"
+      field="size"
+      label="Grösse"
     >
-      <span v-if="data.item.unit !== 'N/A'">
-        {{ data.item.size + '&nbsp;' + data.item.unit }}
+      <span v-if="data.row.unit !== 'N/A'">
+        {{ data.row.size + '&nbsp;' + data.row.unit }}
       </span>
-    </template>
-    <template
-      slot="cell(lots)"
-      slot-scope="articleData"
+    </b-table-column>
+
+    <b-table-column
+      v-slot="articleData"
+      field="lots"
+      label="Charge(n)"
     >
       <b-table
-        :fields="lotsTableFields"
-        :items="articleData.item.lots"
-        sort-by="position"
-        small
-        thead-class="d-none"
+        v-if="hasLots(articleData.row)"
+        :data="articleData.row.lots"
+        :default-sort="['position', 'asc']"
         striped
-        hover
+        hoverable
+        narrowed
       >
-        <template
-          slot="cell(best_before)"
-          slot-scope="lotData"
+        <b-table-column
+          v-slot="lotData"
+          field="best_before"
+          :th-attrs="hiddenAttrs"
+          :td-attrs="bestBeforeColumnAttrs"
         >
-          <span class="text-nowrap">
-            {{ lotData.item.best_before }}
-          </span>
-        </template>
-        <template
-          slot="cell(stock)"
-          slot-scope="lotData"
+          {{ lotData.row.best_before }}
+        </b-table-column>
+        <b-table-column
+          v-slot="lotData"
+          field="stock"
+          :th-attrs="hiddenAttrs"
         >
           <b-button
             v-if="$nuxt.isOnline"
-            variant="outline-secondary"
-            @click="decreaseStock(lotData.item)"
-          >
-            <i class="fa fa-minus" />
-          </b-button>
-          <span class="amount">{{ lotData.value }}</span>
+            type="is-dark"
+            outlined
+            icon-right="minus"
+            @click="decreaseStock(lotData.row)"
+          />
+          <span class="amount">{{ lotData.row.stock }}</span>
           <b-button
             v-if="$nuxt.isOnline"
-            variant="outline-secondary"
-            @click="increaseStock(lotData.item)"
-          >
-            <i class="fa fa-plus" />
-          </b-button>
-        </template>
+            type="is-dark"
+            outlined
+            icon-right="plus"
+            @click="increaseStock(lotData.row)"
+          />
+        </b-table-column>
       </b-table>
-    </template>
-    <template
-      slot="cell(sorting)"
-      slot-scope="data"
+    </b-table-column>
+
+    <b-table-column
+      v-slot="data"
+      custom-key="sorting"
+      :td-attrs="sortingColumnAttrs"
     >
       <b-button
         v-if="$nuxt.isOnline"
-        :class="{ invisible: data.index === highestArticleIndex }"
-        variant="outline-secondary"
-        @click="moveDown(data.item)"
-      >
-        <i class="fa fa-angle-down" />
-      </b-button>
+        :class="{ 'is-invisible': data.index === highestArticleIndex }"
+        type="is-dark"
+        outlined
+        icon-right="chevron-bottom"
+        @click="moveDown(data.row)"
+      />
       <b-button
         v-if="$nuxt.isOnline && data.index > 0"
-        variant="outline-secondary"
-        @click="moveUp(data.item)"
-      >
-        <i class="fa fa-angle-up" />
-      </b-button>
-    </template>
-    <template
-      slot="cell(actions)"
-      slot-scope="data"
+        type="is-dark"
+        outlined
+        icon-right="chevron-top"
+        @click="moveUp(data.row)"
+      />
+    </b-table-column>
+
+    <b-table-column
+      v-slot="data"
+      custom-key="actions"
+      label="Aktionen"
     >
-      <nuxt-link :to="'/article/edit/' + data.item.id">
-        <b-button variant="primary">
-          <i class="fa fa-edit" />
-        </b-button>
-      </nuxt-link>
       <b-button
-        variant="danger"
-        @click="resetArticle(data.item)"
-      >
-        <i class="fa fa-trash-o" />
-      </b-button>
-    </template>
+        type="is-info"
+        tag="nuxt-link"
+        :to="'/article/edit/' + data.row.id"
+        icon-right="edit"
+      />
+      <b-button
+        type="is-danger"
+        icon-right="trash"
+        @click="resetArticle(data.row)"
+      />
+    </b-table-column>
+
   </b-table>
 </template>
 
@@ -119,22 +129,6 @@ export default {
     }
   },
 
-  data() {
-    return {
-      articlesTableFields: [
-        {key: 'name', label: 'Name'},
-        {key: 'size', label: 'Grösse'},
-        {key: 'lots', label: 'Charge(n)'},
-        {key: 'sorting', label: '', class: ['d-none', 'd-sm-table-cell']},
-        {key: 'actions', label: 'Aktionen'},
-      ],
-      lotsTableFields: [
-        {key: 'best_before', label: 'MHD', class: ['d-none', 'd-lg-table-cell']},
-        {key: 'stock', label: 'Anzahl', tdAttr: {style: 'width: 140px'}},
-      ]
-    };
-  },
-
   computed: {
     highestArticleIndex() {
       return (this.articles.length - 1);
@@ -144,9 +138,29 @@ export default {
   methods: {
     ...mapMutations(['replaceArticle', 'replaceLot']),
     ...mapActions(['addToSyncQueue']),
-    hasBestBefore(article) {
+    hiddenAttrs(_row, _column) {
+      return {
+        class: 'is-hidden',
+      };
+    },
+    sortingColumnAttrs(_row, _column) {
+      return {
+        class: 'is-hidden-mobile',
+      };
+    },
+    bestBeforeColumnAttrs(_row, _column) {
+      return {
+        class: ['is-hidden-touch', 'is-vcentered'],
+        style: {'white-space': 'nowrap'},
+      };
+    },
+    hasLots(article) {
       return (article.hasOwnProperty('lots')
         && article.lots.length > 0
+      );
+    },
+    hasBestBefore(article) {
+      return (this.hasLots(article)
         && article.lots[0].best_before !== ''
       );
     },
@@ -198,8 +212,7 @@ export default {
 .amount {
   display: inline-block;
   min-width: 2.5rem;
-  justify-content: center;
-  align-items: center;
+  vertical-align: middle;
   text-align: center;
 }
 </style>
