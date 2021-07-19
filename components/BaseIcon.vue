@@ -4,7 +4,7 @@
       v-if="isKnownIcon"
       :class="size"
     >
-      <use :xlink:href="'icons.svg#' + iconId" />
+      <use :xlink:href="'/icons.svg#' + iconId" />
     </svg>
     <span v-else>N/A</span>
   </span>
