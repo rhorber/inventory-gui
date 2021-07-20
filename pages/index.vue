@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Put content into a component, is nearly the same as category page -->
   <div>
     <p class="is-size-3">Alle Artikel</p>
     <div class="is-flex is-justify-content-space-between is-align-items-center py-4">
@@ -9,9 +10,14 @@
       >
         Artikel erstellen
       </b-button>
-      <b-checkbox v-model="hideStockZero">
-        Artikel ohne Bestand ausblenden
-      </b-checkbox>
+      <b-field>
+        <b-checkbox
+          v-model="hideStockZero"
+          type="is-info"
+        >
+          Artikel ohne Bestand ausblenden
+        </b-checkbox>
+      </b-field>
     </div>
     <article-table
       :articles="sortedArticles"

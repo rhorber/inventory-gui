@@ -1,10 +1,12 @@
 <template>
   <div class="m-4">
-    <b-input
-      v-model="accessToken"
-      type="text"
-      @keyup.enter.native="login"
-    />
+    <b-field>
+      <b-input
+        v-model="accessToken"
+        type="text"
+        @keyup.enter.native="login"
+      />
+    </b-field>
   </div>
 </template>
 
