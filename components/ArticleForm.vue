@@ -1,171 +1,197 @@
 <template>
-  <b-form
-    class="mb-2"
-    @submit="onSubmit"
-  >
-    <h4 class="mt-3">
-      Artikel
-    </h4>
-    <b-form-group
-      label="Kategorie *"
-      label-for="category"
-    >
-      <b-form-select
-        id="category"
-        v-model="dataArticle.category"
-        :options="categories"
-        value-field="id"
-        text-field="name"
-        required
-      />
-    </b-form-group>
+  <!-- TODO: The selects can not be coloured blue, therefore all elements are left violet. -->
+  <form>
+    <section>
+      <p class="is-size-4 mt-4">Artikel</p>
 
-    <b-form-group
-      label="Name *"
-      label-for="name"
-    >
-      <b-form-input
-        id="name"
-        v-model="dataArticle.name"
-        type="text"
-        required
-      />
-    </b-form-group>
+      <b-field label="Kategorie *">
+        <b-select
+          v-model="dataArticle.category"
+          required
+        >
+          <option
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id"
+          >
+            {{ category.name }}
+          </option>
+        </b-select>
+      </b-field>
 
-    <b-form-group
-      label="Grösse"
-      label-for="size"
-    >
-      <b-form-input
-        id="size"
-        v-model="dataArticle.size"
-        type="text"
-      />
-    </b-form-group>
-
-    <b-form-group
-      label="Einheit"
-      label-for="unit"
-    >
-      <div>
-        <b-form-select
-          id="unit"
-          v-model="dataArticle.unit"
-          :options="units"
-        />
-      </div>
-    </b-form-group>
-
-    <h4 class="mt-4">
-      Charge(n)
-    </h4>
-
-    <b-table
-      :fields="tableFields"
-      :items="dataArticle.lots"
-      sort-by="position"
-      foot-clone
-      striped
-      hover
-    >
-      <template
-        slot="cell(best_before)"
-        slot-scope="data"
-      >
-        <!-- Looks not so nice as with input-append, but no duplicated code -->
-        <div class="row no-gutters">
-          <div class="col-12 col-sm-10">
-            <b-form-input
-              v-model="data.item.best_before"
-              type="text"
-            />
-          </div>
-          <div class="col-12 col-sm-2">
-            <b-form-datepicker
-              v-model="data.item.best_before_datepicker"
-              button-only
-              hide-header
-              right
-              offset="100"
-              locale="de-CH"
-              start-weekday="1"
-              @input="onDateChange(data.item)"
-            />
-          </div>
-        </div>
-      </template>
-      <template
-        slot="cell(stock)"
-        slot-scope="data"
-      >
-        <b-form-input
-          v-model="data.item.stock"
-          type="number"
-          class="amount"
+      <b-field label="Name *">
+        <b-input
+          v-model="dataArticle.name"
+          type="text"
           required
         />
-      </template>
-      <template
-        slot="cell(sorting)"
-        slot-scope="data"
-      >
-        <b-button
-          v-if="$nuxt.isOnline"
-          :class="{ invisible: data.index === highestLotIndex }"
-          variant="outline-secondary"
-          @click="moveDown(data.item)"
-        >
-          <i class="fa fa-angle-down" />
-        </b-button>
-        <b-button
-          v-if="$nuxt.isOnline && data.index > 0"
-          variant="outline-secondary"
-          @click="moveUp(data.item)"
-        >
-          <i class="fa fa-angle-up" />
-        </b-button>
-      </template>
-      <template
-        slot="cell(actions)"
-        slot-scope="data"
-      >
-        <b-button
-          variant="outline-danger"
-          @click="removeLot(data.item)"
-        >
-          <i class="fa fa-trash-o" />
-        </b-button>
-      </template>
-      <template slot="foot()">
-        &nbsp;
-      </template>
-      <template slot="foot(best_before)">
-        <b-form-text id="best-before-help">
-          Format: dd.mm.YYYY oder mm.YYYY
-        </b-form-text>
-      </template>
-      <template slot="foot(actions)">
-        <b-button
-          variant="outline-primary"
-          @click="addLot()"
-        >
-          <i class="fa fa-plus" />
-        </b-button>
-      </template>
-    </b-table>
+      </b-field>
 
-    <a @click="back()">
-      <b-button variant="outline-danger">
+      <b-field label="Grösse">
+        <b-input
+          v-model="dataArticle.size"
+          type="text"
+        />
+      </b-field>
+
+      <b-field label="Einheit">
+        <b-select v-model="dataArticle.unit">
+          <option
+            v-for="unit in units"
+            :key="unit"
+            :value="unit"
+          >
+            {{ unit }}
+          </option>
+        </b-select>
+      </b-field>
+    </section>
+
+    <section>
+      <p class="is-size-4 mt-5">Charge(n)</p>
+
+      <b-table
+        :data="dataArticle.lots"
+        :default-sort="['position', 'asc']"
+        striped
+        hoverable
+      >
+
+        <b-table-column
+          v-slot="data"
+          custom-key="best_before"
+          label="Mindestens haltbar bis"
+          :th-attrs="bestBeforeColumnAttrs"
+          :td-attrs="bestBeforeColumnAttrs"
+        >
+          <b-field>
+            <b-datepicker
+              v-model="data.row.best_before.date"
+              :type="data.row.best_before.isMonth ? 'month' : undefined"
+              append-to-body
+              @input="setBestBeforeText(data.row.best_before)"
+            >
+              <template>
+                <b-field class="columns">
+                  <b-radio-button
+                    v-model="data.row.best_before.isMonth"
+                    :native-value="false"
+                    class="column pr-0"
+                  >
+                    <span>dd.mm.YYYY</span>
+                  </b-radio-button>
+                  <b-radio-button
+                    v-model="data.row.best_before.isMonth"
+                    :native-value="true"
+                    class="column pl-0"
+                  >
+                    <span>mm.YYYY</span>
+                  </b-radio-button>
+                </b-field>
+              </template>
+              <template #trigger>
+                <b-button
+                  class="is-dark"
+                  outlined
+                  icon-right="calendar"
+                />
+              </template>
+            </b-datepicker>
+            <b-input
+              v-model="data.row.best_before.text"
+              type="text"
+              custom-class="has-text-right"
+              @input="setBestBeforeDate(data.row.best_before)"
+            />
+          </b-field>
+        </b-table-column>
+
+        <b-table-column
+          v-slot="data"
+          field="stock"
+          label="Anzahl *"
+        >
+          <b-field>
+            <b-input
+              v-model="data.row.stock"
+              type="number"
+              class="amount"
+              required
+            />
+          </b-field>
+        </b-table-column>
+
+        <b-table-column
+          v-slot="data"
+          custom-key="sorting"
+          :td-attrs="sortingColumnAttrs"
+        >
+          <b-button
+            v-if="$nuxt.isOnline"
+            :class="{ 'is-invisible': data.index === highestLotIndex }"
+            type="is-dark"
+            outlined
+            icon-right="chevron-bottom"
+            @click="moveDown(data.row)"
+          />
+          <b-button
+            v-if="$nuxt.isOnline && data.index > 0"
+            type="is-dark"
+            outlined
+            icon-right="chevron-top"
+            @click="moveUp(data.row)"
+          />
+        </b-table-column>
+
+        <b-table-column
+          v-slot="data"
+          custom-key="actions"
+          label="Aktionen"
+        >
+          <b-button
+            type="is-danger"
+            outlined
+            icon-right="trash"
+            @click="removeLot(data.row)"
+          />
+        </b-table-column>
+
+        <template #footer>
+          <td>
+            <p class="is-size-7 has-text-grey">
+              Format: dd.mm.YYYY oder mm.YYYY
+            </p>
+          </td>
+          <td></td>
+          <td class="is-hidden-mobile"></td>
+          <td>
+            <b-button
+              type="is-info"
+              outlined
+              icon-right="plus"
+              @click="addLot()"
+            />
+          </td>
+        </template>
+      </b-table>
+    </section>
+
+    <section>
+      <b-button
+        type="is-danger"
+        outlined
+        @click="back()"
+      >
         Abbrechen
       </b-button>
-    </a>
-    <b-button
-      variant="primary"
-      type="submit"
-    >
-      Speichern
-    </b-button>
-  </b-form>
+      <b-button
+        type="is-info"
+        @click="submit()"
+      >
+        Speichern
+      </b-button>
+    </section>
+  </form>
 </template>
 
 <script>
@@ -178,29 +204,56 @@ export default {
       required: true
     }
   },
+
   data() {
+    this.article.lots.forEach((lot) => {
+      if (lot.best_before instanceof Object) {
+        return;
+      }
+
+      const bestBefore = lot.best_before;
+      const parsed = this.parseDate(bestBefore);
+
+      lot.best_before = {
+        text: bestBefore,
+        date: parsed.date,
+        isMonth: parsed.isMonth,
+      };
+    });
+
     return {
       dataArticle: this.article,
-      units: ['', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk'],
-      tableFields: [
-        {key: 'best_before', label: 'Mindestens haltbar bis', class: 'best-before'},
-        {key: 'stock', label: 'Anzahl *'},
-        {key: 'sorting', label: '', class: ['d-none', 'd-sm-table-cell']},
-        {key: 'actions', label: 'Aktionen'},
-      ]
+      units: ['', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk']
     }
   },
+
   computed: {
     ...mapState(['categories']),
     highestLotIndex() {
       return (this.dataArticle.lots.length - 1);
     }
   },
-  methods: {
-    onDateChange(lot) {
-      const parts = lot.best_before_datepicker.split('-');
 
-      lot.best_before = `${parts[2]}.${parts[1]}.${parts[0]}`;
+  methods: {
+    bestBeforeColumnAttrs(_row, _column) {
+      return {
+        class: 'best-before',
+      };
+    },
+    sortingColumnAttrs(_row, _column) {
+      return {
+        class: 'is-hidden-mobile',
+      };
+    },
+    setBestBeforeText(bestBefore) {
+      bestBefore.text = this.formatDate(bestBefore.date, bestBefore.isMonth);
+    },
+    setBestBeforeDate(bestBefore) {
+      if (bestBefore instanceof Object) {
+        const parsed = this.parseDate(bestBefore.text);
+
+        bestBefore.date = parsed.date;
+      }
     },
     moveDown(lot) {
       const filterCandidatesCallback = (l) => l.position > lot.position;
@@ -232,9 +285,15 @@ export default {
         maxPosition = Math.max(maxPosition, thisPosition);
       });
 
+      const date = new Date();
+      const bestBefore = {
+        text: this.formatDate(date, false),
+        date: date,
+        isMonth: false,
+      };
       const newPosition = String(maxPosition + 1);
       const newLot = {
-        best_before: '',
+        best_before: bestBefore,
         stock: 0,
         position: newPosition
       };
@@ -246,22 +305,60 @@ export default {
         (l) => l !== lot
       );
     },
-    back(_event) {
+    back() {
       this.$router.go(-1);
     },
-    onSubmit(event) {
-      event.preventDefault();
-
+    submit() {
       const timestamp = Math.floor(Date.now() / 1000);
       this.dataArticle.lots.forEach((lot) => {
         lot.timestamp = timestamp;
-        delete lot.best_before_datepicker;
+        lot.best_before = lot.best_before.text;
       });
       this.dataArticle.lots.sort(
         (lot1, lot2) => lot1.position - lot2.position
       );
 
       this.$emit('formSubmitted', this.dataArticle);
+    },
+    parseDate(dateString) {
+      const match = dateString.match(/(\d{2})?\.?(\d{2})\.(\d{4})/);
+      const date = new Date();
+      let isMonth = false;
+
+      if (match !== null) {
+        date.setFullYear(match[3]);
+        date.setMonth(match[2] - 1);
+
+        if (match[1] === undefined) {
+          isMonth = true;
+        } else {
+          date.setDate(match[1]);
+        }
+      }
+
+      return {
+        date,
+        isMonth,
+      };
+    },
+    formatDate(date, isMonth) {
+      if (date instanceof Date) {
+        const year = date.getFullYear();
+
+        let month = String(date.getMonth() + 1)
+        month = month.padStart(2, '0');
+
+        if (isMonth) {
+          return `${month}.${year}`;
+        } else {
+          let day = String(date.getDate())
+          day = day.padStart(2, '0');
+
+          return `${day}.${month}.${year}`;
+        }
+      } else {
+        return '';
+      }
     }
   }
 }
