@@ -12,6 +12,7 @@ Vue.use(Buefy, {
       'bitesize': {
         iconPrefix: 'i-',
         internalIcons: {
+          'alert-circle': 'error',
           'information': 'info',
         },
         sizes: {
