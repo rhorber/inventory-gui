@@ -2,6 +2,9 @@
   <symbol id="i-alert" viewBox="0 0 32 32">
     <path d="M16 3 L30 29 2 29 Z M16 11 L16 19 M16 23 L16 25"/>
   </symbol>
+  <symbol id="i-calendar" viewBox="0 0 32 32">
+    <path d="M2 6 L2 30 30 30 30 6 Z M2 15 L30 15 M7 3 L7 9 M13 3 L13 9 M19 3 L19 9 M25 3 L25 9"/>
+  </symbol>
   <symbol id="i-chevron-bottom" viewBox="0 0 32 32">
     <path d="M30 12 L16 24 2 12"/>
   </symbol>

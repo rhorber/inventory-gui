@@ -51,6 +51,7 @@ export default {
     getIconId(iconName) {
       const knownIcons = [
         'i-alert',
+        'i-calendar',
         'i-chevron-bottom',
         'i-chevron-left',
         'i-chevron-right',
