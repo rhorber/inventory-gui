@@ -14,27 +14,27 @@
       :data="categories"
       striped
       hoverable
+      sort-icon="chevron-bottom"
     >
 
       <b-table-column
+        v-slot="data"
         field="name"
         label="Name"
-        v-slot="data"
-        :td-attrs="vCenteredTdAttrs"
+        :td-attrs="vCenteredAttrs"
       >
         {{ data.row.name }}
       </b-table-column>
 
       <b-table-column
-        field="sorting"
         v-slot="data"
+        custom-key="sorting"
       >
         <b-button
           :class="{ 'is-invisible': data.index === highestCategoryIndex }"
           type="is-dark"
           outlined
           icon-right="chevron-bottom"
-          class="pt-4"
           @click="moveDown(data.row)"
         />
         <b-button
@@ -42,22 +42,20 @@
           type="is-dark"
           outlined
           icon-right="chevron-top"
-          class="pt-4"
           @click="moveUp(data.row)"
         />
       </b-table-column>
 
       <b-table-column
-        field="actions"
-        label="Aktionen"
         v-slot="data"
+        custom-key="actions"
+        label="Aktionen"
       >
         <b-button
           type="is-info"
           tag="nuxt-link"
           :to="'/category/edit/' + data.row.id"
           icon-right="edit"
-          class="pt-4"
         />
       </b-table-column>
 
@@ -87,9 +85,9 @@ export default {
 
   methods: {
     ...mapMutations(['replaceCategory']),
-    vCenteredTdAttrs(_row, _column) {
+    vCenteredAttrs(_row, _column) {
       return {
-        class: 'is-vcentered'
+        class: 'is-vcentered',
       };
     },
     moveDown(category) {
