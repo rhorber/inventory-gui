@@ -55,6 +55,7 @@
           v-slot="lotData"
           field="stock"
           :th-attrs="hiddenAttrs"
+          :td-attrs="stockColumnAttrs"
         >
           <b-button
             v-if="$nuxt.isOnline"
@@ -150,8 +151,13 @@ export default {
     },
     bestBeforeColumnAttrs(_row, _column) {
       return {
-        class: ['is-hidden-touch', 'is-vcentered'],
+        class: ['is-hidden-touch', 'is-vcentered', 'has-text-right'],
         style: {'white-space': 'nowrap'},
+      };
+    },
+    stockColumnAttrs(_row, _column) {
+      return {
+        style: {'width': '150px'},
       };
     },
     hasLots(article) {
