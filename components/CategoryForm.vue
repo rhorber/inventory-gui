@@ -41,11 +41,10 @@ export default {
     }
   },
   methods: {
-    back(_event) {
+    back() {
       this.$router.go(-1);
     },
-    submit(event) {
-      event.preventDefault();
+    submit() {
       this.$emit('formSubmitted', this.dataCategory);
     }
   }
