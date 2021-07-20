@@ -1,12 +1,10 @@
 <template>
   <section class="container">
-    <div>
-      <h2>Artikel bearbeiten ({{ articleId }})</h2>
-      <article-form
-        :article="article"
-        @formSubmitted="saveArticle"
-      />
-    </div>
+    <p class="is-size-3 mb-2">Artikel bearbeiten ({{ articleId }})</p>
+    <article-form
+      :article="article"
+      @formSubmitted="saveArticle"
+    />
   </section>
 </template>
 
