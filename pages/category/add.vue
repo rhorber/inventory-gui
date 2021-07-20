@@ -1,12 +1,10 @@
 <template>
   <section class="container">
-    <div>
-      <h2>Kategorie erstellen</h2>
-      <category-form
-        :category="{name: ''}"
-        @formSubmitted="addCategory"
-      />
-    </div>
+    <p class="is-size-3 mb-2">Kategorie erstellen</p>
+    <category-form
+      :category="{name: ''}"
+      @formSubmitted="addCategory"
+    />
   </section>
 </template>
 
