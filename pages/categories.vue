@@ -30,20 +30,22 @@
         v-slot="data"
         custom-key="sorting"
       >
-        <b-button
-          :class="{ 'is-invisible': data.index === highestCategoryIndex }"
-          type="is-dark"
-          outlined
-          icon-right="chevron-bottom"
-          @click="moveDown(data.row)"
-        />
-        <b-button
-          v-if="data.index > 0"
-          type="is-dark"
-          outlined
-          icon-right="chevron-top"
-          @click="moveUp(data.row)"
-        />
+        <div>
+          <b-button
+            :class="{ 'is-invisible': data.index === highestCategoryIndex }"
+            type="is-dark"
+            outlined
+            icon-right="chevron-bottom"
+            @click="moveDown(data.row)"
+          />
+          <b-button
+            :class="{ 'is-invisible': data.index === 0 }"
+            type="is-dark"
+            outlined
+            icon-right="chevron-top"
+            @click="moveUp(data.row)"
+          />
+        </div>
       </b-table-column>
 
       <b-table-column

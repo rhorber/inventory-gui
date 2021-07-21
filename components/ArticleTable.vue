@@ -81,21 +81,24 @@
       custom-key="sorting"
       :td-attrs="sortingColumnAttrs"
     >
-      <b-button
-        v-if="$nuxt.isOnline"
-        :class="{ 'is-invisible': data.index === highestArticleIndex }"
-        type="is-dark"
-        outlined
-        icon-right="chevron-bottom"
-        @click="moveDown(data.row)"
-      />
-      <b-button
-        v-if="$nuxt.isOnline && data.index > 0"
-        type="is-dark"
-        outlined
-        icon-right="chevron-top"
-        @click="moveUp(data.row)"
-      />
+      <div>
+        <b-button
+          v-if="$nuxt.isOnline"
+          :class="{ 'is-invisible': data.index === highestArticleIndex }"
+          type="is-dark"
+          outlined
+          icon-right="chevron-bottom"
+          @click="moveDown(data.row)"
+        />
+        <b-button
+          v-if="$nuxt.isOnline"
+          :class="{ 'is-invisible': data.index === 0 }"
+          type="is-dark"
+          outlined
+          icon-right="chevron-top"
+          @click="moveUp(data.row)"
+        />
+      </div>
     </b-table-column>
 
     <b-table-column
@@ -103,17 +106,19 @@
       custom-key="actions"
       label="Aktionen"
     >
-      <b-button
-        type="is-info"
-        tag="nuxt-link"
-        :to="'/article/edit/' + data.row.id"
-        icon-right="edit"
-      />
-      <b-button
-        type="is-danger"
-        icon-right="trash"
-        @click="resetArticle(data.row)"
-      />
+      <div>
+        <b-button
+          type="is-info"
+          tag="nuxt-link"
+          :to="'/article/edit/' + data.row.id"
+          icon-right="edit"
+        />
+        <b-button
+          type="is-danger"
+          icon-right="trash"
+          @click="resetArticle(data.row)"
+        />
+      </div>
     </b-table-column>
 
   </b-table>

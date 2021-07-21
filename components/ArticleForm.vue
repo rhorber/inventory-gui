@@ -125,21 +125,24 @@
           custom-key="sorting"
           :td-attrs="sortingColumnAttrs"
         >
-          <b-button
-            v-if="$nuxt.isOnline"
-            :class="{ 'is-invisible': data.index === highestLotIndex }"
-            type="is-dark"
-            outlined
-            icon-right="chevron-bottom"
-            @click="moveDown(data.row)"
-          />
-          <b-button
-            v-if="$nuxt.isOnline && data.index > 0"
-            type="is-dark"
-            outlined
-            icon-right="chevron-top"
-            @click="moveUp(data.row)"
-          />
+          <div>
+            <b-button
+              v-if="$nuxt.isOnline"
+              :class="{ 'is-invisible': data.index === highestLotIndex }"
+              type="is-dark"
+              outlined
+              icon-right="chevron-bottom"
+              @click="moveDown(data.row)"
+            />
+            <b-button
+              v-if="$nuxt.isOnline"
+              :class="{ 'is-invisible': data.index === 0 }"
+              type="is-dark"
+              outlined
+              icon-right="chevron-top"
+              @click="moveUp(data.row)"
+            />
+          </div>
         </b-table-column>
 
         <b-table-column
