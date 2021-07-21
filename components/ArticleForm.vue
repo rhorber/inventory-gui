@@ -61,7 +61,7 @@
         hoverable
       >
         <b-table-column
-          v-slot="data"
+          v-slot="{ row }"
           custom-key="best_before"
           label="Mindestens haltbar bis"
           :th-attrs="bestBeforeColumnAttrs"
@@ -69,23 +69,23 @@
         >
           <b-field>
             <b-datepicker
-              v-model="data.row.best_before.date"
-              :type="data.row.best_before.isMonth ? 'month' : undefined"
+              v-model="row.best_before.date"
+              :type="row.best_before.isMonth ? 'month' : undefined"
               :mobile-native="false"
               append-to-body
-              @input="setBestBeforeText(data.row.best_before)"
+              @input="setBestBeforeText(row.best_before)"
             >
               <template #default>
                 <b-field class="columns">
                   <b-radio-button
-                    v-model="data.row.best_before.isMonth"
+                    v-model="row.best_before.isMonth"
                     :native-value="false"
                     class="column pr-0"
                   >
                     <span>dd.mm.YYYY</span>
                   </b-radio-button>
                   <b-radio-button
-                    v-model="data.row.best_before.isMonth"
+                    v-model="row.best_before.isMonth"
                     :native-value="true"
                     class="column pl-0"
                   >
@@ -100,22 +100,22 @@
               </template>
             </b-datepicker>
             <b-input
-              v-model="data.row.best_before.text"
+              v-model="row.best_before.text"
               type="text"
               custom-class="has-text-right"
-              @input="setBestBeforeDate(data.row.best_before)"
+              @input="setBestBeforeDate(row.best_before)"
             />
           </b-field>
         </b-table-column>
 
         <b-table-column
-          v-slot="data"
+          v-slot="{ row }"
           field="stock"
           label="Anzahl *"
         >
           <b-field>
             <b-input
-              v-model="data.row.stock"
+              v-model="row.stock"
               type="number"
               class="amount"
               required
@@ -124,31 +124,31 @@
         </b-table-column>
 
         <b-table-column
-          v-slot="data"
+          v-slot="{ row, index }"
           custom-key="sorting"
         >
           <div>
             <b-button
               v-if="$nuxt.isOnline"
-              :class="{ 'is-invisible': data.index === highestLotIndex }"
+              :class="{ 'is-invisible': index === highestLotIndex }"
               type="is-dark"
               outlined
               icon-right="chevron-bottom"
-              @click="moveDown(data.row)"
+              @click="moveDown(row)"
             />
             <b-button
               v-if="$nuxt.isOnline"
-              :class="{ 'is-invisible': data.index === 0 }"
+              :class="{ 'is-invisible': index === 0 }"
               type="is-dark"
               outlined
               icon-right="chevron-top"
-              @click="moveUp(data.row)"
+              @click="moveUp(row)"
             />
           </div>
         </b-table-column>
 
         <b-table-column
-          v-slot="data"
+          v-slot="{ row }"
           custom-key="actions"
           label="Aktionen"
         >
@@ -156,7 +156,7 @@
             type="is-danger"
             outlined
             icon-right="trash"
-            @click="removeLot(data.row)"
+            @click="removeLot(row)"
           />
         </b-table-column>
 
