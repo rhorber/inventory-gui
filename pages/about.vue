@@ -44,4 +44,8 @@ export default {
   word-spacing: 5px;
   padding-bottom: 15px;
 }
+
+p {
+  padding-bottom: 0.5rem;
+}
 </style>
