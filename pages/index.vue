@@ -2,15 +2,17 @@
   <!-- TODO: Put content into a component, is nearly the same as category page -->
   <div>
     <p class="is-size-3">Alle Artikel</p>
-    <div class="is-flex is-justify-content-space-between is-align-items-center py-4">
-      <b-button
-        type="is-info"
-        tag="nuxt-link"
-        to="/article/add"
-      >
-        Artikel erstellen
-      </b-button>
-      <b-field>
+    <div class="columns py-4">
+      <div class="column">
+        <b-button
+          type="is-info"
+          tag="nuxt-link"
+          to="/article/add"
+        >
+          Artikel erstellen
+        </b-button>
+      </div>
+      <b-field class="column is-narrow">
         <b-checkbox
           v-model="hideStockZero"
           type="is-info"
