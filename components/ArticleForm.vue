@@ -2,7 +2,7 @@
   <!-- TODO: The selects can not be coloured blue, therefore all elements are left violet. -->
   <form>
     <section>
-      <p class="is-size-4 mt-4">Artikel</p>
+      <p class="is-size-4 mt-4 mb-2">Artikel</p>
 
       <b-field label="Kategorie *">
         <b-select
@@ -48,7 +48,7 @@
     </section>
 
     <section>
-      <p class="is-size-4 mt-5">Charge(n)</p>
+      <p class="is-size-4 mt-5 mb-2">Charge(n)</p>
 
       <b-table
         :data="dataArticle.lots"
@@ -68,6 +68,7 @@
             <b-datepicker
               v-model="data.row.best_before.date"
               :type="data.row.best_before.isMonth ? 'month' : undefined"
+              :mobile-native="false"
               append-to-body
               @input="setBestBeforeText(data.row.best_before)"
             >
@@ -91,8 +92,6 @@
               </template>
               <template #trigger>
                 <b-button
-                  class="is-dark"
-                  outlined
                   icon-right="calendar"
                 />
               </template>
@@ -176,7 +175,7 @@
       </b-table>
     </section>
 
-    <section>
+    <section class="py-4">
       <b-button
         type="is-danger"
         outlined
