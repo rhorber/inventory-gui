@@ -123,7 +123,6 @@
         <b-table-column
           v-slot="data"
           custom-key="sorting"
-          :td-attrs="sortingColumnAttrs"
         >
           <div>
             <b-button
@@ -164,8 +163,7 @@
               Format: dd.mm.YYYY oder mm.YYYY
             </p>
           </td>
-          <td></td>
-          <td class="is-hidden-mobile"></td>
+          <td colspan="2"></td>
           <td>
             <b-button
               type="is-info"
@@ -240,11 +238,6 @@ export default {
     bestBeforeColumnAttrs(_row, _column) {
       return {
         class: 'best-before',
-      };
-    },
-    sortingColumnAttrs(_row, _column) {
-      return {
-        class: 'is-hidden-mobile',
       };
     },
     setBestBeforeText(bestBefore) {

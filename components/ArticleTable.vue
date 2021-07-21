@@ -85,7 +85,6 @@
     <b-table-column
       v-slot="data"
       custom-key="sorting"
-      :td-attrs="sortingColumnAttrs"
     >
       <div>
         <b-button
@@ -153,11 +152,6 @@ export default {
     hiddenAttrs(_row, _column) {
       return {
         class: 'is-hidden',
-      };
-    },
-    sortingColumnAttrs(_row, _column) {
-      return {
-        class: 'is-hidden-mobile',
       };
     },
     bestBeforeColumnAttrs(_row, _column) {
