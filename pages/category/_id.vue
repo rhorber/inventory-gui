@@ -1,7 +1,9 @@
 <template>
   <!-- TODO: Put content into a component, is nearly the same as index -->
   <div>
-    <p class="is-size-3">{{ pageTitle }}</p>
+    <p class="is-size-3">
+      {{ pageTitle }}
+    </p>
     <div class="columns py-4">
       <div class="column">
         <b-button

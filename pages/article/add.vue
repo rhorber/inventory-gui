@@ -1,6 +1,8 @@
 <template>
   <section class="container">
-    <p class="is-size-3 mb-2">Artikel erstellen</p>
+    <p class="is-size-3 mb-2">
+      Artikel erstellen
+    </p>
     <article-form
       :article="emptyArticle"
       @formSubmitted="addArticle"

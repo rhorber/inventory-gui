@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p class="is-size-3">Kategorien</p>
+    <p class="is-size-3">
+      Kategorien
+    </p>
     <div class="py-4">
       <b-button
         type="is-info"
@@ -16,7 +18,6 @@
       hoverable
       sort-icon="chevron-bottom"
     >
-
       <b-table-column
         v-slot="data"
         field="name"
@@ -60,7 +61,6 @@
           icon-right="edit"
         />
       </b-table-column>
-
     </b-table>
     <div class="py-4">
       <b-button

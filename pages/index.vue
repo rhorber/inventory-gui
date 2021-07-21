@@ -1,7 +1,9 @@
 <template>
   <!-- TODO: Put content into a component, is nearly the same as category page -->
   <div>
-    <p class="is-size-3">Alle Artikel</p>
+    <p class="is-size-3">
+      Alle Artikel
+    </p>
     <div class="columns py-4">
       <div class="column">
         <b-button

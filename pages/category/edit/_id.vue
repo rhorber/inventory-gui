@@ -1,6 +1,8 @@
 <template>
   <section class="container">
-    <p class="is-size-3 mb-2">Kategorie bearbeiten ({{ categoryId }})</p>
+    <p class="is-size-3 mb-2">
+      Kategorie bearbeiten ({{ categoryId }})
+    </p>
     <category-form
       :category="category"
       @formSubmitted="saveCategory"

@@ -1,6 +1,8 @@
 <template>
   <section class="container">
-    <p class="is-size-3 mb-2">Kategorie erstellen</p>
+    <p class="is-size-3 mb-2">
+      Kategorie erstellen
+    </p>
     <category-form
       :category="{name: ''}"
       @formSubmitted="addCategory"

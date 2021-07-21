@@ -2,7 +2,9 @@
   <!-- TODO: The selects can not be coloured blue, therefore all elements are left violet. -->
   <form>
     <section>
-      <p class="is-size-4 mt-4 mb-2">Artikel</p>
+      <p class="is-size-4 mt-4 mb-2">
+        Artikel
+      </p>
 
       <b-field label="Kategorie *">
         <b-select
@@ -48,7 +50,9 @@
     </section>
 
     <section>
-      <p class="is-size-4 mt-5 mb-2">Charge(n)</p>
+      <p class="is-size-4 mt-5 mb-2">
+        Charge(n)
+      </p>
 
       <b-table
         :data="dataArticle.lots"
@@ -56,7 +60,6 @@
         striped
         hoverable
       >
-
         <b-table-column
           v-slot="data"
           custom-key="best_before"
@@ -72,7 +75,7 @@
               append-to-body
               @input="setBestBeforeText(data.row.best_before)"
             >
-              <template>
+              <template #default>
                 <b-field class="columns">
                   <b-radio-button
                     v-model="data.row.best_before.isMonth"
@@ -163,7 +166,7 @@
               Format: dd.mm.YYYY oder mm.YYYY
             </p>
           </td>
-          <td colspan="2"></td>
+          <td colspan="2" />
           <td>
             <b-button
               type="is-info"

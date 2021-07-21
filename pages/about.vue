@@ -10,8 +10,12 @@
     <p class="subtitle">
       Little helper application to manage (cellar) inventory.
     </p>
-    <p class="is-size-5">Access Token: {{ accessToken }}</p>
-    <p class="is-size-5">Sync Pending: {{ isSyncPending }}</p>
+    <p class="is-size-5">
+      Access Token: {{ accessToken }}
+    </p>
+    <p class="is-size-5">
+      Sync Pending: {{ isSyncPending }}
+    </p>
   </div>
 </template>
 

@@ -5,7 +5,6 @@
     hoverable
     sort-icon="chevron-bottom"
   >
-
     <b-table-column
       v-slot="data"
       field="name"
@@ -125,7 +124,6 @@
         />
       </div>
     </b-table-column>
-
   </b-table>
 </template>
 

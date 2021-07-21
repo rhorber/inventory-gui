@@ -1,6 +1,8 @@
 <template>
   <section class="container">
-    <p class="is-size-3 mb-2">Artikel bearbeiten ({{ articleId }})</p>
+    <p class="is-size-3 mb-2">
+      Artikel bearbeiten ({{ articleId }})
+    </p>
     <article-form
       :article="article"
       @formSubmitted="saveArticle"
