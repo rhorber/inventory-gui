@@ -1,51 +1,20 @@
 <template>
-  <!-- TODO: Put content into a component, is nearly the same as index -->
-  <div>
-    <p class="is-size-3">
-      {{ pageTitle }}
-    </p>
-    <div class="columns py-4">
-      <div class="column">
-        <b-button
-          type="is-info"
-          tag="nuxt-link"
-          :to="'/article/add?category=' + categoryId"
-        >
-          Artikel erstellen
-        </b-button>
-      </div>
-      <b-field class="column is-narrow">
-        <b-checkbox
-          v-model="hideStockZero"
-          type="is-info"
-        >
-          Artikel ohne Bestand ausblenden
-        </b-checkbox>
-      </b-field>
-    </div>
-    <article-table
-      :articles="sortedArticles"
-    />
-    <div class="py-4">
-      <b-button
-        type="is-info"
-        tag="nuxt-link"
-        :to="'/article/add?category=' + categoryId"
-      >
-        Artikel erstellen
-      </b-button>
-    </div>
-  </div>
+  <page-articles
+    v-model="hideStockZero"
+    :page-title="pageTitle"
+    :articles="sortedArticles"
+    :add-article-button-link="'/article/add?category=' + categoryId"
+  />
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 
-import ArticleTable from '~/components/ArticleTable'
+import PageArticles from '~/components/PageArticles'
 
 export default {
   components: {
-    ArticleTable
+    PageArticles
   },
 
   validate({params}) {
