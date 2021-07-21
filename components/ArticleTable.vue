@@ -11,13 +11,17 @@
       field="name"
       label="Name"
     >
-      {{ data.row.name }}
-      <span
-        v-if="hasBestBefore(data.row)"
-        class="is-hidden-desktop"
-      >
-        ({{ data.row.lots[0].best_before }})
-      </span>
+      <div class="columns is-multiline p-3">
+        <span class="column p-0">
+          {{ data.row.name }}
+        </span>
+        <span
+          v-if="hasBestBefore(data.row)"
+          class="column p-0 is-hidden-desktop"
+        >
+          ({{ data.row.lots[0].best_before }})
+        </span>
+      </div>
     </b-table-column>
 
     <b-table-column
@@ -64,7 +68,9 @@
             icon-right="minus"
             @click="decreaseStock(lotData.row)"
           />
-          <span class="amount">{{ lotData.row.stock }}</span>
+          <span class="amount mt-2">
+            {{ lotData.row.stock }}
+          </span>
           <b-button
             v-if="$nuxt.isOnline"
             type="is-dark"
@@ -223,7 +229,6 @@ export default {
 .amount {
   display: inline-block;
   min-width: 2.5rem;
-  vertical-align: middle;
   text-align: center;
 }
 </style>
