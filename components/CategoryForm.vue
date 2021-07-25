@@ -19,7 +19,7 @@
       Abbrechen
     </b-button>
     <b-button
-      type="is-info"
+      type="is-primary"
       @click="submit()"
     >
       Speichern

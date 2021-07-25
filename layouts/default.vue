@@ -24,7 +24,7 @@
       </b-message>
       <b-message
         v-if="isSyncing"
-        type="is-info"
+        type="is-primary"
         has-icon
         icon-size="is-medium"
       >

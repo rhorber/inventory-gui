@@ -6,7 +6,7 @@
     <div class="columns py-4">
       <div class="column">
         <b-button
-          type="is-info"
+          type="is-primary"
           tag="nuxt-link"
           :to="addArticleButtonLink"
         >
@@ -15,7 +15,7 @@
       </div>
       <b-field class="column is-narrow">
         <b-checkbox
-          type="is-info"
+          type="is-primary"
           :value="value"
           @input="onInput"
         >
@@ -28,7 +28,7 @@
     />
     <div class="py-4">
       <b-button
-        type="is-info"
+        type="is-primary"
         tag="nuxt-link"
         :to="addArticleButtonLink"
       >

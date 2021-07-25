@@ -112,7 +112,7 @@
     >
       <div>
         <b-button
-          type="is-info"
+          type="is-primary"
           tag="nuxt-link"
           :to="'/article/edit/' + row.id"
           icon-right="edit"

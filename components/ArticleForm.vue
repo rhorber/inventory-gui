@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: The selects can not be coloured blue, therefore all elements are left violet. -->
   <form>
     <section>
       <p class="is-size-4 mt-4 mb-2">
@@ -169,7 +168,7 @@
           <td colspan="2" />
           <td>
             <b-button
-              type="is-info"
+              type="is-primary"
               outlined
               icon-right="plus"
               @click="addLot()"
@@ -188,7 +187,7 @@
         Abbrechen
       </b-button>
       <b-button
-        type="is-info"
+        type="is-primary"
         @click="submit()"
       >
         Speichern

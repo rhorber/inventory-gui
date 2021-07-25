@@ -5,7 +5,7 @@
     </p>
     <div class="py-4">
       <b-button
-        type="is-info"
+        type="is-primary"
         tag="nuxt-link"
         to="/category/add"
       >
@@ -55,7 +55,7 @@
         label="Aktionen"
       >
         <b-button
-          type="is-info"
+          type="is-primary"
           tag="nuxt-link"
           :to="'/category/edit/' + row.id"
           icon-right="edit"
@@ -64,7 +64,7 @@
     </b-table>
     <div class="py-4">
       <b-button
-        type="is-info"
+        type="is-primary"
         tag="nuxt-link"
         to="/category/add"
       >
