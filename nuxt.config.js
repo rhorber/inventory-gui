@@ -33,13 +33,13 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#167df0', height: '3px' },
+  loading: { color: '#333399', height: '3px' },
 
   /*
   ** Global CSS
   */
   css: [
-    'buefy/dist/buefy.css',
+    '~/assets/buefy.scss',
     '~/assets/main.css'
   ],
 
