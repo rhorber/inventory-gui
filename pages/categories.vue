@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <p class="is-size-3">
-      Kategorien
-    </p>
-    <div class="py-4">
+  <BaseLayoutList
+    page-title="Kategorien"
+  >
+    <template #header>
       <b-button
         type="is-primary"
         tag="nuxt-link"
@@ -11,73 +10,73 @@
       >
         Kategorie erstellen
       </b-button>
-    </div>
-    <b-table
-      :data="categories"
-      striped
-      hoverable
-      sort-icon="chevron-bottom"
-    >
-      <b-table-column
-        v-slot="{ row }"
-        field="name"
-        label="Name"
-        :td-attrs="vCenteredAttrs"
-      >
-        {{ row.name }}
-      </b-table-column>
+    </template>
 
-      <b-table-column
-        v-slot="{ row, index }"
-        custom-key="sorting"
+    <template #default>
+      <b-table
+        :data="categories"
+        striped
+        hoverable
+        sort-icon="chevron-bottom"
       >
-        <div>
-          <b-button
-            :class="{ 'is-invisible': index === highestCategoryIndex }"
-            type="is-dark"
-            outlined
-            icon-right="chevron-bottom"
-            @click="moveDown(row)"
-          />
-          <b-button
-            :class="{ 'is-invisible': index === 0 }"
-            type="is-dark"
-            outlined
-            icon-right="chevron-top"
-            @click="moveUp(row)"
-          />
-        </div>
-      </b-table-column>
+        <b-table-column
+          v-slot="{ row }"
+          field="name"
+          label="Name"
+          :td-attrs="vCenteredAttrs"
+        >
+          {{ row.name }}
+        </b-table-column>
 
-      <b-table-column
-        v-slot="{ row }"
-        custom-key="actions"
-        label="Aktionen"
-      >
-        <b-button
-          type="is-primary"
-          tag="nuxt-link"
-          :to="'/category/edit/' + row.id"
-          icon-right="edit"
-        />
-      </b-table-column>
-    </b-table>
-    <div class="py-4">
-      <b-button
-        type="is-primary"
-        tag="nuxt-link"
-        to="/category/add"
-      >
-        Kategorie erstellen
-      </b-button>
-    </div>
-  </div>
+        <b-table-column
+          v-slot="{ row, index }"
+          custom-key="sorting"
+        >
+          <div>
+            <b-button
+              :class="{ 'is-invisible': index === highestCategoryIndex }"
+              type="is-dark"
+              outlined
+              icon-right="chevron-bottom"
+              @click="moveDown(row)"
+            />
+            <b-button
+              :class="{ 'is-invisible': index === 0 }"
+              type="is-dark"
+              outlined
+              icon-right="chevron-top"
+              @click="moveUp(row)"
+            />
+          </div>
+        </b-table-column>
+
+        <b-table-column
+          v-slot="{ row }"
+          custom-key="actions"
+          label="Aktionen"
+        >
+          <b-button
+            type="is-primary"
+            tag="nuxt-link"
+            :to="'/category/edit/' + row.id"
+            icon-right="edit"
+          />
+        </b-table-column>
+      </b-table>
+    </template>
+  </BaseLayoutList>
 </template>
 
 <script>
 import { mapMutations, mapState } from 'vuex'
 
+import BaseLayoutList from '~/components/BaseLayoutList'
+
 export default {
+  components: {
+    BaseLayoutList,
+  },
+
   computed: {
     ...mapState(['categories']),
     highestCategoryIndex() {

@@ -1,32 +1,37 @@
 <template>
-  <div>
-    <p class="is-size-3">
-      {{ pageTitle }}
-    </p>
-    <div class="columns py-4">
-      <div class="column">
-        <b-button
-          type="is-primary"
-          tag="nuxt-link"
-          :to="addArticleButtonLink"
-        >
-          Artikel erstellen
-        </b-button>
+  <BaseLayoutList
+    :page-title="pageTitle"
+  >
+    <template #header>
+      <div class="columns">
+        <div class="column">
+          <b-button
+            type="is-primary"
+            tag="nuxt-link"
+            :to="addArticleButtonLink"
+          >
+            Artikel erstellen
+          </b-button>
+        </div>
+        <b-field class="column is-narrow">
+          <b-checkbox
+            type="is-primary"
+            :value="value"
+            @input="onInput"
+          >
+            Artikel ohne Bestand ausblenden
+          </b-checkbox>
+        </b-field>
       </div>
-      <b-field class="column is-narrow">
-        <b-checkbox
-          type="is-primary"
-          :value="value"
-          @input="onInput"
-        >
-          Artikel ohne Bestand ausblenden
-        </b-checkbox>
-      </b-field>
-    </div>
-    <article-table
-      :articles="articles"
-    />
-    <div class="py-4">
+    </template>
+
+    <template #default>
+      <article-table
+        :articles="articles"
+      />
+    </template>
+
+    <template #footer>
       <b-button
         type="is-primary"
         tag="nuxt-link"
@@ -34,17 +39,19 @@
       >
         Artikel erstellen
       </b-button>
-    </div>
-  </div>
+    </template>
+  </BaseLayoutList>
 </template>
 
 <script>
+import BaseLayoutList from '~/components/BaseLayoutList'
 import ArticleTable from '~/components/ArticleTable'
 
 export default {
   name: 'PageArticles',
   components: {
-    ArticleTable
+    ArticleTable,
+    BaseLayoutList,
   },
   props: {
     pageTitle: {
