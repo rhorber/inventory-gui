@@ -1,23 +1,24 @@
 <template>
-  <section class="container">
-    <p class="is-size-3 mb-2">
-      Artikel erstellen
-    </p>
+  <BaseLayoutForm
+    page-title="Artikel erstellen"
+  >
     <article-form
       :article="emptyArticle"
       @formSubmitted="addArticle"
     />
-  </section>
+  </BaseLayoutForm>
 </template>
 
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
+import BaseLayoutForm from '~/components/BaseLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
 
 export default {
   components: {
-    ArticleForm
+    ArticleForm,
+    BaseLayoutForm,
   },
 
   data() {

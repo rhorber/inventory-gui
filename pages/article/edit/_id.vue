@@ -1,23 +1,24 @@
 <template>
-  <section class="container">
-    <p class="is-size-3 mb-2">
-      Artikel bearbeiten ({{ articleId }})
-    </p>
+  <BaseLayoutForm
+    :page-title="`Artikel bearbeiten (${articleId})`"
+  >
     <article-form
       :article="article"
       @formSubmitted="saveArticle"
     />
-  </section>
+  </BaseLayoutForm>
 </template>
 
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
+import BaseLayoutForm from '~/components/BaseLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
 
 export default {
   components: {
-    ArticleForm
+    ArticleForm,
+    BaseLayoutForm,
   },
 
   validate({params}) {

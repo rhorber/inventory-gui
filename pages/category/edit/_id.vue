@@ -1,23 +1,24 @@
 <template>
-  <section class="container">
-    <p class="is-size-3 mb-2">
-      Kategorie bearbeiten ({{ categoryId }})
-    </p>
+  <BaseLayoutForm
+    :page-title="`Kategorie bearbeiten (${categoryId})`"
+  >
     <category-form
       :category="category"
       @formSubmitted="saveCategory"
     />
-  </section>
+  </BaseLayoutForm>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
 
+import BaseLayoutForm from '~/components/BaseLayoutForm'
 import CategoryForm from '~/components/CategoryForm'
 
 export default {
   components: {
-    CategoryForm
+    BaseLayoutForm,
+    CategoryForm,
   },
   validate({params}) {
     return /^\d+$/.test(params.id);
