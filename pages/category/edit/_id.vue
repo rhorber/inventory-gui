@@ -1,12 +1,12 @@
 <template>
   <section class="container">
-    <div>
-      <h2>Kategorie bearbeiten ({{ categoryId }})</h2>
-      <category-form
-        :category="category"
-        @formSubmitted="saveCategory"
-      />
-    </div>
+    <p class="is-size-3 mb-2">
+      Kategorie bearbeiten ({{ categoryId }})
+    </p>
+    <category-form
+      :category="category"
+      @formSubmitted="saveCategory"
+    />
   </section>
 </template>
 

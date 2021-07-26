@@ -33,12 +33,13 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#007bff', height: '3px' },
+  loading: { color: '#333399', height: '3px' },
 
   /*
   ** Global CSS
   */
   css: [
+    '~/assets/buefy.scss',
     '~/assets/main.css'
   ],
 
@@ -46,7 +47,9 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/axios'
+    '~/plugins/axios',
+    // Doc: https://buefy.org/documentation/
+    '~/plugins/buefy'
   ],
 
   /*
@@ -54,10 +57,7 @@ export default {
   */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios',
-    // Doc: https://bootstrap-vue.js.org/docs/
-    'bootstrap-vue/nuxt',
-    '@nuxtjs/font-awesome'
+    '@nuxtjs/axios'
   ],
   /*
   ** Axios module configuration

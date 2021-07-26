@@ -1,12 +1,12 @@
 <template>
   <section class="container">
-    <div>
-      <h2>Artikel erstellen</h2>
-      <article-form
-        :article="emptyArticle"
-        @formSubmitted="addArticle"
-      />
-    </div>
+    <p class="is-size-3 mb-2">
+      Artikel erstellen
+    </p>
+    <article-form
+      :article="emptyArticle"
+      @formSubmitted="addArticle"
+    />
   </section>
 </template>
 

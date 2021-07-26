@@ -1,19 +1,13 @@
 <template>
-  <b-container
-    fluid
-    class="p-3"
-  >
-    <b-form-row>
-      <b-col cols="12">
-        <b-form-input
-          v-model="accessToken"
-          type="text"
-          required
-          @keyup.enter="login"
-        />
-      </b-col>
-    </b-form-row>
-  </b-container>
+  <div class="m-4">
+    <b-field>
+      <b-input
+        v-model="accessToken"
+        type="text"
+        @keyup.enter.native="login"
+      />
+    </b-field>
+  </div>
 </template>
 
 <script>

@@ -1,29 +1,30 @@
 <template>
-  <b-form @submit="onSubmit">
-    <b-form-group
+  <form>
+    <b-field
       label="Name *"
-      label-for="name"
+      class="mb-4"
     >
-      <b-form-input
-        id="name"
+      <b-input
         v-model="dataCategory.name"
         type="text"
         required
       />
-    </b-form-group>
+    </b-field>
 
-    <a @click="back()">
-      <b-button variant="outline-danger">
-        Abbrechen
-      </b-button>
-    </a>
     <b-button
-      variant="primary"
-      type="submit"
+      type="is-danger"
+      outlined
+      @click="back()"
+    >
+      Abbrechen
+    </b-button>
+    <b-button
+      type="is-primary"
+      @click="submit()"
     >
       Speichern
     </b-button>
-  </b-form>
+  </form>
 </template>
 
 <script>
@@ -40,11 +41,10 @@ export default {
     }
   },
   methods: {
-    back(_event) {
+    back() {
       this.$router.go(-1);
     },
-    onSubmit(event) {
-      event.preventDefault();
+    submit() {
       this.$emit('formSubmitted', this.dataCategory);
     }
   }
