@@ -15,6 +15,9 @@ export default async function ({store}) {
   if (store.state.categories === null) {
     promises.push(store.dispatch('fetchCategories'));
   }
+  if (store.state.isInventoryActive === null) {
+    promises.push(store.dispatch('fetchIsInventoryActive'));
+  }
 
   return Promise.all(promises);
 }

@@ -1,52 +1,20 @@
 <template>
-  <div>
-    <h2>Alle Artikel</h2>
-    <div class="container-fluid">
-      <div class="row justify-content-between align-items-center">
-        <div class="column">
-          <nuxt-link to="/article/add">
-            <b-button
-              variant="primary"
-              class="mt-2 mb-3"
-            >
-              Artikel erstellen
-            </b-button>
-          </nuxt-link>
-        </div>
-        <div class="column">
-          <b-form-checkbox
-            v-model="hideStockZero"
-            name="hide-stock-zero"
-          >
-            Artikel ohne Bestand ausblenden
-          </b-form-checkbox>
-        </div>
-      </div>
-    </div>
-    <article-table
-      :articles="sortedArticles"
-    />
-    <div>
-      <nuxt-link to="/article/add">
-        <b-button
-          variant="primary"
-          class="mb-2"
-        >
-          Artikel erstellen
-        </b-button>
-      </nuxt-link>
-    </div>
-  </div>
+  <PageArticles
+    v-model="hideStockZero"
+    page-title="Alle Artikel"
+    :articles="sortedArticles"
+    add-article-button-link="/article/add"
+  />
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 
-import ArticleTable from '~/components/ArticleTable'
+import PageArticles from '~/components/PageArticles'
 
 export default {
   components: {
-    ArticleTable
+    PageArticles
   },
 
   data() {

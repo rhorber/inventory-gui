@@ -17,6 +17,13 @@ I am aware, that the solution is very primitive and definitively not state of th
 As I have little time to dive fully into the better APIs (i.e. IndexedDB),
 and we are just two persons using it at the time, I chose this pragmatic approach.
 
+## Icons
+
+I'm using the Bytesize Icons from danklammer.
+[GitHub Repo](https://github.com/danklammer/bytesize-icons/tree/master)
+
+[comment]: <> (Version 1.4)
+
 ## Build Setup
 
 ``` bash

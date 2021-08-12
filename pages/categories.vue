@@ -1,77 +1,80 @@
 <template>
-  <div>
-    <h2>Kategorien</h2>
-    <div>
-      <nuxt-link to="/category/add">
-        <b-button
-          variant="primary"
-          class="mt-2 mb-3"
-        >
-          Kategorie erstellen
-        </b-button>
-      </nuxt-link>
-    </div>
-    <b-table
-      :fields="tableFields"
-      :items="categories"
-      striped
-      hover
-    >
-      <template
-        slot="cell(sorting)"
-        slot-scope="data"
+  <BaseLayoutList
+    page-title="Kategorien"
+  >
+    <template #header>
+      <b-button
+        type="is-primary"
+        tag="nuxt-link"
+        to="/category/add"
       >
-        <b-button
-          :class="{ invisible: data.index === highestCategoryIndex }"
-          variant="outline-secondary"
-          @click="moveDown(data.item)"
-        >
-          <i class="fa fa-angle-down" />
-        </b-button>
-        <b-button
-          v-if="data.index > 0"
-          variant="outline-secondary"
-          @click="moveUp(data.item)"
-        >
-          <i class="fa fa-angle-up" />
-        </b-button>
-      </template>
-      <template
-        slot="cell(actions)"
-        slot-scope="data"
+        Kategorie erstellen
+      </b-button>
+    </template>
+
+    <template #default>
+      <b-table
+        :data="categories"
+        striped
+        hoverable
+        sort-icon="chevron-bottom"
       >
-        <nuxt-link :to="'/category/edit/' + data.item.id">
-          <b-button variant="primary">
-            <i class="fa fa-edit" />
-          </b-button>
-        </nuxt-link>
-      </template>
-    </b-table>
-    <div>
-      <nuxt-link to="/category/add">
-        <b-button
-          variant="primary"
-          class="mb-2"
+        <b-table-column
+          v-slot="{ row }"
+          field="name"
+          label="Name"
+          :td-attrs="vCenteredAttrs"
         >
-          Kategorie erstellen
-        </b-button>
-      </nuxt-link>
-    </div>
-  </div>
+          {{ row.name }}
+        </b-table-column>
+
+        <b-table-column
+          v-slot="{ row, index }"
+          custom-key="sorting"
+        >
+          <div>
+            <b-button
+              :class="{ 'is-invisible': index === highestCategoryIndex }"
+              type="is-dark"
+              outlined
+              icon-right="chevron-bottom"
+              @click="moveDown(row)"
+            />
+            <b-button
+              :class="{ 'is-invisible': index === 0 }"
+              type="is-dark"
+              outlined
+              icon-right="chevron-top"
+              @click="moveUp(row)"
+            />
+          </div>
+        </b-table-column>
+
+        <b-table-column
+          v-slot="{ row }"
+          custom-key="actions"
+          label="Aktionen"
+        >
+          <b-button
+            type="is-primary"
+            tag="nuxt-link"
+            :to="'/category/edit/' + row.id"
+            icon-right="edit"
+          />
+        </b-table-column>
+      </b-table>
+    </template>
+  </BaseLayoutList>
 </template>
 
 <script>
 import { mapMutations, mapState } from 'vuex'
 
+import BaseLayoutList from '~/components/BaseLayoutList'
+
 export default {
-  data() {
-    return {
-      tableFields: [
-        {key: 'name', label: 'Name'},
-        {key: 'sorting', label: ''},
-        {key: 'actions', label: 'Aktionen'},
-      ]
-    };
+  components: {
+    BaseLayoutList,
   },
 
   computed: {
@@ -83,6 +86,11 @@ export default {
 
   methods: {
     ...mapMutations(['replaceCategory']),
+    vCenteredAttrs(_row, _column) {
+      return {
+        class: 'is-vcentered',
+      };
+    },
     moveDown(category) {
       this.$axios.$put(`/v3/categories/${category.id}/move-down`)
         .then((result) => {

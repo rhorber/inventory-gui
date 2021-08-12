@@ -1,23 +1,24 @@
 <template>
-  <section class="container">
-    <div>
-      <h2>Kategorie erstellen</h2>
-      <category-form
-        :category="{name: ''}"
-        @formSubmitted="addCategory"
-      />
-    </div>
-  </section>
+  <BaseLayoutForm
+    page-title="Kategorie erstellen"
+  >
+    <category-form
+      :category="{name: ''}"
+      @formSubmitted="addCategory"
+    />
+  </BaseLayoutForm>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
 
+import BaseLayoutForm from '~/components/BaseLayoutForm'
 import CategoryForm from '~/components/CategoryForm'
 
 export default {
   components: {
-    CategoryForm
+    BaseLayoutForm,
+    CategoryForm,
   },
   methods: {
     ...mapMutations(['resetCategories']),

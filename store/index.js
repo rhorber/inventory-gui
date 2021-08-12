@@ -4,6 +4,7 @@ const state = function () {
     accessToken: null,
     articles: null,
     categories: null,
+    isInventoryActive: null,
     isSyncPending: null,
     isSyncing: false
   };
@@ -74,6 +75,9 @@ const mutations = {
   resetCategories(state) {
     state.categories = null;
   },
+  setIsInventoryActive(state, isInventoryActive) {
+    state.isInventoryActive = isInventoryActive;
+  },
   setIsSyncPending(state, isSyncPending) {
     state.isSyncPending = isSyncPending;
   },
@@ -111,6 +115,17 @@ const actions = {
       .then((result) => {
         commit('setCategories', result.categories);
       });
+  },
+  fetchIsInventoryActive({commit}) {
+    return this.$axios.$get('/v3/inventories')
+      .then((result) => {
+        const active = (result.status === 'active');
+        commit('setIsInventoryActive', active);
+      });
+  },
+  saveIsInventoryActive({commit, dispatch}, isInventoryActive) {
+    commit('setIsInventoryActive', isInventoryActive);
+    return dispatch('fetchArticles');
   },
   getSyncQueue() {
     const lastIndex = window.localStorage.getItem('syncQueue.lastIndex');

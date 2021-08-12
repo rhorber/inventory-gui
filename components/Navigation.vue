@@ -1,51 +1,76 @@
 <template>
   <b-navbar
-    :variant="variant"
-    type="light"
-    sticky
+    :type="type"
+    fixed-top
   >
-    <b-navbar-nav>
-      <h4>
-        Inventar
-        <small class="text-muted d-none d-md-inline">
-          Kleine Hilfs-Applikation zum Verwalten des (Keller-) Inventars.
-        </small>
-      </h4>
-    </b-navbar-nav>
-
-    <b-navbar-nav class="ml-auto pr-4">
-      <b-nav-item-dropdown
-        text="Menu"
-        right
-        size="lg"
+    <template #brand>
+      <b-navbar-item
+        tag="nuxt-link"
+        to="/"
       >
-        <b-dropdown-item
+        <Logo />
+      </b-navbar-item>
+    </template>
+
+    <template #start>
+      <b-navbar-item tag="div">
+        <div class="columns is-align-items-baseline">
+          <div class="column is-narrow">
+            <span class="is-size-4">Inventar</span>
+          </div>
+          <div class="column is-hidden-mobile">
+            <span class="has-text-grey is-size-5 is-size-6-touch">
+              Kleine Hilfs-Applikation zum Verwalten des (Keller-) Inventars.
+            </span>
+          </div>
+        </div>
+      </b-navbar-item>
+    </template>
+
+    <template #end>
+      <b-navbar-dropdown
+        label="Menu"
+        right
+      >
+        <b-navbar-item
           v-for="category in categories"
           :key="category.id"
+          tag="nuxt-link"
           :to="'/category/' + category.id"
+          :active="getIsActive('/category/' + category.id)"
         >
           {{ category.name }}
-        </b-dropdown-item>
-        <b-dropdown-divider />
-
-        <b-dropdown-item to="/">
+        </b-navbar-item>
+        <hr class="navbar-divider">
+        <b-navbar-item
+          tag="nuxt-link"
+          to="/"
+          :active="getIsActive('/')"
+        >
           Alle Artikel
-        </b-dropdown-item>
-        <b-dropdown-divider />
-
-        <b-dropdown-item
-          :disabled="$nuxt.isOffline"
+        </b-navbar-item>
+        <hr class="navbar-divider">
+        <b-navbar-item
+          v-show="$nuxt.isOnline"
+          tag="nuxt-link"
           to="/categories"
-          no-prefetch
+          :active="getIsActive('/categories')"
+          :prefetch="false"
         >
           Kategorien verwalten
-        </b-dropdown-item>
-      </b-nav-item-dropdown>
-    </b-navbar-nav>
-
-    <b-navbar-brand href="#">
-      <Logo />
-    </b-navbar-brand>
+        </b-navbar-item>
+        <hr class="navbar-divider">
+        <b-navbar-item
+          v-show="$nuxt.isOnline"
+          tag="nuxt-link"
+          to="/inventory"
+          :active="getIsActive('/inventory')"
+          :prefetch="false"
+        >
+          Inventur
+        </b-navbar-item>
+      </b-navbar-dropdown>
+    </template>
   </b-navbar>
 </template>
 
@@ -60,12 +85,17 @@ export default {
   },
   computed: {
     ...mapState(['categories']),
-    variant() {
+    type() {
       if ($nuxt.isOnline) {
-        return 'light';
+        return 'is-light';
       } else {
-        return 'warning';
+        return 'is-warning';
       }
+    }
+  },
+  methods: {
+    getIsActive(path) {
+      return (path === this.$route.path);
     }
   }
 }
