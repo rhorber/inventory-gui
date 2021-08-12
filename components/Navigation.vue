@@ -59,6 +59,16 @@
         >
           Kategorien verwalten
         </b-navbar-item>
+        <hr class="navbar-divider">
+        <b-navbar-item
+          v-show="$nuxt.isOnline"
+          tag="nuxt-link"
+          to="/inventory"
+          :active="getIsActive('/inventory')"
+          :prefetch="false"
+        >
+          Inventur
+        </b-navbar-item>
       </b-navbar-dropdown>
     </template>
   </b-navbar>
