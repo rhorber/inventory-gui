@@ -11,7 +11,7 @@
       label="Name"
     >
       <div class="columns is-multiline p-3">
-        <span class="column p-0">
+        <span :class="getNameClasses(row)">
           {{ row.name }}
         </span>
         <span
@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
   props: {
@@ -139,6 +139,7 @@ export default {
   },
 
   computed: {
+    ...mapState(['isInventoryActive']),
     highestArticleIndex() {
       return (this.articles.length - 1);
     }
@@ -162,6 +163,19 @@ export default {
       return {
         style: {'width': '150px'},
       };
+    },
+    getNameClasses(row) {
+      let classes = [];
+
+      if (this.isInventoryActive) {
+        let statusClass = (parseInt(row.inventoried, 10) === 1) ? 'is-success' : 'is-danger';
+
+        classes = ['tag', statusClass, 'is-medium', 'is-justify-content-left', 'pl-2'];
+      }
+
+      classes.push('column');
+      classes.push('p-0');
+      return classes;
     },
     hasLots(article) {
       return (article.hasOwnProperty('lots')
