@@ -116,6 +116,13 @@ const actions = {
         commit('setCategories', result.categories);
       });
   },
+  fetchIsInventoryActive({commit}) {
+    return this.$axios.$get('/v3/inventories')
+      .then((result) => {
+        const active = (result.status === 'active');
+        commit('setIsInventoryActive', active);
+      });
+  },
   saveIsInventoryActive({commit, dispatch}, isInventoryActive) {
     commit('setIsInventoryActive', isInventoryActive);
     return dispatch('fetchArticles');
