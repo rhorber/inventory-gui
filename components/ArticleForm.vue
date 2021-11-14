@@ -48,9 +48,19 @@
       </b-field>
 
       <b-field label="GTIN (EAN)">
+        <p
+          v-if="dataArticle.gtin === null || dataArticle.gtin === ''"
+          class="control"
+        >
+          <b-button
+            icon-left="fullscreen"
+            @click="openScanner"
+          />
+        </p>
         <b-input
           v-model="dataArticle.gtin"
           type="text"
+          expanded
         />
       </b-field>
     </section>
@@ -200,13 +210,25 @@
         Speichern
       </b-button>
     </section>
+
+    <scanner
+      :is-active="scanner"
+      @onScanCancel="onScanCancel"
+      @onScanSuccess="onScanSuccess"
+    />
   </form>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 
+import Scanner from '~/components/Scanner'
+
 export default {
+  components: {
+    Scanner,
+  },
+
   props: {
     article: {
       type: Object,
@@ -250,7 +272,8 @@ export default {
 
     return {
       dataArticle: article,
-      units: units
+      units: units,
+      scanner: false,
     }
   },
 
@@ -326,6 +349,16 @@ export default {
       this.dataArticle.lots = this.dataArticle.lots.filter(
         (l) => l !== lot
       );
+    },
+    openScanner() {
+      this.scanner = true;
+    },
+    onScanCancel() {
+      this.scanner = false;
+    },
+    onScanSuccess(decodedText, _decodedResult) {
+      this.scanner = false;
+      this.dataArticle.gtin = decodedText;
     },
     back() {
       this.$router.go(-1);
