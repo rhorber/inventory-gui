@@ -62,6 +62,7 @@ export default {
         'i-chevron-top',
         'i-edit',
         'i-error',
+        'i-fullscreen',
         'i-info',
         'i-minus',
         'i-plus',

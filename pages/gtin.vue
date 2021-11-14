@@ -17,21 +17,31 @@
       {{ error }}
     </b-message>
 
-    <form
-      v-if="article === undefined"
-    >
-      <div id="qr-code-scanner"></div>
-
+    <form v-if="article === undefined">
       <b-field
         label="GTIN (EAN) *"
         class="mb-4"
       >
+        <p class="control">
+          <b-button
+            icon-left="fullscreen"
+            @click="openScanner"
+          />
+        </p>
         <b-input
           v-model="gtin"
           type="text"
           required
+          expanded
         />
       </b-field>
+
+      <div
+        v-if="scanner !== undefined"
+        id="scanner"
+        class="mb-2"
+        style="width: 600px;"
+      />
 
       <b-button
         type="is-danger"
@@ -59,7 +69,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex'
-import { Html5QrcodeScanner, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import { Html5Qrcode, Html5QrcodeScannerState, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 import BaseLayoutForm from '~/components/BaseLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
@@ -76,35 +86,54 @@ export default {
     return {
       pageTitle: 'GTIN eingeben',
       gtin: '',
+      scanner: undefined,
       loading: false,
-      article: undefined,
       notFound: false,
       error: '',
-      scanner: undefined,
+      article: undefined,
     };
-  },
-
-  mounted() {
-    const scannerConfig = {
-      fps: 5,
-      qrbox: {width: 250, height: 150},
-      formatsToSupport: [
-        Html5QrcodeSupportedFormats.EAN_8,
-        Html5QrcodeSupportedFormats.EAN_13,
-      ],
-    };
-
-    const scanner = new Html5QrcodeScanner('qr-code-scanner', scannerConfig, false);
-    scanner.render(this.onScanSuccess, console.error);
-
-    this.scanner = scanner;
   },
 
   methods: {
     ...mapMutations({resetArticles: 'resetArticles', addToStore: 'addArticle'}),
     ...mapActions(['addToSyncQueue']),
+    openScanner() {
+      this.loading = true;
+      this.scanner = true;
+
+      $nuxt.$nextTick(() => {
+        const config = {
+          fps: 2,
+          qrbox: {width: 400, height: 150},
+          aspectRatio: 1.777778,
+          formatsToSupport: [
+            Html5QrcodeSupportedFormats.EAN_8,
+            Html5QrcodeSupportedFormats.EAN_13,
+          ],
+        };
+
+        const scanner = new Html5Qrcode('scanner');
+        scanner.start(
+          {facingMode: 'environment'},
+          config,
+          this.onScanSuccess,
+        );
+
+        this.scanner = scanner;
+        this.loading = false;
+      });
+    },
+    onScanSuccess(decodedText, _decodedResult) {
+      this.gtin = decodedText;
+      this.stopScanner();
+    },
+    stopScanner() {
+      if (this.scanner && this.scanner.getState() === Html5QrcodeScannerState.SCANNING) {
+        this.scanner.stop();
+      }
+    },
     back() {
-      this.scanner.clear();
+      this.stopScanner();
       this.$router.go(-1);
     },
     send() {
@@ -115,7 +144,7 @@ export default {
 
       this.$axios.get('/v3/gtin/' + this.gtin)
         .then((response) => {
-          this._handleResponse(response.data);
+          this.handleResponse(response.data);
           this.loading = false;
         })
         .catch((error) => {
@@ -124,11 +153,7 @@ export default {
           this.loading = false;
         });
     },
-    onScanSuccess(decodedText, _decodedResult) {
-      this.gtin = decodedText;
-      this.scanner.clear();
-    },
-    _handleResponse(response) {
+    handleResponse(response) {
       switch (response.type) {
         case "existing":
           this.$router.push(`/article/edit/${response.articleId}`);
