@@ -13,13 +13,15 @@
       v-if="error !== ''"
       type="is-danger"
     >
-      Bei der Abfrage trat folgender Fehler auf:<br />
+      Bei der Abfrage trat folgender Fehler auf:<br>
       {{ error }}
     </b-message>
 
     <form
       v-if="article === undefined"
     >
+      <div id="qr-code-scanner"></div>
+
       <b-field
         label="GTIN (EAN) *"
         class="mb-4"
@@ -57,6 +59,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex'
+import { Html5QrcodeScanner } from 'html5-qrcode';
 
 import BaseLayoutForm from '~/components/BaseLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
@@ -67,6 +70,16 @@ export default {
   components: {
     ArticleForm,
     BaseLayoutForm,
+  },
+
+  mounted() {
+    const scannerConfig = {
+      fps: 5,
+      qrbox: {width: 250, height: 100},
+    };
+
+    const scanner = new Html5QrcodeScanner('qr-code-scanner', scannerConfig, false);
+    scanner.render(this.onScanSuccess, console.error);
   },
 
   data() {
@@ -103,6 +116,9 @@ export default {
         });
 
       console.log(`send EAN: ${this.gtin}`);
+    },
+    onScanSuccess(decodedText, decodedResult) {
+      this.gtin = decodedText;
     },
     _handleResponse(response) {
       switch (response.type) {
