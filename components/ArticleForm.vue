@@ -339,6 +339,7 @@ export default {
       this.dataArticle.lots.sort(
         (lot1, lot2) => lot1.position - lot2.position
       );
+      this.dataArticle.gtin = this.dataArticle.gtin.trim();
 
       this.$emit('formSubmitted', this.dataArticle);
     },

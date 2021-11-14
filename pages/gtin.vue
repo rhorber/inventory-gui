@@ -111,6 +111,7 @@ export default {
       this.loading = true;
       this.notFound = false;
       this.error = "";
+      this.gtin = this.gtin.trim();
 
       this.$axios.get('/v3/gtin/' + this.gtin)
         .then((response) => {
