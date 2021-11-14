@@ -33,6 +33,14 @@
         right
       >
         <b-navbar-item
+          tag="nuxt-link"
+          to="/gtin"
+          :active="getIsActive('/gtin')"
+        >
+          GTIN (EAN) eingeben
+        </b-navbar-item>
+        <hr class="navbar-divider">
+        <b-navbar-item
           v-for="category in categories"
           :key="category.id"
           tag="nuxt-link"
