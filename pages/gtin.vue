@@ -36,13 +36,6 @@
         />
       </b-field>
 
-      <div
-        v-if="scanner !== undefined"
-        id="scanner"
-        class="mb-2"
-        style="width: 600px;"
-      />
-
       <b-button
         type="is-danger"
         outlined
@@ -59,6 +52,12 @@
       </b-button>
     </form>
 
+    <scanner
+      :is-active="scanner"
+      @onScanCancel="onScanCancel"
+      @onScanSuccess="onScanSuccess"
+    />
+
     <article-form
       v-if="article !== undefined"
       :article="article"
@@ -69,10 +68,10 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex'
-import { Html5Qrcode, Html5QrcodeScannerState, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 import BaseLayoutForm from '~/components/BaseLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
+import Scanner from '~/components/Scanner'
 
 export default {
   name: 'Gtin',
@@ -80,13 +79,14 @@ export default {
   components: {
     ArticleForm,
     BaseLayoutForm,
+    Scanner,
   },
 
   data() {
     return {
       pageTitle: 'GTIN eingeben',
       gtin: '',
-      scanner: undefined,
+      scanner: false,
       loading: false,
       notFound: false,
       error: '',
@@ -98,42 +98,16 @@ export default {
     ...mapMutations({resetArticles: 'resetArticles', addToStore: 'addArticle'}),
     ...mapActions(['addToSyncQueue']),
     openScanner() {
-      this.loading = true;
       this.scanner = true;
-
-      $nuxt.$nextTick(() => {
-        const config = {
-          fps: 2,
-          qrbox: {width: 400, height: 150},
-          aspectRatio: 1.777778,
-          formatsToSupport: [
-            Html5QrcodeSupportedFormats.EAN_8,
-            Html5QrcodeSupportedFormats.EAN_13,
-          ],
-        };
-
-        const scanner = new Html5Qrcode('scanner');
-        scanner.start(
-          {facingMode: 'environment'},
-          config,
-          this.onScanSuccess,
-        );
-
-        this.scanner = scanner;
-        this.loading = false;
-      });
+    },
+    onScanCancel() {
+      this.scanner = false;
     },
     onScanSuccess(decodedText, _decodedResult) {
+      this.scanner = false;
       this.gtin = decodedText;
-      this.stopScanner();
-    },
-    stopScanner() {
-      if (this.scanner && this.scanner.getState() === Html5QrcodeScannerState.SCANNING) {
-        this.scanner.stop();
-      }
     },
     back() {
-      this.stopScanner();
       this.$router.go(-1);
     },
     send() {
