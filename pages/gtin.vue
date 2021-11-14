@@ -87,7 +87,7 @@ export default {
   mounted() {
     const scannerConfig = {
       fps: 5,
-      qrbox: {width: 250, height: 100},
+      qrbox: {width: 250, height: 150},
       formatsToSupport: [
         Html5QrcodeSupportedFormats.EAN_8,
         Html5QrcodeSupportedFormats.EAN_13,
@@ -104,6 +104,7 @@ export default {
     ...mapMutations({resetArticles: 'resetArticles', addToStore: 'addArticle'}),
     ...mapActions(['addToSyncQueue']),
     back() {
+      this.scanner.clear();
       this.$router.go(-1);
     },
     send() {
