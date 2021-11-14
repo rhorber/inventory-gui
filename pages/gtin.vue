@@ -59,7 +59,7 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex'
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5QrcodeScanner, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 import BaseLayoutForm from '~/components/BaseLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
@@ -72,16 +72,6 @@ export default {
     BaseLayoutForm,
   },
 
-  mounted() {
-    const scannerConfig = {
-      fps: 5,
-      qrbox: {width: 250, height: 100},
-    };
-
-    const scanner = new Html5QrcodeScanner('qr-code-scanner', scannerConfig, false);
-    scanner.render(this.onScanSuccess, console.error);
-  },
-
   data() {
     return {
       pageTitle: 'GTIN eingeben',
@@ -89,8 +79,25 @@ export default {
       loading: false,
       article: undefined,
       notFound: false,
-      error: "",
+      error: '',
+      scanner: undefined,
     };
+  },
+
+  mounted() {
+    const scannerConfig = {
+      fps: 5,
+      qrbox: {width: 250, height: 100},
+      formatsToSupport: [
+        Html5QrcodeSupportedFormats.EAN_8,
+        Html5QrcodeSupportedFormats.EAN_13,
+      ],
+    };
+
+    const scanner = new Html5QrcodeScanner('qr-code-scanner', scannerConfig, false);
+    scanner.render(this.onScanSuccess, console.error);
+
+    this.scanner = scanner;
   },
 
   methods: {
@@ -114,11 +121,10 @@ export default {
           this.error = error;
           this.loading = false;
         });
-
-      console.log(`send EAN: ${this.gtin}`);
     },
-    onScanSuccess(decodedText, decodedResult) {
+    onScanSuccess(decodedText, _decodedResult) {
       this.gtin = decodedText;
+      this.scanner.clear();
     },
     _handleResponse(response) {
       switch (response.type) {
