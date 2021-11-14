@@ -46,6 +46,13 @@
           </option>
         </b-select>
       </b-field>
+
+      <b-field label="GTIN (EAN)">
+        <b-input
+          v-model="dataArticle.gtin"
+          type="text"
+        />
+      </b-field>
     </section>
 
     <section>

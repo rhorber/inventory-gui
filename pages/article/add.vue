@@ -28,6 +28,7 @@ export default {
         name: '',
         size: '',
         unit: '',
+        gtin: '',
         lots: []
       }
     };
@@ -49,6 +50,7 @@ export default {
         name: data.name,
         size: data.size,
         unit: data.unit,
+        gtin: data.gtin,
         lots: data.lots
       };
 

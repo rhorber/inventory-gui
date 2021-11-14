@@ -26,7 +26,7 @@
       >
         <b-input
           v-model="gtin"
-          type="number"
+          type="text"
           required
         />
       </b-field>
@@ -115,6 +115,7 @@ export default {
           this.article = {
             name: response.name,
             size: response.quantity,
+            gtin: this.gtin,
           };
           return;
 
@@ -134,6 +135,7 @@ export default {
         name: data.name,
         size: data.size,
         unit: data.unit,
+        gtin: data.gtin,
         lots: data.lots
       };
 
