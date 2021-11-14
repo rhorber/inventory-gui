@@ -208,7 +208,14 @@ export default {
   },
 
   data() {
-    this.article.lots.forEach((lot) => {
+    const article = Object.assign({}, this.article);
+    const units = ['', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk'];
+
+    if (article.hasOwnProperty('lots') === false) {
+      article.lots = [];
+    }
+
+    article.lots.forEach((lot) => {
       if (lot.best_before instanceof Object) {
         return;
       }
@@ -223,9 +230,20 @@ export default {
       };
     });
 
+    if (article.size !== '' && article.hasOwnProperty('unit') === false) {
+      const match = article.size.match(/(\d+) (\w+)/);
+
+      if (match !== null) {
+        if (units.includes(match[2])) {
+          article.size = match[1];
+          article.unit = match[2];
+        }
+      }
+    }
+
     return {
-      dataArticle: this.article,
-      units: ['', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk']
+      dataArticle: article,
+      units: units
     }
   },
 
