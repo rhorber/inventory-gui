@@ -77,7 +77,10 @@ export default {
         {facingMode: 'environment'},
         this.config,
         this.onScanSuccess,
-      );
+      )
+        .catch((error) => {
+          document.getElementById('scanner').innerText = error;
+        });
       this.scanner = scanner;
     },
     cancel() {
