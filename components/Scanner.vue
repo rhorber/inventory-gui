@@ -3,6 +3,7 @@
     :active="isActive"
     scroll="keep"
     has-modal-card
+    full-screen
     can-cancel
     :on-cancel="cancel"
   >
@@ -47,7 +48,7 @@ export default {
   data() {
     const config = {
       fps: 2,
-      qrbox: {width: 400, height: 150},
+      aspectRatio: 1.777778,
       formatsToSupport: [
         Html5QrcodeSupportedFormats.EAN_8,
         Html5QrcodeSupportedFormats.EAN_13,
