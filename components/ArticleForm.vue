@@ -309,7 +309,7 @@ export default {
 
       const date = new Date();
       const bestBefore = {
-        text: this.formatDate(date, false),
+        text: '',
         date: date,
         isMonth: false,
       };
