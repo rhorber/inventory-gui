@@ -99,3 +99,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#scanner {
+  width: 600px;
+}
+</style>
