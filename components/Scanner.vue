@@ -16,6 +16,7 @@
       <div class="modal-card-body">
         <div
           id="scanner"
+          ref="scanner"
           class="mb-2"
         />
       </div>
@@ -49,7 +50,7 @@ export default {
     const config = {
       fps: 2,
       qrbox: {width: 400, height: 150},
-      aspectRatio: 1.777778,
+      aspectRatio: 1,
       formatsToSupport: [
         Html5QrcodeSupportedFormats.EAN_8,
         Html5QrcodeSupportedFormats.EAN_13,
@@ -72,6 +73,13 @@ export default {
 
   methods: {
     openScanner() {
+      const scannerWidth = this.$refs.scanner.clientWidth;
+      if (scannerWidth < this.config.qrbox.width) {
+        const width = Math.floor(scannerWidth * 2 / 3);
+        const height = Math.floor(width * 3 / 8);
+        this.config.qrbox = {width, height};
+      }
+
       const scanner = new Html5Qrcode('scanner');
       scanner.start(
         {facingMode: 'environment'},
@@ -79,7 +87,7 @@ export default {
         this.onScanSuccess,
       )
         .catch((error) => {
-          document.getElementById('scanner').innerText = error;
+          this.$refs.scanner.innerText = error;
         });
       this.scanner = scanner;
     },
@@ -102,6 +110,6 @@ export default {
 
 <style scoped>
 #scanner {
-  width: 600px;
+  max-width: 600px;
 }
 </style>
