@@ -23,6 +23,7 @@
     "@nuxtjs/axios": "~5.13.6",
     "buefy": "~0.9.8",
     "cross-env": "~7.0.3",
+    "html5-qrcode": "~2.1.2",
     "jquery": "~3.6.0",
     "lodash": "~4.17.21",
     "lodash.template": "~4.5.0",

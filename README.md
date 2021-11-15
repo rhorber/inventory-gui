@@ -24,6 +24,11 @@ I'm using the Bytesize Icons from danklammer.
 
 [comment]: <> (Version 1.4)
 
+## Barcode Scanner
+
+To enable the app to scan barcodes (EAN), I added the Html5-QRCode library from mebjas and contributors.
+[GitHub Repo](https://github.com/mebjas/html5-qrcode)
+
 ## Build Setup
 
 ``` bash

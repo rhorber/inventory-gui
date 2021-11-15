@@ -37,6 +37,9 @@
     <path d="M16 17 L16 8 M16 23 L16 21" />
     <circle cx="16" cy="16" r="14"/>
   </svg>
+  <svg id="i-fullscreen" viewBox="0 0 32 32">
+    <path d="M4 12 L4 4 12 4 M20 4 L28 4 28 12 M4 20 L4 28 12 28 M28 20 L28 28 20 28"/>
+  </svg>
   <symbol id="i-info" viewBox="0 0 32 32">
     <path d="M16 14 L16 23 M16 8 L16 10"/>
     <circle cx="16" cy="16" r="14"/>

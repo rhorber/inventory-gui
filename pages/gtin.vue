@@ -13,21 +13,26 @@
       v-if="error !== ''"
       type="is-danger"
     >
-      Bei der Abfrage trat folgender Fehler auf:<br />
+      Bei der Abfrage trat folgender Fehler auf:<br>
       {{ error }}
     </b-message>
 
-    <form
-      v-if="article === undefined"
-    >
+    <form v-if="article === undefined">
       <b-field
         label="GTIN (EAN) *"
         class="mb-4"
       >
+        <p class="control">
+          <b-button
+            icon-left="fullscreen"
+            @click="openScanner"
+          />
+        </p>
         <b-input
           v-model="gtin"
           type="text"
           required
+          expanded
         />
       </b-field>
 
@@ -40,12 +45,19 @@
       </b-button>
       <b-button
         type="is-primary"
+        native-type="submit"
         :loading="loading"
         @click="send()"
       >
         Senden
       </b-button>
     </form>
+
+    <scanner
+      :is-active="scanner"
+      @onScanCancel="onScanCancel"
+      @onScanSuccess="onScanSuccess"
+    />
 
     <article-form
       v-if="article !== undefined"
@@ -60,6 +72,7 @@ import { mapActions, mapMutations } from 'vuex'
 
 import BaseLayoutForm from '~/components/BaseLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
+import Scanner from '~/components/Scanner'
 
 export default {
   name: 'Gtin',
@@ -67,22 +80,34 @@ export default {
   components: {
     ArticleForm,
     BaseLayoutForm,
+    Scanner,
   },
 
   data() {
     return {
       pageTitle: 'GTIN eingeben',
       gtin: '',
+      scanner: false,
       loading: false,
-      article: undefined,
       notFound: false,
-      error: "",
+      error: '',
+      article: undefined,
     };
   },
 
   methods: {
     ...mapMutations({resetArticles: 'resetArticles', addToStore: 'addArticle'}),
     ...mapActions(['addToSyncQueue']),
+    openScanner() {
+      this.scanner = true;
+    },
+    onScanCancel() {
+      this.scanner = false;
+    },
+    onScanSuccess(decodedText, _decodedResult) {
+      this.scanner = false;
+      this.gtin = decodedText;
+    },
     back() {
       this.$router.go(-1);
     },
@@ -90,10 +115,11 @@ export default {
       this.loading = true;
       this.notFound = false;
       this.error = "";
+      this.gtin = this.gtin.trim();
 
       this.$axios.get('/v3/gtin/' + this.gtin)
         .then((response) => {
-          this._handleResponse(response.data);
+          this.handleResponse(response.data);
           this.loading = false;
         })
         .catch((error) => {
@@ -101,10 +127,8 @@ export default {
           this.error = error;
           this.loading = false;
         });
-
-      console.log(`send EAN: ${this.gtin}`);
     },
-    _handleResponse(response) {
+    handleResponse(response) {
       switch (response.type) {
         case "existing":
           this.$router.push(`/article/edit/${response.articleId}`);
