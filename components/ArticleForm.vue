@@ -48,9 +48,19 @@
       </b-field>
 
       <b-field label="GTIN (EAN)">
+        <p
+          v-if="dataArticle.gtin === null || dataArticle.gtin === ''"
+          class="control"
+        >
+          <b-button
+            icon-left="fullscreen"
+            @click="openScanner"
+          />
+        </p>
         <b-input
           v-model="dataArticle.gtin"
           type="text"
+          expanded
         />
       </b-field>
     </section>
@@ -195,18 +205,31 @@
       </b-button>
       <b-button
         type="is-primary"
+        native-type="submit"
         @click="submit()"
       >
         Speichern
       </b-button>
     </section>
+
+    <scanner
+      :is-active="scanner"
+      @onScanCancel="onScanCancel"
+      @onScanSuccess="onScanSuccess"
+    />
   </form>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 
+import Scanner from '~/components/Scanner'
+
 export default {
+  components: {
+    Scanner,
+  },
+
   props: {
     article: {
       type: Object,
@@ -250,7 +273,8 @@ export default {
 
     return {
       dataArticle: article,
-      units: units
+      units: units,
+      scanner: false,
     }
   },
 
@@ -309,7 +333,7 @@ export default {
 
       const date = new Date();
       const bestBefore = {
-        text: this.formatDate(date, false),
+        text: '',
         date: date,
         isMonth: false,
       };
@@ -327,6 +351,16 @@ export default {
         (l) => l !== lot
       );
     },
+    openScanner() {
+      this.scanner = true;
+    },
+    onScanCancel() {
+      this.scanner = false;
+    },
+    onScanSuccess(decodedText, _decodedResult) {
+      this.scanner = false;
+      this.dataArticle.gtin = decodedText;
+    },
     back() {
       this.$router.go(-1);
     },
@@ -339,6 +373,9 @@ export default {
       this.dataArticle.lots.sort(
         (lot1, lot2) => lot1.position - lot2.position
       );
+      if (this.dataArticle.gtin !== null) {
+        this.dataArticle.gtin = this.dataArticle.gtin.trim();
+      }
 
       this.$emit('formSubmitted', this.dataArticle);
     },
