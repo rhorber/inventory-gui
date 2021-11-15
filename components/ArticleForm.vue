@@ -205,6 +205,7 @@
       </b-button>
       <b-button
         type="is-primary"
+        native-type="submit"
         @click="submit()"
       >
         Speichern
