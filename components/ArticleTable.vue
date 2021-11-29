@@ -10,16 +10,16 @@
       field="name"
       label="Name"
     >
-      <div class="columns is-multiline p-3">
-        <span :class="getNameClasses(row)">
+      <div>
+        <p :class="getNameClasses(row)">
           {{ row.name }}
-        </span>
-        <span
+        </p>
+        <p
           v-if="hasBestBefore(row)"
-          class="column p-0 is-hidden-desktop"
+          class="is-hidden-desktop"
         >
           ({{ row.lots[0].best_before }})
-        </span>
+        </p>
       </div>
     </b-table-column>
 
@@ -170,11 +170,11 @@ export default {
       if (this.isInventoryActive) {
         let statusClass = (parseInt(row.inventoried, 10) === 1) ? 'is-success' : 'is-danger';
 
-        classes = ['tag', statusClass, 'is-medium', 'is-justify-content-left', 'pl-2'];
+        classes = ['tag', statusClass, 'is-medium', 'custom-height', 'px-2'];
       }
 
-      classes.push('column');
-      classes.push('p-0');
+      // classes.push('column');
+      // classes.push('p-0');
       return classes;
     },
     hasLots(article) {
@@ -236,5 +236,9 @@ export default {
   display: inline-block;
   min-width: 2.5rem;
   text-align: center;
+}
+
+p.tag.custom-height {
+  height: 1.5rem;
 }
 </style>
