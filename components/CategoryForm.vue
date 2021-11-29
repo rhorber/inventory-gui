@@ -21,7 +21,7 @@
     <b-button
       type="is-primary"
       native-type="submit"
-      @click="submit()"
+      @click="submit($event)"
     >
       Speichern
     </b-button>
@@ -45,7 +45,8 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    submit() {
+    submit(event) {
+      event.preventDefault();
       this.$emit('formSubmitted', this.dataCategory);
     }
   }

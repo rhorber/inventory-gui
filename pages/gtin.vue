@@ -47,7 +47,7 @@
         type="is-primary"
         native-type="submit"
         :loading="loading"
-        @click="send()"
+        @click="send($event)"
       >
         Senden
       </b-button>
@@ -111,7 +111,9 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    send() {
+    send(event) {
+      event.preventDefault();
+
       this.loading = true;
       this.notFound = false;
       this.error = "";
