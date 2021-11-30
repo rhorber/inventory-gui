@@ -206,7 +206,7 @@
       <b-button
         type="is-primary"
         native-type="submit"
-        @click="submit()"
+        @click="submit($event)"
       >
         Speichern
       </b-button>
@@ -364,7 +364,9 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    submit() {
+    submit(event) {
+      event.preventDefault();
+
       const timestamp = Math.floor(Date.now() / 1000);
       this.dataArticle.lots.forEach((lot) => {
         lot.timestamp = timestamp;

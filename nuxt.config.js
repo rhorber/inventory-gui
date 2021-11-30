@@ -36,6 +36,11 @@ export default {
   loading: { color: '#333399', height: '3px' },
 
   /*
+  ** Customize the loading-indicator
+  */
+  loadingIndicator: { name: 'fading-circle', color: '#333399' },
+
+  /*
   ** Global CSS
   */
   css: [
