@@ -20,7 +20,7 @@
           class="mb-2"
         />
       </div>
-      <div class="modal-card-foot">
+      <div class="modal-card-foot is-justify-content-space-between">
         <b-button
           type="is-danger"
           outlined
@@ -28,6 +28,19 @@
         >
           Abbrechen
         </b-button>
+        <b-select
+          :value="selectedCamera"
+          :loading="loading"
+          @input="changeCamera($event)"
+        >
+          <option
+            v-for="camera in cameras"
+            :key="camera.id"
+            :value="camera.id"
+          >
+            {{ camera.label }}
+          </option>
+        </b-select>
       </div>
     </div>
   </b-modal>
@@ -58,50 +71,94 @@ export default {
     };
 
     return {
+      loading: true,
+      cameras: undefined,
       scanner: undefined,
       config: config,
+      videoConstraints: { facingMode: 'environment' },
+      selectedCamera: undefined,
     }
   },
 
   watch: {
     isActive(newValue, _oldValue) {
       if (newValue === true) {
-        $nuxt.$nextTick(this.openScanner);
+        this.$nextTick(this.openScanner);
       }
     },
   },
 
   methods: {
-    openScanner() {
+    async openScanner() {
+      this.$nuxt.$loading.start();
+      if (this.cameras === undefined) {
+        await this.initCameras();
+      }
+
+      this.initConfig();
+
+      try {
+        const param = (this.selectedCamera === undefined)
+          ? this.videoConstraints
+          : this.selectedCamera;
+
+        this.scanner = new Html5Qrcode('scanner');
+        await this.restartCamera(param);
+      } catch (error) {
+        this.$refs.scanner.innerText = error;
+      }
+
+      this.loading = false;
+      this.$nuxt.$loading.finish();
+    },
+    async initCameras() {
+      try {
+        this.cameras = await Html5Qrcode.getCameras();
+
+        const constraints = { audio: false, video: this.videoConstraints };
+        const streams = await navigator.mediaDevices.getUserMedia(constraints);
+        const tracks = streams.getVideoTracks();
+
+        if (tracks.length > 0) {
+          const settings = tracks[0].getSettings();
+          this.selectedCamera = settings.deviceId;
+        }
+      } catch (error) {
+        console.error('Error getting camera devices:', error);
+        this.cameras = [];
+      }
+    },
+    initConfig() {
       const scannerWidth = this.$refs.scanner.clientWidth;
       if (scannerWidth < this.config.qrbox.width) {
         const width = Math.floor(scannerWidth * 2 / 3);
         const height = Math.floor(width * 3 / 8);
-        this.config.qrbox = {width, height};
+        this.config.qrbox = { width, height };
       }
-
-      const scanner = new Html5Qrcode('scanner');
-      scanner.start(
-        {facingMode: 'environment'},
-        this.config,
-        this.onScanSuccess,
-      )
-        .catch((error) => {
-          this.$refs.scanner.innerText = error;
-        });
-      this.scanner = scanner;
     },
-    cancel() {
-      this.stopScanner();
+    async changeCamera(cameraId) {
+      try {
+        await this.restartCamera(cameraId);
+        this.selectedCamera = cameraId;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async restartCamera(cameraIdOrConfig) {
+      await this.stopScanner();
+      await this.scanner.start(cameraIdOrConfig, this.config, this.onScanSuccess);
+    },
+    async cancel() {
+      await this.stopScanner();
       this.$emit('onScanCancel');
     },
-    onScanSuccess(decodedText, _decodedResult) {
-      this.stopScanner();
+    async onScanSuccess(decodedText, _decodedResult) {
+      await this.stopScanner();
       this.$emit('onScanSuccess', decodedText);
     },
-    stopScanner() {
+    async stopScanner() {
       if (this.scanner && this.scanner.getState() !== Html5QrcodeScannerState.NOT_STARTED) {
-        this.scanner.stop();
+        await this.scanner.stop();
       }
     }
   }
