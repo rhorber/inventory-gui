@@ -74,9 +74,10 @@ export default {
       loading: true,
       cameras: undefined,
       scanner: undefined,
+      selectedCamera: undefined,
       config: config,
       videoConstraints: { facingMode: 'environment' },
-      selectedCamera: undefined,
+      qrcodeConfig: { experimentalFeatures: { useBarCodeDetectorIfSupported: true } },
     }
   },
 
@@ -102,7 +103,7 @@ export default {
           ? this.videoConstraints
           : this.selectedCamera;
 
-        this.scanner = new Html5Qrcode('scanner');
+        this.scanner = new Html5Qrcode('scanner', this.qrcodeConfig );
         await this.restartCamera(param);
       } catch (error) {
         this.$refs.scanner.innerText = error;
