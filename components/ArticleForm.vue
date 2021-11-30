@@ -260,7 +260,7 @@ export default {
       };
     });
 
-    if (article.size !== '' && article.hasOwnProperty('unit') === false) {
+    if (article.size !== null && article.size !== '' && article.hasOwnProperty('unit') === false) {
       const match = article.size.match(/(\d+) (\w+)/);
 
       if (match !== null) {
