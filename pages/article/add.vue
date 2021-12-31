@@ -55,7 +55,7 @@ export default {
       };
 
       const url = '/v3/articles';
-      const path = `/category/${data.category}`;
+      const path = `/category/${data.category}/#bottom`;
 
       if ($nuxt.isOnline) {
         this.$axios.$post(url, article)
