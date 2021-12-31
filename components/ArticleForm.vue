@@ -425,7 +425,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .table th.best-before, .table td.best-before {
   min-width: 8.5rem;
 }
