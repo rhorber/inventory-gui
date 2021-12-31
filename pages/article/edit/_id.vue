@@ -63,7 +63,7 @@ export default {
       };
 
       const url = `/v3/articles/${this.articleId}`;
-      const path = `/category/${data.category}`;
+      const path = `/category/${data.category}/#article-${this.articleId}`;
 
       if ($nuxt.isOnline) {
         this.$axios.$put(url, article)
