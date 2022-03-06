@@ -71,7 +71,7 @@
       </p>
 
       <b-table
-        :data="dataArticle.lots"
+        :data="articleLots"
         :default-sort="['position', 'asc']"
         striped
         hoverable
@@ -280,6 +280,10 @@ export default {
 
   computed: {
     ...mapState(['categories']),
+    articleLots() {
+      const lots = this.dataArticle.lots.slice(0);
+      return lots.sort((lot1, lot2) => lot1.position - lot2.position);
+    },
     highestLotIndex() {
       return (this.dataArticle.lots.length - 1);
     }
