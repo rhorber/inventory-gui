@@ -46,23 +46,6 @@
           </option>
         </b-select>
       </b-field>
-
-      <b-field label="GTIN (EAN)">
-        <p
-          v-if="dataArticle.gtin === null || dataArticle.gtin === ''"
-          class="control"
-        >
-          <b-button
-            icon-left="fullscreen"
-            @click="openScanner"
-          />
-        </p>
-        <b-input
-          v-model="dataArticle.gtin"
-          type="text"
-          expanded
-        />
-      </b-field>
     </section>
 
     <section>
@@ -195,6 +178,51 @@
       </b-table>
     </section>
 
+    <section>
+      <p class="is-size-4 mt-5 mb-2">
+        GTIN (EAN)
+      </p>
+
+      <b-field label="GTIN (EAN)">
+        <p class="control">
+          <b-button
+            icon-left="fullscreen"
+            @click="openScanner"
+          />
+        </p>
+        <b-input
+          v-model="gtin"
+          type="text"
+          expanded
+        />
+        <p class="control">
+          <b-button
+            icon-left="plus"
+            @click="addGtin()"
+          />
+        </p>
+      </b-field>
+
+      <b-field
+        grouped
+        group-multiline
+      >
+        <div
+          v-for="gtin in dataArticle.gtins"
+          :key="gtin"
+          class="control"
+        >
+          <b-tag
+            attached
+            closable
+            @close="removeGtin(gtin)"
+          >
+            {{ gtin }}
+          </b-tag>
+        </div>
+      </b-field>
+    </section>
+
     <section class="py-4">
       <b-button
         type="is-danger"
@@ -274,6 +302,7 @@ export default {
     return {
       dataArticle: article,
       units: units,
+      gtin: '',
       scanner: false,
     }
   },
@@ -355,6 +384,22 @@ export default {
         (l) => l !== lot
       );
     },
+    addGtin() {
+      if (this.dataArticle.gtins === undefined) {
+        this.dataArticle.gtins = [];
+      }
+
+      if (/\d{1,14}/.test(this.gtin)) {
+        this.dataArticle.gtins.push(this.gtin);
+      }
+
+      this.gtin = '';
+    },
+    removeGtin(gtin) {
+      this.dataArticle.gtins = this.dataArticle.gtins.filter(
+        (g) => g !== gtin
+      );
+    },
     openScanner() {
       this.scanner = true;
     },
@@ -363,7 +408,8 @@ export default {
     },
     onScanSuccess(decodedText, _decodedResult) {
       this.scanner = false;
-      this.dataArticle.gtin = decodedText;
+      this.gtin = decodedText;
+      this.addGtin();
     },
     back() {
       this.$router.go(-1);
@@ -379,8 +425,9 @@ export default {
       this.dataArticle.lots.sort(
         (lot1, lot2) => lot1.position - lot2.position
       );
-      if (this.dataArticle.gtin !== null) {
-        this.dataArticle.gtin = this.dataArticle.gtin.trim();
+
+      if (this.gtin !== '') {
+        this.addGtin();
       }
 
       this.$emit('formSubmitted', this.dataArticle);

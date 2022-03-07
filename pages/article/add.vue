@@ -53,8 +53,8 @@ export default {
         name: data.name,
         size: data.size,
         unit: data.unit,
-        gtin: data.gtin,
-        lots: data.lots
+        lots: data.lots,
+        gtins: data.gtins,
       };
 
       const url = '/v3/articles';
