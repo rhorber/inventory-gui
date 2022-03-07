@@ -22,22 +22,25 @@ export default {
   },
 
   data() {
+    let emptyArticle = {
+      category: 0,
+      name: '',
+      size: '',
+      unit: '',
+      gtin: '',
+      lots: []
+    };
+
+    if (Object.prototype.hasOwnProperty.call(this.$route.query, 'category')) {
+      emptyArticle.category = this.$route.query.category;
+    }
+
     return {
-      emptyArticle: {
-        category: 0,
-        name: '',
-        size: '',
-        unit: '',
-        gtin: '',
-        lots: []
-      }
+      emptyArticle
     };
   },
 
   mounted() {
-    if (Object.prototype.hasOwnProperty.call(this.$route.query, 'category')) {
-      this.emptyArticle.category = this.$route.query.category;
-    }
   },
 
   methods: {
@@ -50,8 +53,8 @@ export default {
         name: data.name,
         size: data.size,
         unit: data.unit,
-        gtin: data.gtin,
-        lots: data.lots
+        lots: data.lots,
+        gtins: data.gtins,
       };
 
       const url = '/v3/articles';
