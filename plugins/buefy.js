@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Buefy from 'buefy';
-import BaseIcon from "../components/BaseIcon";
+import BaseIcon from '../components/BaseIcon';
 
 // Doc: https://buefy.org/documentation/
 Vue.use(Buefy, {
