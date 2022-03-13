@@ -27,7 +27,7 @@
     "jquery": "~3.6.0",
     "lodash": "~4.17.21",
     "lodash.template": "~4.5.0",
-    "nuxt": "2.15.8"
+    "nuxt": "latest"
   },
   "devDependencies": {
     "babel-eslint": "~10.1.0",
