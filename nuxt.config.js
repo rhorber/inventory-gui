@@ -4,7 +4,8 @@ import pkg from './package'
 const isProduction = (process.env.NODE_ENV === 'production');
 
 if (isProduction === false) {
-  require('dotenv').config();
+  import('dotenv')
+    .then(dotenv => dotenv.config());
 }
 
 export default defineNuxtConfig({
