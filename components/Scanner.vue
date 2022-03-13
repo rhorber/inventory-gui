@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { mapMutations,  mapState } from 'vuex';
 import { Html5Qrcode, Html5QrcodeScannerState, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 export default {
@@ -72,13 +73,15 @@ export default {
 
     return {
       loading: true,
-      cameras: undefined,
       scanner: undefined,
-      selectedCamera: undefined,
       config: config,
       videoConstraints: { facingMode: 'environment' },
       qrcodeConfig: { experimentalFeatures: { useBarCodeDetectorIfSupported: true } },
     }
+  },
+
+  computed: {
+    ...mapState('scanner', ['cameras', 'selectedCamera']),
   },
 
   watch: {
@@ -90,6 +93,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations('scanner', ['setCameras', 'setSelectedCamera']),
     async openScanner() {
       this.$nuxt.$loading.start();
       if (this.cameras === undefined) {
@@ -113,8 +117,9 @@ export default {
       this.$nuxt.$loading.finish();
     },
     async initCameras() {
+      let cameras;
       try {
-        this.cameras = await Html5Qrcode.getCameras();
+        cameras = await Html5Qrcode.getCameras();
 
         const constraints = { audio: false, video: this.videoConstraints };
         const streams = await navigator.mediaDevices.getUserMedia(constraints);
@@ -122,12 +127,13 @@ export default {
 
         if (tracks.length > 0) {
           const settings = tracks[0].getSettings();
-          this.selectedCamera = settings.deviceId;
+          this.setSelectedCamera(settings.deviceId);
         }
       } catch (error) {
         console.error('Error getting camera devices:', error);
-        this.cameras = [];
+        cameras = [];
       }
+      this.setCameras(cameras);
     },
     initConfig() {
       const scannerWidth = this.$refs.scanner.clientWidth;
@@ -140,7 +146,7 @@ export default {
     async changeCamera(cameraId) {
       try {
         await this.restartCamera(cameraId);
-        this.selectedCamera = cameraId;
+        this.setSelectedCamera(cameraId);
       } catch (error) {
         console.error(error);
       }
