@@ -11317,7 +11317,7 @@ std-env@^2.2.1, std-env@^2.3.0:
   dependencies:
     ci-info "^3.1.1"
 
-std-env@^3.0.1:
+std-env@^3.0.1, std-env@~3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/std-env/-/std-env-3.0.1.tgz#bc4cbc0e438610197e34c2d79c3df30b491f5182"
   integrity sha512-mC1Ps9l77/97qeOZc+HrOL7TIaOboHqMZ24dGVQrlxFcpPpfCHpH+qfUT7Dz+6mlG8+JPA1KfBQo19iC/+Ngcw==
