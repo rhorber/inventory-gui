@@ -81,3 +81,6 @@ dist
 .idea/deployment.xml
 .idea/workspace.xml
 .idea/shelf/
+
+# Nuxt build output
+.output
