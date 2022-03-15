@@ -20,9 +20,9 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "~5.13.6",
-    "buefy": "~0.9.8",
+    "buefy": "~0.9.19",
     "cross-env": "~7.0.3",
-    "html5-qrcode": "~2.1.2",
+    "html5-qrcode": "~2.2.0",
     "jquery": "~3.6.0",
     "lodash": "~4.17.21",
     "lodash.template": "~4.5.0",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
     "babel-eslint": "~10.1.0",
-    "dotenv": "~10.0.0",
+    "dotenv": "~16.0.0",
     "eslint": "~7.32.0",
     "eslint-loader": "~4.0.2",
     "eslint-plugin-vue": "~7.20.0",
@@ -39,8 +39,8 @@
     "minimist": "~1.2.5",
     "node-sass": "~6.0.1",
     "nodemon": "~2.0.15",
-    "npm-check-updates": "~11.8.5",
-    "sass-loader": "~10.2.0",
+    "npm-check-updates": "~12.5.3",
+    "sass-loader": "~10.2.1",
     "std-env": "~3.0.1"
   }
 }
