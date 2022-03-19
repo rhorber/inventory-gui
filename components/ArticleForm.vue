@@ -390,7 +390,9 @@ export default {
       }
 
       if (/\d{1,14}/.test(this.gtin)) {
-        this.dataArticle.gtins.push(this.gtin);
+        if (this.dataArticle.gtins.indexOf(this.gtin) === -1) {
+          this.dataArticle.gtins.push(this.gtin);
+        }
       }
 
       this.gtin = '';
