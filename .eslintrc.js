@@ -5,14 +5,14 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser',
+    requireConfigFile: false
   },
   extends: [
-    'plugin:vue/recommended'
+    '@nuxtjs',
+    'plugin:nuxt/recommended'
   ],
-  // required to lint *.vue files
   plugins: [
-    'vue'
   ],
   // add your custom rules here
   // https://github.com/vuejs/eslint-plugin-vue/tree/4.x
