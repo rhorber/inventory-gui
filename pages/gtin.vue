@@ -141,7 +141,7 @@ export default {
           this.article = {
             name: response.name,
             size: response.quantity,
-            gtin: this.gtin,
+            gtins: [this.gtin],
           };
           return;
 
