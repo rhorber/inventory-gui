@@ -10,7 +10,10 @@ if (isProduction === false) {
 
 export default defineNuxtConfig({
   // Temporarily disable bridge integration: https://v3.nuxtjs.org/getting-started/bridge/#ensure-everything-goes-well
-  bridge: false,
+  // Temporarily disable nitro: https://github.com/nuxt/framework/issues/886
+  bridge: {
+    nitro: false
+  },
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
