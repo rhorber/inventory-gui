@@ -1,6 +1,6 @@
 {
   "name": "inventory",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Little helper application to manage (cellar) inventory.",
   "author": "Raphael Horber (raphael.horber@gmail.com)",
   "private": true,
@@ -13,8 +13,6 @@
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "yarn lint:js",
     "lintfix": "yarn lint:js --fix",
-    "ncu": "node_modules/.bin/ncu",
-    "ncu-u": "node_modules/.bin/ncu -u",
     "precommit": "npm run lint"
   },
   "engines": {
@@ -38,8 +36,7 @@
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-vue": "^8.5.0",
     "event-stream": "4.0.1",
-    "node-sass": "^6.0.1",
-    "npm-check-updates": "^12.5.3",
+    "sass": "^1.49.9",
     "sass-loader": "^10.2.1"
   }
 }
