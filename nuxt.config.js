@@ -1,4 +1,3 @@
-import { defineNuxtConfig } from '@nuxt/bridge'
 import pkg from './package.json'
 
 const isProduction = (process.env.NODE_ENV === 'production');
@@ -8,10 +7,7 @@ if (isProduction === false) {
     .then(dotenv => dotenv.config());
 }
 
-export default defineNuxtConfig({
-  // Temporarily disable bridge integration: https://v3.nuxtjs.org/getting-started/bridge/#ensure-everything-goes-well
-  bridge: false,
-
+export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
@@ -79,4 +75,4 @@ export default defineNuxtConfig({
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
-});
+};
