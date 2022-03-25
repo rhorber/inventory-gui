@@ -74,6 +74,16 @@ export default {
     debug: !isProduction
   },
 
+  // TypeScript module configuration: https://typescript.nuxtjs.org/guide/setup/#module-options
+  typescript: {
+    // Enable runtime line (https://typescript.nuxtjs.org/guide/lint/#runtime-lint)
+    typeCheck: {
+      eslint: {
+        files: './**/*.{ts,js,vue}'
+      }
+    }
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
