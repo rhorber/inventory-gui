@@ -1,14 +1,3 @@
-<template>
-  <BaseLayoutForm
-    page-title="Artikel erstellen"
-  >
-    <article-form
-      :article="emptyArticle"
-      @formSubmitted="addArticle"
-    />
-  </BaseLayoutForm>
-</template>
-
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
@@ -76,3 +65,14 @@ export default {
   }
 }
 </script>
+
+<template>
+  <BaseLayoutForm
+    page-title="Artikel erstellen"
+  >
+    <article-form
+      :article="emptyArticle"
+      @formSubmitted="addArticle"
+    />
+  </BaseLayoutForm>
+</template>

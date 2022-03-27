@@ -1,3 +1,28 @@
+<script>
+export default {
+  props: {
+    category: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      dataCategory: this.category
+    }
+  },
+  methods: {
+    back() {
+      this.$router.go(-1);
+    },
+    submit(event) {
+      event.preventDefault();
+      this.$emit('formSubmitted', this.dataCategory);
+    }
+  }
+}
+</script>
+
 <template>
   <form>
     <b-field
@@ -27,28 +52,3 @@
     </b-button>
   </form>
 </template>
-
-<script>
-export default {
-  props: {
-    category: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      dataCategory: this.category
-    }
-  },
-  methods: {
-    back() {
-      this.$router.go(-1);
-    },
-    submit(event) {
-      event.preventDefault();
-      this.$emit('formSubmitted', this.dataCategory);
-    }
-  }
-}
-</script>

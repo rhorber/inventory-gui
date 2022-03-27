@@ -1,51 +1,3 @@
-<template>
-  <b-modal
-    :active="isActive"
-    scroll="keep"
-    has-modal-card
-    full-screen
-    can-cancel
-    :on-cancel="cancel"
-  >
-    <div class="modal-card">
-      <div class="modal-card-head">
-        <div class="modal-card-title">
-          Barcode Scanner
-        </div>
-      </div>
-      <div class="modal-card-body">
-        <div
-          id="scanner"
-          ref="scanner"
-          class="mb-2"
-        />
-      </div>
-      <div class="modal-card-foot is-justify-content-space-between">
-        <b-button
-          type="is-danger"
-          outlined
-          @click="cancel"
-        >
-          Abbrechen
-        </b-button>
-        <b-select
-          :value="selectedCamera"
-          :loading="loading"
-          @input="changeCamera($event)"
-        >
-          <option
-            v-for="camera in cameras"
-            :key="camera.id"
-            :value="camera.id"
-          >
-            {{ camera.label }}
-          </option>
-        </b-select>
-      </div>
-    </div>
-  </b-modal>
-</template>
-
 <script>
 import { mapMutations,  mapState } from 'vuex';
 import { Html5Qrcode, Html5QrcodeScannerState, Html5QrcodeSupportedFormats } from 'html5-qrcode';
@@ -171,6 +123,54 @@ export default {
   }
 }
 </script>
+
+<template>
+  <b-modal
+    :active="isActive"
+    scroll="keep"
+    has-modal-card
+    full-screen
+    can-cancel
+    :on-cancel="cancel"
+  >
+    <div class="modal-card">
+      <div class="modal-card-head">
+        <div class="modal-card-title">
+          Barcode Scanner
+        </div>
+      </div>
+      <div class="modal-card-body">
+        <div
+          id="scanner"
+          ref="scanner"
+          class="mb-2"
+        />
+      </div>
+      <div class="modal-card-foot is-justify-content-space-between">
+        <b-button
+          type="is-danger"
+          outlined
+          @click="cancel"
+        >
+          Abbrechen
+        </b-button>
+        <b-select
+          :value="selectedCamera"
+          :loading="loading"
+          @input="changeCamera($event)"
+        >
+          <option
+            v-for="camera in cameras"
+            :key="camera.id"
+            :value="camera.id"
+          >
+            {{ camera.label }}
+          </option>
+        </b-select>
+      </div>
+    </div>
+  </b-modal>
+</template>
 
 <style scoped>
 #scanner {

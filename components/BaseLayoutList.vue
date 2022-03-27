@@ -1,3 +1,15 @@
+<script>
+export default {
+  name: 'BaseLayoutList',
+  props: {
+    pageTitle: {
+      type: String,
+      required: true,
+    },
+  },
+}
+</script>
+
 <template>
   <div>
     <p class="is-size-3">
@@ -19,15 +31,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'BaseLayoutList',
-  props: {
-    pageTitle: {
-      type: String,
-      required: true,
-    },
-  },
-}
-</script>

@@ -1,3 +1,39 @@
+<script>
+import BaseLayoutList from '~/components/BaseLayoutList'
+import ArticleTable from '~/components/ArticleTable'
+
+export default {
+  name: 'PageArticles',
+  components: {
+    ArticleTable,
+    BaseLayoutList,
+  },
+  props: {
+    pageTitle: {
+      type: String,
+      required: true,
+    },
+    articles: {
+      type: Array,
+      required: true
+    },
+    addArticleButtonLink: {
+      type: String,
+      required: true,
+    },
+    value: {
+      type: Boolean,
+      required: true
+    }
+  },
+  methods: {
+    onInput(value) {
+      this.$emit('input', value)
+    }
+  }
+}
+</script>
+
 <template>
   <BaseLayoutList
     :page-title="pageTitle"
@@ -42,43 +78,3 @@
     </template>
   </BaseLayoutList>
 </template>
-
-<script>
-import BaseLayoutList from '~/components/BaseLayoutList'
-import ArticleTable from '~/components/ArticleTable'
-
-export default {
-  name: 'PageArticles',
-  components: {
-    ArticleTable,
-    BaseLayoutList,
-  },
-  props: {
-    pageTitle: {
-      type: String,
-      required: true,
-    },
-    articles: {
-      type: Array,
-      required: true
-    },
-    addArticleButtonLink: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: Boolean,
-      required: true
-    }
-  },
-  methods: {
-    onInput(value) {
-      this.$emit('input', value)
-    }
-  }
-}
-</script>
-
-<style scoped>
-
-</style>

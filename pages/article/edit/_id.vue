@@ -1,14 +1,3 @@
-<template>
-  <BaseLayoutForm
-    :page-title="`Artikel bearbeiten (${articleId})`"
-  >
-    <article-form
-      :article="article"
-      @formSubmitted="saveArticle"
-    />
-  </BaseLayoutForm>
-</template>
-
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
@@ -83,3 +72,14 @@ export default {
   }
 }
 </script>
+
+<template>
+  <BaseLayoutForm
+    :page-title="`Artikel bearbeiten (${articleId})`"
+  >
+    <article-form
+      :article="article"
+      @formSubmitted="saveArticle"
+    />
+  </BaseLayoutForm>
+</template>

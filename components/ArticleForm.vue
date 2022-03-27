@@ -1,3 +1,233 @@
+<script>
+import { mapState } from 'vuex'
+
+import Scanner from '~/components/Scanner'
+
+export default {
+  components: {
+    Scanner,
+  },
+
+  props: {
+    article: {
+      type: Object,
+      required: true
+    }
+  },
+
+  data() {
+    const article = Object.assign({}, this.article);
+    const units = ['', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk'];
+
+    if (article.hasOwnProperty('lots') === false) {
+      article.lots = [];
+    }
+
+    article.lots.forEach((lot) => {
+      if (lot.best_before instanceof Object) {
+        return;
+      }
+
+      const bestBefore = lot.best_before;
+      const parsed = this.parseDate(bestBefore);
+
+      lot.best_before = {
+        text: bestBefore,
+        date: parsed.date,
+        isMonth: parsed.isMonth,
+      };
+    });
+
+    if (article.size !== null && article.size !== '' && article.hasOwnProperty('unit') === false) {
+      const match = article.size.match(/(\d+) (\w+)/);
+
+      if (match !== null) {
+        if (units.includes(match[2])) {
+          article.size = match[1];
+          article.unit = match[2];
+        }
+      }
+    }
+
+    return {
+      dataArticle: article,
+      units: units,
+      gtin: '',
+      scanner: false,
+    }
+  },
+
+  computed: {
+    ...mapState(['categories']),
+    articleLots() {
+      const lots = this.dataArticle.lots.slice(0);
+      return lots.sort((lot1, lot2) => lot1.position - lot2.position);
+    },
+    highestLotIndex() {
+      return (this.dataArticle.lots.length - 1);
+    }
+  },
+
+  methods: {
+    bestBeforeColumnAttrs(_row, _column) {
+      return {
+        class: 'best-before',
+      };
+    },
+    setBestBeforeText(bestBefore) {
+      bestBefore.text = this.formatDate(bestBefore.date, bestBefore.isMonth);
+    },
+    setBestBeforeDate(bestBefore) {
+      if (bestBefore instanceof Object) {
+        const parsed = this.parseDate(bestBefore.text);
+
+        bestBefore.date = parsed.date;
+      }
+    },
+    moveDown(lot) {
+      const filterCandidatesCallback = (l) => l.position > lot.position;
+      const sortCandidatesCallback = (lot1, lot2) => lot1.position - lot2.position;
+
+      this.moveLot(lot, filterCandidatesCallback, sortCandidatesCallback);
+    },
+    moveUp(lot) {
+      const filterCandidatesCallback = (l) => l.position < lot.position;
+      const sortCandidatesCallback = (lot1, lot2) => lot2.position - lot1.position;
+
+      this.moveLot(lot, filterCandidatesCallback, sortCandidatesCallback);
+    },
+    moveLot(lot, filterCandidatesCallback, sortCandidatesCallback) {
+      const thisPosition = lot.position;
+
+      const candidates = this.dataArticle.lots.filter(filterCandidatesCallback);
+      candidates.sort(sortCandidatesCallback);
+      const lotToSwapWith = candidates.shift();
+
+      lot.position = lotToSwapWith.position;
+      lotToSwapWith.position = thisPosition;
+    },
+    addLot() {
+      let maxPosition = 0;
+      let thisPosition = 0;
+      this.dataArticle.lots.forEach((lot) => {
+        thisPosition = Number.parseInt(lot.position, 10);
+        maxPosition = Math.max(maxPosition, thisPosition);
+      });
+
+      const date = new Date();
+      const bestBefore = {
+        text: '',
+        date: date,
+        isMonth: false,
+      };
+      const newPosition = String(maxPosition + 1);
+      const newLot = {
+        best_before: bestBefore,
+        stock: 0,
+        position: newPosition
+      };
+
+      this.dataArticle.lots.push(newLot);
+    },
+    removeLot(lot) {
+      this.dataArticle.lots = this.dataArticle.lots.filter(
+        (l) => l !== lot
+      );
+    },
+    addGtin() {
+      if (this.dataArticle.gtins === undefined) {
+        this.dataArticle.gtins = [];
+      }
+
+      if (/\d{1,14}/.test(this.gtin)) {
+        if (this.dataArticle.gtins.indexOf(this.gtin) === -1) {
+          this.dataArticle.gtins.push(this.gtin);
+        }
+      }
+
+      this.gtin = '';
+    },
+    removeGtin(gtin) {
+      this.dataArticle.gtins = this.dataArticle.gtins.filter(
+        (g) => g !== gtin
+      );
+    },
+    openScanner() {
+      this.scanner = true;
+    },
+    onScanCancel() {
+      this.scanner = false;
+    },
+    onScanSuccess(decodedText, _decodedResult) {
+      this.scanner = false;
+      this.gtin = decodedText;
+      this.addGtin();
+    },
+    back() {
+      this.$router.go(-1);
+    },
+    submit(event) {
+      event.preventDefault();
+
+      const timestamp = Math.floor(Date.now() / 1000);
+      this.dataArticle.lots.forEach((lot) => {
+        lot.timestamp = timestamp;
+        lot.best_before = lot.best_before.text;
+      });
+      this.dataArticle.lots.sort(
+        (lot1, lot2) => lot1.position - lot2.position
+      );
+
+      if (this.gtin !== '') {
+        this.addGtin();
+      }
+
+      this.$emit('formSubmitted', this.dataArticle);
+    },
+    parseDate(dateString) {
+      const match = dateString.match(/(\d{2})?\.?(\d{2})\.(\d{4})/);
+      const date = new Date();
+      let isMonth = false;
+
+      if (match !== null) {
+        date.setFullYear(match[3]);
+        date.setMonth(match[2] - 1);
+
+        if (match[1] === undefined) {
+          isMonth = true;
+        } else {
+          date.setDate(match[1]);
+        }
+      }
+
+      return {
+        date,
+        isMonth,
+      };
+    },
+    formatDate(date, isMonth) {
+      if (date instanceof Date) {
+        const year = date.getFullYear();
+
+        let month = String(date.getMonth() + 1)
+        month = month.padStart(2, '0');
+
+        if (isMonth) {
+          return `${month}.${year}`;
+        } else {
+          let day = String(date.getDate())
+          day = day.padStart(2, '0');
+
+          return `${day}.${month}.${year}`;
+        }
+      } else {
+        return '';
+      }
+    }
+  }
+}
+</script>
+
 <template>
   <form>
     <section>
@@ -247,236 +477,6 @@
     />
   </form>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-
-import Scanner from '~/components/Scanner'
-
-export default {
-  components: {
-    Scanner,
-  },
-
-  props: {
-    article: {
-      type: Object,
-      required: true
-    }
-  },
-
-  data() {
-    const article = Object.assign({}, this.article);
-    const units = ['', 'g', 'kg', 'l', 'ml', 'Rolle', 'Stk'];
-
-    if (article.hasOwnProperty('lots') === false) {
-      article.lots = [];
-    }
-
-    article.lots.forEach((lot) => {
-      if (lot.best_before instanceof Object) {
-        return;
-      }
-
-      const bestBefore = lot.best_before;
-      const parsed = this.parseDate(bestBefore);
-
-      lot.best_before = {
-        text: bestBefore,
-        date: parsed.date,
-        isMonth: parsed.isMonth,
-      };
-    });
-
-    if (article.size !== null && article.size !== '' && article.hasOwnProperty('unit') === false) {
-      const match = article.size.match(/(\d+) (\w+)/);
-
-      if (match !== null) {
-        if (units.includes(match[2])) {
-          article.size = match[1];
-          article.unit = match[2];
-        }
-      }
-    }
-
-    return {
-      dataArticle: article,
-      units: units,
-      gtin: '',
-      scanner: false,
-    }
-  },
-
-  computed: {
-    ...mapState(['categories']),
-    articleLots() {
-      const lots = this.dataArticle.lots.slice(0);
-      return lots.sort((lot1, lot2) => lot1.position - lot2.position);
-    },
-    highestLotIndex() {
-      return (this.dataArticle.lots.length - 1);
-    }
-  },
-
-  methods: {
-    bestBeforeColumnAttrs(_row, _column) {
-      return {
-        class: 'best-before',
-      };
-    },
-    setBestBeforeText(bestBefore) {
-      bestBefore.text = this.formatDate(bestBefore.date, bestBefore.isMonth);
-    },
-    setBestBeforeDate(bestBefore) {
-      if (bestBefore instanceof Object) {
-        const parsed = this.parseDate(bestBefore.text);
-
-        bestBefore.date = parsed.date;
-      }
-    },
-    moveDown(lot) {
-      const filterCandidatesCallback = (l) => l.position > lot.position;
-      const sortCandidatesCallback = (lot1, lot2) => lot1.position - lot2.position;
-
-      this.moveLot(lot, filterCandidatesCallback, sortCandidatesCallback);
-    },
-    moveUp(lot) {
-      const filterCandidatesCallback = (l) => l.position < lot.position;
-      const sortCandidatesCallback = (lot1, lot2) => lot2.position - lot1.position;
-
-      this.moveLot(lot, filterCandidatesCallback, sortCandidatesCallback);
-    },
-    moveLot(lot, filterCandidatesCallback, sortCandidatesCallback) {
-      const thisPosition = lot.position;
-
-      const candidates = this.dataArticle.lots.filter(filterCandidatesCallback);
-      candidates.sort(sortCandidatesCallback);
-      const lotToSwapWith = candidates.shift();
-
-      lot.position = lotToSwapWith.position;
-      lotToSwapWith.position = thisPosition;
-    },
-    addLot() {
-      let maxPosition = 0;
-      let thisPosition = 0;
-      this.dataArticle.lots.forEach((lot) => {
-        thisPosition = Number.parseInt(lot.position, 10);
-        maxPosition = Math.max(maxPosition, thisPosition);
-      });
-
-      const date = new Date();
-      const bestBefore = {
-        text: '',
-        date: date,
-        isMonth: false,
-      };
-      const newPosition = String(maxPosition + 1);
-      const newLot = {
-        best_before: bestBefore,
-        stock: 0,
-        position: newPosition
-      };
-
-      this.dataArticle.lots.push(newLot);
-    },
-    removeLot(lot) {
-      this.dataArticle.lots = this.dataArticle.lots.filter(
-        (l) => l !== lot
-      );
-    },
-    addGtin() {
-      if (this.dataArticle.gtins === undefined) {
-        this.dataArticle.gtins = [];
-      }
-
-      if (/\d{1,14}/.test(this.gtin)) {
-        if (this.dataArticle.gtins.indexOf(this.gtin) === -1) {
-          this.dataArticle.gtins.push(this.gtin);
-        }
-      }
-
-      this.gtin = '';
-    },
-    removeGtin(gtin) {
-      this.dataArticle.gtins = this.dataArticle.gtins.filter(
-        (g) => g !== gtin
-      );
-    },
-    openScanner() {
-      this.scanner = true;
-    },
-    onScanCancel() {
-      this.scanner = false;
-    },
-    onScanSuccess(decodedText, _decodedResult) {
-      this.scanner = false;
-      this.gtin = decodedText;
-      this.addGtin();
-    },
-    back() {
-      this.$router.go(-1);
-    },
-    submit(event) {
-      event.preventDefault();
-
-      const timestamp = Math.floor(Date.now() / 1000);
-      this.dataArticle.lots.forEach((lot) => {
-        lot.timestamp = timestamp;
-        lot.best_before = lot.best_before.text;
-      });
-      this.dataArticle.lots.sort(
-        (lot1, lot2) => lot1.position - lot2.position
-      );
-
-      if (this.gtin !== '') {
-        this.addGtin();
-      }
-
-      this.$emit('formSubmitted', this.dataArticle);
-    },
-    parseDate(dateString) {
-      const match = dateString.match(/(\d{2})?\.?(\d{2})\.(\d{4})/);
-      const date = new Date();
-      let isMonth = false;
-
-      if (match !== null) {
-        date.setFullYear(match[3]);
-        date.setMonth(match[2] - 1);
-
-        if (match[1] === undefined) {
-          isMonth = true;
-        } else {
-          date.setDate(match[1]);
-        }
-      }
-
-      return {
-        date,
-        isMonth,
-      };
-    },
-    formatDate(date, isMonth) {
-      if (date instanceof Date) {
-        const year = date.getFullYear();
-
-        let month = String(date.getMonth() + 1)
-        month = month.padStart(2, '0');
-
-        if (isMonth) {
-          return `${month}.${year}`;
-        } else {
-          let day = String(date.getDate())
-          day = day.padStart(2, '0');
-
-          return `${day}.${month}.${year}`;
-        }
-      } else {
-        return '';
-      }
-    }
-  }
-}
-</script>
 
 <style scoped>
 .table th.best-before, .table td.best-before {

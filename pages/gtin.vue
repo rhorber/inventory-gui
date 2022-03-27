@@ -1,72 +1,3 @@
-<template>
-  <base-layout-form
-    :page-title="pageTitle"
-  >
-    <b-message
-      v-if="notFound"
-      type="is-info"
-    >
-      Es wurde kein Artikel mit dieser GTIN gefunden.
-    </b-message>
-
-    <b-message
-      v-if="error !== ''"
-      type="is-danger"
-    >
-      Bei der Abfrage trat folgender Fehler auf:<br>
-      {{ error }}
-    </b-message>
-
-    <form v-if="article === undefined">
-      <b-field
-        label="GTIN (EAN) *"
-        class="mb-4"
-      >
-        <p class="control">
-          <b-button
-            icon-left="fullscreen"
-            @click="openScanner"
-          />
-        </p>
-        <b-input
-          v-model="gtin"
-          type="text"
-          required
-          expanded
-        />
-      </b-field>
-
-      <b-button
-        type="is-danger"
-        outlined
-        @click="back()"
-      >
-        Abbrechen
-      </b-button>
-      <b-button
-        type="is-primary"
-        native-type="submit"
-        :loading="loading"
-        @click="send($event)"
-      >
-        Senden
-      </b-button>
-    </form>
-
-    <scanner
-      :is-active="scanner"
-      @onScanCancel="onScanCancel"
-      @onScanSuccess="onScanSuccess"
-    />
-
-    <article-form
-      v-if="article !== undefined"
-      :article="article"
-      @formSubmitted="addArticle"
-    />
-  </base-layout-form>
-</template>
-
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
@@ -184,3 +115,72 @@ export default {
   }
 }
 </script>
+
+<template>
+  <base-layout-form
+    :page-title="pageTitle"
+  >
+    <b-message
+      v-if="notFound"
+      type="is-info"
+    >
+      Es wurde kein Artikel mit dieser GTIN gefunden.
+    </b-message>
+
+    <b-message
+      v-if="error !== ''"
+      type="is-danger"
+    >
+      Bei der Abfrage trat folgender Fehler auf:<br>
+      {{ error }}
+    </b-message>
+
+    <form v-if="article === undefined">
+      <b-field
+        label="GTIN (EAN) *"
+        class="mb-4"
+      >
+        <p class="control">
+          <b-button
+            icon-left="fullscreen"
+            @click="openScanner"
+          />
+        </p>
+        <b-input
+          v-model="gtin"
+          type="text"
+          required
+          expanded
+        />
+      </b-field>
+
+      <b-button
+        type="is-danger"
+        outlined
+        @click="back()"
+      >
+        Abbrechen
+      </b-button>
+      <b-button
+        type="is-primary"
+        native-type="submit"
+        :loading="loading"
+        @click="send($event)"
+      >
+        Senden
+      </b-button>
+    </form>
+
+    <scanner
+      :is-active="scanner"
+      @onScanCancel="onScanCancel"
+      @onScanSuccess="onScanSuccess"
+    />
+
+    <article-form
+      v-if="article !== undefined"
+      :article="article"
+      @formSubmitted="addArticle"
+    />
+  </base-layout-form>
+</template>

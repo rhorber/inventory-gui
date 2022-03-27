@@ -1,3 +1,105 @@
+<script>
+import { mapActions, mapMutations, mapState } from 'vuex'
+
+export default {
+  props: {
+    articles: {
+      type: Array,
+      required: true
+    }
+  },
+
+  computed: {
+    ...mapState(['isInventoryActive']),
+    highestArticleIndex() {
+      return (this.articles.length - 1);
+    }
+  },
+
+  methods: {
+    ...mapMutations(['replaceArticle', 'replaceLot']),
+    ...mapActions(['addToSyncQueue']),
+    hiddenAttrs(_row, _column) {
+      return {
+        class: 'is-hidden',
+      };
+    },
+    bestBeforeColumnAttrs(_row, _column) {
+      return {
+        class: ['is-hidden-touch', 'is-vcentered', 'has-text-right'],
+        style: {'white-space': 'nowrap'},
+      };
+    },
+    stockColumnAttrs(_row, _column) {
+      return {
+        style: {'width': '150px'},
+      };
+    },
+    getNameClasses(row) {
+      let classes = [];
+
+      if (this.isInventoryActive) {
+        let statusClass = (parseInt(row.inventoried, 10) === 1) ? 'is-success' : 'is-danger';
+
+        classes = ['tag', statusClass, 'is-medium', 'custom-height', 'px-2'];
+      }
+
+      return classes;
+    },
+    hasLots(article) {
+      return (article.hasOwnProperty('lots')
+        && article.lots.length > 0
+      );
+    },
+    hasBestBefore(article) {
+      return (this.hasLots(article)
+        && article.lots[0].best_before !== ''
+      );
+    },
+    decreaseStock(lot) {
+      this.$axios.$put(`/v3/lots/${lot.id}/decrement`)
+        .then(this.replaceLot)
+        .catch(console.error);
+    },
+    increaseStock(lot) {
+      this.$axios.$put(`/v3/lots/${lot.id}/increment`)
+        .then(this.replaceLot)
+        .catch(console.error);
+    },
+    moveDown(article) {
+      this.$axios.$put(`/v3/articles/${article.id}/move-down`)
+        .then((result) => {
+          this.replaceArticles(result.articles);
+        })
+        .catch(console.error);
+    },
+    moveUp(article) {
+      this.$axios.$put(`/v3/articles/${article.id}/move-up`)
+        .then((result) => {
+          this.replaceArticles(result.articles);
+        })
+        .catch(console.error);
+    },
+    resetArticle(article) {
+      const url = `/v3/articles/${article.id}/reset`;
+      if ($nuxt.isOnline) {
+        this.$axios.$put(url)
+          .then(this.replaceArticle)
+          .catch(console.error);
+      } else {
+        this.addToSyncQueue({method: 'put', url: url, payload: {}});
+        let newArticle = Object.assign({}, article);
+        newArticle.lots = [];
+        this.replaceArticle(newArticle);
+      }
+    },
+    replaceArticles(articles) {
+      articles.forEach(this.replaceArticle);
+    }
+  }
+}
+</script>
+
 <template>
   <div>
     <b-table
@@ -138,108 +240,6 @@
     ></span>
   </div>
 </template>
-
-<script>
-import { mapActions, mapMutations, mapState } from 'vuex'
-
-export default {
-  props: {
-    articles: {
-      type: Array,
-      required: true
-    }
-  },
-
-  computed: {
-    ...mapState(['isInventoryActive']),
-    highestArticleIndex() {
-      return (this.articles.length - 1);
-    }
-  },
-
-  methods: {
-    ...mapMutations(['replaceArticle', 'replaceLot']),
-    ...mapActions(['addToSyncQueue']),
-    hiddenAttrs(_row, _column) {
-      return {
-        class: 'is-hidden',
-      };
-    },
-    bestBeforeColumnAttrs(_row, _column) {
-      return {
-        class: ['is-hidden-touch', 'is-vcentered', 'has-text-right'],
-        style: {'white-space': 'nowrap'},
-      };
-    },
-    stockColumnAttrs(_row, _column) {
-      return {
-        style: {'width': '150px'},
-      };
-    },
-    getNameClasses(row) {
-      let classes = [];
-
-      if (this.isInventoryActive) {
-        let statusClass = (parseInt(row.inventoried, 10) === 1) ? 'is-success' : 'is-danger';
-
-        classes = ['tag', statusClass, 'is-medium', 'custom-height', 'px-2'];
-      }
-
-      return classes;
-    },
-    hasLots(article) {
-      return (article.hasOwnProperty('lots')
-        && article.lots.length > 0
-      );
-    },
-    hasBestBefore(article) {
-      return (this.hasLots(article)
-        && article.lots[0].best_before !== ''
-      );
-    },
-    decreaseStock(lot) {
-      this.$axios.$put(`/v3/lots/${lot.id}/decrement`)
-        .then(this.replaceLot)
-        .catch(console.error);
-    },
-    increaseStock(lot) {
-      this.$axios.$put(`/v3/lots/${lot.id}/increment`)
-        .then(this.replaceLot)
-        .catch(console.error);
-    },
-    moveDown(article) {
-      this.$axios.$put(`/v3/articles/${article.id}/move-down`)
-        .then((result) => {
-          this.replaceArticles(result.articles);
-        })
-        .catch(console.error);
-    },
-    moveUp(article) {
-      this.$axios.$put(`/v3/articles/${article.id}/move-up`)
-        .then((result) => {
-          this.replaceArticles(result.articles);
-        })
-        .catch(console.error);
-    },
-    resetArticle(article) {
-      const url = `/v3/articles/${article.id}/reset`;
-      if ($nuxt.isOnline) {
-        this.$axios.$put(url)
-          .then(this.replaceArticle)
-          .catch(console.error);
-      } else {
-        this.addToSyncQueue({method: 'put', url: url, payload: {}});
-        let newArticle = Object.assign({}, article);
-        newArticle.lots = [];
-        this.replaceArticle(newArticle);
-      }
-    },
-    replaceArticles(articles) {
-      articles.forEach(this.replaceArticle);
-    }
-  }
-}
-</script>
 
 <style scoped>
 .amount {

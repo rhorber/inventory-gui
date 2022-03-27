@@ -1,15 +1,3 @@
-<template>
-  <span :class="size">
-    <svg
-      v-if="isKnownIcon"
-      :class="size"
-    >
-      <use :xlink:href="'/icons.svg#' + iconId" />
-    </svg>
-    <span v-else>N/A</span>
-  </span>
-</template>
-
 <script>
 export default {
   name: 'BaseIcon',
@@ -77,6 +65,18 @@ export default {
   }
 }
 </script>
+
+<template>
+  <span :class="size">
+    <svg
+      v-if="isKnownIcon"
+      :class="size"
+    >
+      <use :xlink:href="'/icons.svg#' + iconId" />
+    </svg>
+    <span v-else>N/A</span>
+  </span>
+</template>
 
 <style scoped>
 svg {

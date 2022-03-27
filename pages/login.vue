@@ -1,15 +1,3 @@
-<template>
-  <div class="m-4">
-    <b-field>
-      <b-input
-        v-model="accessToken"
-        type="text"
-        @keyup.enter.native="login"
-      />
-    </b-field>
-  </div>
-</template>
-
 <script>
 export default {
   layout: "login",
@@ -28,3 +16,15 @@ export default {
   }
 };
 </script>
+
+<template>
+  <div class="m-4">
+    <b-field>
+      <b-input
+        v-model="accessToken"
+        type="text"
+        @keyup.enter.native="login"
+      />
+    </b-field>
+  </div>
+</template>

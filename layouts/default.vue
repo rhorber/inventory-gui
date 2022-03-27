@@ -1,44 +1,3 @@
-<template>
-  <div>
-    <navigation />
-    <section class="mx-3">
-      <b-message
-        v-if="$nuxt.isOffline"
-        type="is-warning"
-        has-icon
-        icon-size="is-medium"
-      >
-        Du bist offline.
-      </b-message>
-      <b-message
-        v-if="$nuxt.isOnline && isSyncPending"
-        type="is-warning"
-      >
-        <b-button
-          type="is-warning"
-          :disabled="isSyncing"
-          @click="synchronize"
-        >
-          Synchronisieren
-        </b-button>
-      </b-message>
-      <b-message
-        v-if="isSyncing"
-        type="is-primary"
-        has-icon
-        icon-size="is-medium"
-      >
-        Synchronisation läuft...
-      </b-message>
-    </section>
-    <section>
-      <div class="container p-5">
-        <nuxt />
-      </div>
-    </section>
-  </div>
-</template>
-
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 
@@ -82,6 +41,47 @@ export default {
   }
 }
 </script>
+
+<template>
+  <div>
+    <navigation />
+    <section class="mx-3">
+      <b-message
+        v-if="$nuxt.isOffline"
+        type="is-warning"
+        has-icon
+        icon-size="is-medium"
+      >
+        Du bist offline.
+      </b-message>
+      <b-message
+        v-if="$nuxt.isOnline && isSyncPending"
+        type="is-warning"
+      >
+        <b-button
+          type="is-warning"
+          :disabled="isSyncing"
+          @click="synchronize"
+        >
+          Synchronisieren
+        </b-button>
+      </b-message>
+      <b-message
+        v-if="isSyncing"
+        type="is-primary"
+        has-icon
+        icon-size="is-medium"
+      >
+        Synchronisation läuft...
+      </b-message>
+    </section>
+    <section>
+      <div class="container p-5">
+        <nuxt />
+      </div>
+    </section>
+  </div>
+</template>
 
 <style>
 html {

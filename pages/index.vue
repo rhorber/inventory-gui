@@ -1,12 +1,3 @@
-<template>
-  <PageArticles
-    v-model="hideStockZero"
-    page-title="Alle Artikel"
-    :articles="sortedArticles"
-    add-article-button-link="/article/add"
-  />
-</template>
-
 <script>
 import { mapGetters, mapState } from 'vuex'
 
@@ -63,3 +54,12 @@ export default {
   }
 }
 </script>
+
+<template>
+  <PageArticles
+    v-model="hideStockZero"
+    page-title="Alle Artikel"
+    :articles="sortedArticles"
+    add-article-button-link="/article/add"
+  />
+</template>

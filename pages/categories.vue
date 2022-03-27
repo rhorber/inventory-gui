@@ -1,3 +1,48 @@
+<script>
+import { mapMutations, mapState } from 'vuex'
+
+import BaseLayoutList from '~/components/BaseLayoutList'
+
+export default {
+  components: {
+    BaseLayoutList,
+  },
+
+  computed: {
+    ...mapState(['categories']),
+    highestCategoryIndex() {
+      return (this.categories.length - 1);
+    }
+  },
+
+  methods: {
+    ...mapMutations(['replaceCategory']),
+    vCenteredAttrs(_row, _column) {
+      return {
+        class: 'is-vcentered',
+      };
+    },
+    moveDown(category) {
+      this.$axios.$put(`/v3/categories/${category.id}/move-down`)
+        .then((result) => {
+          this.replaceCategories(result.categories);
+        })
+        .catch(console.error);
+    },
+    moveUp(category) {
+      this.$axios.$put(`/v3/categories/${category.id}/move-up`)
+        .then((result) => {
+          this.replaceCategories(result.categories);
+        })
+        .catch(console.error);
+    },
+    replaceCategories(categories) {
+      categories.forEach(this.replaceCategory);
+    }
+  }
+}
+</script>
+
 <template>
   <BaseLayoutList
     page-title="Kategorien"
@@ -66,48 +111,3 @@
     </template>
   </BaseLayoutList>
 </template>
-
-<script>
-import { mapMutations, mapState } from 'vuex'
-
-import BaseLayoutList from '~/components/BaseLayoutList'
-
-export default {
-  components: {
-    BaseLayoutList,
-  },
-
-  computed: {
-    ...mapState(['categories']),
-    highestCategoryIndex() {
-      return (this.categories.length - 1);
-    }
-  },
-
-  methods: {
-    ...mapMutations(['replaceCategory']),
-    vCenteredAttrs(_row, _column) {
-      return {
-        class: 'is-vcentered',
-      };
-    },
-    moveDown(category) {
-      this.$axios.$put(`/v3/categories/${category.id}/move-down`)
-        .then((result) => {
-          this.replaceCategories(result.categories);
-        })
-        .catch(console.error);
-    },
-    moveUp(category) {
-      this.$axios.$put(`/v3/categories/${category.id}/move-up`)
-        .then((result) => {
-          this.replaceCategories(result.categories);
-        })
-        .catch(console.error);
-    },
-    replaceCategories(categories) {
-      categories.forEach(this.replaceCategory);
-    }
-  }
-}
-</script>

@@ -1,14 +1,3 @@
-<template>
-  <BaseLayoutForm
-    :page-title="`Kategorie bearbeiten (${categoryId})`"
-  >
-    <category-form
-      :category="category"
-      @formSubmitted="saveCategory"
-    />
-  </BaseLayoutForm>
-</template>
-
 <script>
 import { mapMutations } from 'vuex'
 
@@ -52,3 +41,14 @@ export default {
   }
 }
 </script>
+
+<template>
+  <BaseLayoutForm
+    :page-title="`Kategorie bearbeiten (${categoryId})`"
+  >
+    <category-form
+      :category="category"
+      @formSubmitted="saveCategory"
+    />
+  </BaseLayoutForm>
+</template>

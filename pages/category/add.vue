@@ -1,14 +1,3 @@
-<template>
-  <BaseLayoutForm
-    page-title="Kategorie erstellen"
-  >
-    <category-form
-      :category="{name: ''}"
-      @formSubmitted="addCategory"
-    />
-  </BaseLayoutForm>
-</template>
-
 <script>
 import { mapMutations } from 'vuex'
 
@@ -38,3 +27,14 @@ export default {
   }
 }
 </script>
+
+<template>
+  <BaseLayoutForm
+    page-title="Kategorie erstellen"
+  >
+    <category-form
+      :category="{name: ''}"
+      @formSubmitted="addCategory"
+    />
+  </BaseLayoutForm>
+</template>

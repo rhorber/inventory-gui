@@ -1,3 +1,30 @@
+<script>
+import { mapState } from 'vuex'
+
+import Logo from './Logo'
+
+export default {
+  components: {
+    Logo
+  },
+  computed: {
+    ...mapState(['categories']),
+    type() {
+      if ($nuxt.isOnline) {
+        return 'is-light';
+      } else {
+        return 'is-warning';
+      }
+    }
+  },
+  methods: {
+    getIsActive(path) {
+      return (path === this.$route.path);
+    }
+  }
+}
+</script>
+
 <template>
   <b-navbar
     :type="type"
@@ -81,30 +108,3 @@
     </template>
   </b-navbar>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-
-import Logo from './Logo'
-
-export default {
-  components: {
-    Logo
-  },
-  computed: {
-    ...mapState(['categories']),
-    type() {
-      if ($nuxt.isOnline) {
-        return 'is-light';
-      } else {
-        return 'is-warning';
-      }
-    }
-  },
-  methods: {
-    getIsActive(path) {
-      return (path === this.$route.path);
-    }
-  }
-}
-</script>
