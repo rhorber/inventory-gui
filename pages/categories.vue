@@ -1,11 +1,11 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 
-import BaseLayoutList from '~/components/BaseLayoutList'
+import AppLayoutList from '~/components/AppLayoutList'
 
 export default {
   components: {
-    BaseLayoutList,
+    AppLayoutList,
   },
 
   computed: {
@@ -44,7 +44,7 @@ export default {
 </script>
 
 <template>
-  <BaseLayoutList
+  <AppLayoutList
     page-title="Kategorien"
   >
     <template #header>
@@ -109,5 +109,5 @@ export default {
         </b-table-column>
       </b-table>
     </template>
-  </BaseLayoutList>
+  </AppLayoutList>
 </template>

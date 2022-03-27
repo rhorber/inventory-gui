@@ -237,7 +237,7 @@ export default {
       id="bottom"
       class="article-anchor"
       style="visibility: hidden;"
-    ></span>
+    />
   </div>
 </template>
 

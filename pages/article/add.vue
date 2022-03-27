@@ -1,13 +1,13 @@
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
-import BaseLayoutForm from '~/components/BaseLayoutForm'
+import AppLayoutForm from '~/components/AppLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
 
 export default {
   components: {
     ArticleForm,
-    BaseLayoutForm,
+    AppLayoutForm,
   },
 
   data() {
@@ -67,12 +67,12 @@ export default {
 </script>
 
 <template>
-  <BaseLayoutForm
+  <AppLayoutForm
     page-title="Artikel erstellen"
   >
-    <article-form
+    <ArticleForm
       :article="emptyArticle"
       @formSubmitted="addArticle"
     />
-  </BaseLayoutForm>
+  </AppLayoutForm>
 </template>

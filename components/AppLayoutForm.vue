@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'BaseLayoutForm',
+  name: 'AppLayoutForm',
   props: {
     pageTitle: {
       type: String,

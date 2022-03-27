@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'BaseLayoutList',
+  name: 'AppLayoutList',
   props: {
     pageTitle: {
       type: String,

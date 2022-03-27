@@ -1,11 +1,11 @@
 <script>
 import { mapState } from 'vuex'
 
-import Logo from './Logo'
+import TheLogo from './TheLogo'
 
 export default {
   components: {
-    Logo
+    TheLogo
   },
   computed: {
     ...mapState(['categories']),
@@ -35,7 +35,7 @@ export default {
         tag="nuxt-link"
         to="/"
       >
-        <Logo />
+        <TheLogo />
       </b-navbar-item>
     </template>
 

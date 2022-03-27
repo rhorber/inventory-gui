@@ -1,11 +1,11 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 
-import PageArticles from '~/components/PageArticles'
+import ArticlesPage from '~/components/ArticlesPage'
 
 export default {
   components: {
-    PageArticles
+    ArticlesPage
   },
 
   validate({params}) {
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <template>
-  <page-articles
+  <ArticlesPage
     v-model="hideStockZero"
     :page-title="pageTitle"
     :articles="sortedArticles"

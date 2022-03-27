@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Buefy from 'buefy';
-import BaseIcon from '../components/BaseIcon';
+import AppIcon from '../components/AppIcon';
 
 // Doc: https://buefy.org/documentation/
 Vue.use(Buefy, {
     defaultIconPack: 'bitesize',
-    defaultIconComponent: BaseIcon,
+    defaultIconComponent: AppIcon,
     defaultLocale: 'de-CH',
     defaultFirstDayOfWeek: 1,
     customIconPacks: {

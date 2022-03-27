@@ -1,12 +1,12 @@
 <script>
 import { mapMutations } from 'vuex'
 
-import BaseLayoutForm from '~/components/BaseLayoutForm'
+import AppLayoutForm from '~/components/AppLayoutForm'
 import CategoryForm from '~/components/CategoryForm'
 
 export default {
   components: {
-    BaseLayoutForm,
+    AppLayoutForm,
     CategoryForm,
   },
   methods: {
@@ -29,12 +29,12 @@ export default {
 </script>
 
 <template>
-  <BaseLayoutForm
+  <AppLayoutForm
     page-title="Kategorie erstellen"
   >
     <category-form
       :category="{name: ''}"
       @formSubmitted="addCategory"
     />
-  </BaseLayoutForm>
+  </AppLayoutForm>
 </template>

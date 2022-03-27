@@ -1,11 +1,11 @@
 <script>
 import { mapState } from 'vuex'
 
-import Scanner from '~/components/Scanner'
+import GtinScanner from '~/components/GtinScanner'
 
 export default {
   components: {
-    Scanner,
+    GtinScanner,
   },
 
   props: {
@@ -470,7 +470,7 @@ export default {
       </b-button>
     </section>
 
-    <scanner
+    <GtinScanner
       :is-active="scanner"
       @onScanCancel="onScanCancel"
       @onScanSuccess="onScanSuccess"

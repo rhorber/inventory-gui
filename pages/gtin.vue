@@ -1,17 +1,17 @@
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
-import BaseLayoutForm from '~/components/BaseLayoutForm'
+import AppLayoutForm from '~/components/AppLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
-import Scanner from '~/components/Scanner'
+import GtinScanner from '~/components/GtinScanner'
 
 export default {
   name: 'Gtin',
 
   components: {
     ArticleForm,
-    BaseLayoutForm,
-    Scanner,
+    AppLayoutForm,
+    GtinScanner,
   },
 
   data() {
@@ -117,7 +117,7 @@ export default {
 </script>
 
 <template>
-  <base-layout-form
+  <AppLayoutForm
     :page-title="pageTitle"
   >
     <b-message
@@ -171,16 +171,16 @@ export default {
       </b-button>
     </form>
 
-    <scanner
+    <GtinScanner
       :is-active="scanner"
       @onScanCancel="onScanCancel"
       @onScanSuccess="onScanSuccess"
     />
 
-    <article-form
+    <ArticleForm
       v-if="article !== undefined"
       :article="article"
       @formSubmitted="addArticle"
     />
-  </base-layout-form>
+  </AppLayoutForm>
 </template>

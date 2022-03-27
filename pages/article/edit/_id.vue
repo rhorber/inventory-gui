@@ -1,13 +1,13 @@
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
-import BaseLayoutForm from '~/components/BaseLayoutForm'
+import AppLayoutForm from '~/components/AppLayoutForm'
 import ArticleForm from '~/components/ArticleForm'
 
 export default {
   components: {
     ArticleForm,
-    BaseLayoutForm,
+    AppLayoutForm,
   },
 
   validate({params}) {
@@ -74,12 +74,12 @@ export default {
 </script>
 
 <template>
-  <BaseLayoutForm
+  <AppLayoutForm
     :page-title="`Artikel bearbeiten (${articleId})`"
   >
-    <article-form
+    <ArticleForm
       :article="article"
       @formSubmitted="saveArticle"
     />
-  </BaseLayoutForm>
+  </AppLayoutForm>
 </template>

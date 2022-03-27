@@ -1,11 +1,11 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 
-import Navigation from '../components/Navigation';
+import TheNavigation from '../components/TheNavigation';
 
 export default {
   components: {
-    Navigation
+    TheNavigation
   },
   middleware: 'populateStore',
   computed: {
@@ -44,7 +44,7 @@ export default {
 
 <template>
   <div>
-    <navigation />
+    <TheNavigation />
     <section class="mx-3">
       <b-message
         v-if="$nuxt.isOffline"

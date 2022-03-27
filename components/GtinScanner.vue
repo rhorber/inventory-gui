@@ -3,7 +3,7 @@ import { mapMutations,  mapState } from 'vuex';
 import { Html5Qrcode, Html5QrcodeScannerState, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 
 export default {
-  name: 'Scanner',
+  name: 'GtinScanner',
 
   props: {
     isActive: {

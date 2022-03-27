@@ -1,12 +1,12 @@
 <script>
-import BaseLayoutList from '~/components/BaseLayoutList'
+import AppLayoutList from '~/components/AppLayoutList'
 import ArticleTable from '~/components/ArticleTable'
 
 export default {
-  name: 'PageArticles',
+  name: 'ArticlesPage',
   components: {
     ArticleTable,
-    BaseLayoutList,
+    AppLayoutList,
   },
   props: {
     pageTitle: {
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <template>
-  <BaseLayoutList
+  <AppLayoutList
     :page-title="pageTitle"
   >
     <template #header>
@@ -62,7 +62,7 @@ export default {
     </template>
 
     <template #default>
-      <article-table
+      <ArticleTable
         :articles="articles"
       />
     </template>
@@ -76,5 +76,5 @@ export default {
         Artikel erstellen
       </b-button>
     </template>
-  </BaseLayoutList>
+  </AppLayoutList>
 </template>
