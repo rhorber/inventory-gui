@@ -101,7 +101,7 @@ const mutations: MutationTree<RootState> = {
       return
     }
     state.articles = [
-      ...state.articles.filter((a: Article) => a.id !== article.id),
+      ...state.articles.filter((a: Article): boolean => a.id !== article.id),
       article
     ]
   },
@@ -115,10 +115,10 @@ const mutations: MutationTree<RootState> = {
     state.articles = null
   },
   replaceLot(state: RootState, lot: Lot): void {
-    const article = state.articles?.find(a => a.id === lot.article)
+    const article = state.articles?.find((a: Article): boolean => a.id === lot.article)
 
     if (article !== undefined) {
-      const lotIndex = article.lots.findIndex(l => l.id === lot.id)
+      const lotIndex = article.lots.findIndex((l: Lot): boolean => l.id === lot.id)
       if (lotIndex !== -1) {
         article.lots.splice(lotIndex, 1, lot)
       }
@@ -134,7 +134,7 @@ const mutations: MutationTree<RootState> = {
       return
     }
     state.categories = [
-      ...state.categories.filter((c: Category) => c.id !== category.id),
+      ...state.categories.filter((c: Category): boolean => c.id !== category.id),
       category
     ]
     state.categories.sort(
