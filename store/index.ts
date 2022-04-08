@@ -33,7 +33,7 @@ type CategoryMap = {
   [categoryId: number]: Category
 }
 
-type RootState = {
+export type RootState = {
   accessToken: string | null
   articles: Article[] | null
   categories: Category[] | null
