@@ -1,12 +1,6 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
-import { CameraDevice } from 'html5-qrcode/core'
 
-import { RootState } from '~/store'
-
-export type ScannerModuleState = {
-  cameras: CameraDevice[] | undefined
-  selectedCamera: string | undefined
-}
+import { CameraDevice, RootState, ScannerModuleState } from '~/types/store'
 
 // Initial state
 const state = function () {

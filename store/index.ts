@@ -1,68 +1,8 @@
 import { ActionContext, ActionTree, GetterTree, MutationTree } from 'vuex'
 
-type Lot = {
-  id: number
-  article?: number
-  best_before: string
-  stock: number
-  position: number
-  timestamp?: number
-}
-
-type Article = {
-  id: number
-  category: number
-  name: string
-  size: number
-  unit: string
-  inventoried: -1 | 0 | 1
-  position: number
-  timestamp?: number
-  lots: Lot[]
-  gtins: string[]
-}
-
-type Category = {
-  id: number
-  name: string
-  position: number
-  timestamp?: number
-};
-
-type CategoryMap = {
-  [categoryId: number]: Category
-}
-
-export type RootState = {
-  accessToken: string | null
-  articles: Article[] | null
-  categories: Category[] | null
-  isInventoryActive: boolean | null
-  isSyncPending: boolean | null
-  isSyncing: boolean
-}
-
-type CategoriesResponse = {
-  categories: Category[]
-}
-
-type ArticlesResponse = {
-  articles: Article[]
-}
-
-type InventoriesResponse = {
-  status: 'active' | 'inactive'
-}
-
-type SyncItemParameter = {
-  method: 'post' | 'put'
-  url: string
-  payload: Record<string, unknown>
-}
-
-type SyncItemStorage = SyncItemParameter & {
-  timestamp: number
-}
+import { Article, Category, Lot } from '~/types/entities'
+import { CategoryMap, RootState, SyncItemParameter, SyncItemStorage } from '~/types/store'
+import { ArticlesResponse, CategoriesResponse, InventoriesResponse } from '~/types/api'
 
 // Initial state
 const state = function (): RootState {
