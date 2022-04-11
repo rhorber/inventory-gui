@@ -1,9 +1,13 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
+import { AxiosPromise } from 'axios'
 
-import TheNavigation from '../components/TheNavigation';
+import TheNavigation from '~/components/TheNavigation.vue'
+import { SyncItemStorage } from '~/types/store'
+import { EmptyResponse } from '~/types/api'
 
-export default {
+export default Vue.extend({
   components: {
     TheNavigation
   },
@@ -14,32 +18,32 @@ export default {
   methods: {
     ...mapMutations(['setIsSyncing']),
     ...mapActions(['getSyncQueue', 'resetSyncQueue']),
-    async synchronize() {
-      this.setIsSyncing(true);
+    async synchronize(): Promise<void> {
+      this.setIsSyncing(true)
 
-      const queue = await this.getSyncQueue();
+      const queue = await this.getSyncQueue()
 
-      const promises = queue.map((job) => {
-        const data = Object.assign(job.payload, {timestamp: job.timestamp});
+      const promises = queue.map((job: SyncItemStorage): AxiosPromise<EmptyResponse> => {
+        const data = Object.assign(job.payload, { timestamp: job.timestamp })
 
         return this.$axios({
           url: job.url,
           method: job.method,
           data: data
-        });
-      });
+        })
+      })
 
       try {
-        await Promise.all(promises);
-        await this.resetSyncQueue();
+        await Promise.all(promises)
+        await this.resetSyncQueue()
       } catch (err) {
-        console.error('synchronization failed', err);
+        console.error('synchronization failed', err)
       }
 
-      this.setIsSyncing(false);
+      this.setIsSyncing(false)
     }
   }
-}
+})
 </script>
 
 <template>
