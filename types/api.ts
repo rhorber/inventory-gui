@@ -10,6 +10,10 @@ export type ArticlesResponse = {
   articles: Article[]
 }
 
+export type ArticlesMoveResponse = {
+  articles: [Article, Article]
+}
+
 export type InventoriesResponse = {
   status: 'active' | 'inactive'
 }

@@ -1,25 +1,28 @@
-<script>
-import AppLayoutList from '~/components/AppLayoutList'
-import ArticleTable from '~/components/ArticleTable'
+<script lang="ts">
+import Vue, { PropType } from 'vue'
 
-export default {
+import AppLayoutList from '~/components/AppLayoutList.vue'
+import ArticleTable from '~/components/ArticleTable.vue'
+import { Article } from '~/types/entities'
+
+export default Vue.extend({
   name: 'ArticlesPage',
   components: {
     ArticleTable,
-    AppLayoutList,
+    AppLayoutList
   },
   props: {
     pageTitle: {
       type: String,
-      required: true,
+      required: true
     },
     articles: {
-      type: Array,
+      type: Array as PropType<Article[]>,
       required: true
     },
     addArticleButtonLink: {
       type: String,
-      required: true,
+      required: true
     },
     value: {
       type: Boolean,
@@ -27,11 +30,11 @@ export default {
     }
   },
   methods: {
-    onInput(value) {
+    onInput(value: InputEvent): void {
       this.$emit('input', value)
     }
   }
-}
+})
 </script>
 
 <template>

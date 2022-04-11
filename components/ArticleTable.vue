@@ -1,103 +1,108 @@
-<script>
+<script lang="ts">
+import Vue, { PropType } from 'vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
 
-export default {
+import { Article, Lot } from '~/types/entities'
+import { ArticlesMoveResponse } from '~/types/api'
+import { BTableColumn, HtmlAttrs } from '~/types/buefy'
+
+export default Vue.extend({
   props: {
     articles: {
-      type: Array,
+      type: Array as PropType<Article[]>,
       required: true
     }
   },
 
   computed: {
     ...mapState(['isInventoryActive']),
-    highestArticleIndex() {
-      return (this.articles.length - 1);
+    highestArticleIndex(): number {
+      return (this.articles.length - 1)
     }
   },
 
   methods: {
     ...mapMutations(['replaceArticle', 'replaceLot']),
     ...mapActions(['addToSyncQueue']),
-    hiddenAttrs(_row, _column) {
+    hiddenAttrs(_column: BTableColumn): HtmlAttrs {
       return {
-        class: 'is-hidden',
-      };
+        class: 'is-hidden'
+      }
     },
-    bestBeforeColumnAttrs(_row, _column) {
+    bestBeforeColumnAttrs(_row: Lot, _column: BTableColumn): HtmlAttrs {
       return {
         class: ['is-hidden-touch', 'is-vcentered', 'has-text-right'],
-        style: {'white-space': 'nowrap'},
-      };
+        style: { 'white-space': 'nowrap' }
+      }
     },
-    stockColumnAttrs(_row, _column) {
+    stockColumnAttrs(_row: Lot, _column: BTableColumn): HtmlAttrs {
       return {
-        style: {'width': '150px'},
-      };
+        style: { width: '150px' }
+      }
     },
-    getNameClasses(row) {
-      let classes = [];
+    getNameClasses(row: Article): string[] {
+      let classes: string[] = []
 
       if (this.isInventoryActive) {
-        let statusClass = (parseInt(row.inventoried, 10) === 1) ? 'is-success' : 'is-danger';
+        const statusClass = (row.inventoried === 1) ? 'is-success' : 'is-danger'
 
-        classes = ['tag', statusClass, 'is-medium', 'custom-height', 'px-2'];
+        classes = ['tag', statusClass, 'is-medium', 'custom-height', 'px-2']
       }
 
-      return classes;
+      return classes
     },
-    hasLots(article) {
-      return (article.hasOwnProperty('lots')
+    hasLots(article: Article): boolean {
+      return (Object.prototype.hasOwnProperty.call(article, 'lots')
         && article.lots.length > 0
-      );
+      )
     },
-    hasBestBefore(article) {
+    hasBestBefore(article: Article): boolean {
       return (this.hasLots(article)
         && article.lots[0].best_before !== ''
-      );
+      )
     },
-    decreaseStock(lot) {
-      this.$axios.$put(`/v3/lots/${lot.id}/decrement`)
+    decreaseStock(lot: Lot): void {
+      this.$axios.$put<Lot>(`/v3/lots/${lot.id}/decrement`)
         .then(this.replaceLot)
-        .catch(console.error);
+        .catch(console.error)
     },
-    increaseStock(lot) {
-      this.$axios.$put(`/v3/lots/${lot.id}/increment`)
+    increaseStock(lot: Lot): void {
+      this.$axios.$put<Lot>(`/v3/lots/${lot.id}/increment`)
         .then(this.replaceLot)
-        .catch(console.error);
+        .catch(console.error)
     },
-    moveDown(article) {
-      this.$axios.$put(`/v3/articles/${article.id}/move-down`)
-        .then((result) => {
-          this.replaceArticles(result.articles);
+    moveDown(article: Article): void {
+      this.$axios.$put<ArticlesMoveResponse>(`/v3/articles/${article.id}/move-down`)
+        .then((result: ArticlesMoveResponse): void => {
+          this.replaceArticles(result.articles)
         })
-        .catch(console.error);
+        .catch(console.error)
     },
-    moveUp(article) {
-      this.$axios.$put(`/v3/articles/${article.id}/move-up`)
-        .then((result) => {
-          this.replaceArticles(result.articles);
+    moveUp(article: Article): void {
+      this.$axios.$put<ArticlesMoveResponse>(`/v3/articles/${article.id}/move-up`)
+        .then((result: ArticlesMoveResponse): void => {
+          this.replaceArticles(result.articles)
         })
-        .catch(console.error);
+        .catch(console.error)
     },
-    resetArticle(article) {
-      const url = `/v3/articles/${article.id}/reset`;
-      if ($nuxt.isOnline) {
-        this.$axios.$put(url)
+    resetArticle(article: Article): void {
+      const url = `/v3/articles/${article.id}/reset`
+      if (this.$nuxt.isOnline) {
+        this.$axios.$put<Article>(url)
           .then(this.replaceArticle)
-          .catch(console.error);
+          .catch(console.error)
       } else {
-        this.addToSyncQueue({method: 'put', url: url, payload: {}});
-        let newArticle = Object.assign({}, article);
-        newArticle.lots = [];
-        this.replaceArticle(newArticle);
+        this.addToSyncQueue({ method: 'put', url: url, payload: {} })
+        const newArticle = Object.assign({}, article)
+        newArticle.lots = []
+        this.replaceArticle(newArticle)
       }
     },
-    replaceArticles(articles) {
-      articles.forEach(this.replaceArticle);
+    replaceArticles(articles: Article[]): void {
+      articles.forEach(this.replaceArticle)
     }
   }
-}
+})
 </script>
 
 <template>

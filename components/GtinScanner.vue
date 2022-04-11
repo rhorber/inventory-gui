@@ -1,127 +1,149 @@
-<script>
-import { mapMutations,  mapState } from 'vuex';
-import { Html5Qrcode, Html5QrcodeScannerState, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+<script lang="ts">
+import Vue from 'vue'
+import { mapMutations, mapState } from 'vuex'
+import { Html5Qrcode, Html5QrcodeScannerState, Html5QrcodeSupportedFormats } from 'html5-qrcode'
+import { Html5QrcodeResult, QrDimensions } from 'html5-qrcode/es2015/core'
+import { Html5QrcodeCameraScanConfig, Html5QrcodeFullConfig } from 'html5-qrcode/es2015/html5-qrcode'
 
-export default {
+import { CameraDevice } from '~/types/store'
+
+const videoConstraints: MediaTrackConstraints = {
+  facingMode: 'environment'
+}
+const qrcodeConfig: Html5QrcodeFullConfig = {
+  formatsToSupport: [
+    Html5QrcodeSupportedFormats.EAN_8,
+    Html5QrcodeSupportedFormats.EAN_13
+  ],
+  experimentalFeatures: {
+    useBarCodeDetectorIfSupported: true
+  },
+  verbose: undefined
+}
+const config: Html5QrcodeCameraScanConfig = {
+  fps: 2,
+  qrbox: {
+    width: 400,
+    height: 150
+  },
+  aspectRatio: 1
+}
+let scanner: undefined | Html5Qrcode
+
+export default Vue.extend({
   name: 'GtinScanner',
 
   props: {
     isActive: {
       type: Boolean,
-      required: true,
+      required: true
     }
   },
 
-  data() {
-    const config = {
-      fps: 2,
-      qrbox: {width: 400, height: 150},
-      aspectRatio: 1,
-      formatsToSupport: [
-        Html5QrcodeSupportedFormats.EAN_8,
-        Html5QrcodeSupportedFormats.EAN_13,
-      ],
-    };
-
+  data: function () {
     return {
-      loading: true,
-      scanner: undefined,
-      config: config,
-      videoConstraints: { facingMode: 'environment' },
-      qrcodeConfig: { experimentalFeatures: { useBarCodeDetectorIfSupported: true } },
+      loading: true
     }
   },
 
   computed: {
-    ...mapState('scanner', ['cameras', 'selectedCamera']),
+    ...mapState('scanner', ['cameras', 'selectedCamera'])
   },
 
   watch: {
-    isActive(newValue, _oldValue) {
-      if (newValue === true) {
-        this.$nextTick(this.openScanner);
+    isActive(newValue: boolean, _oldValue: boolean): void {
+      if (newValue) {
+        this.$nextTick(this.openScanner)
       }
-    },
+    }
   },
 
   methods: {
     ...mapMutations('scanner', ['setCameras', 'setSelectedCamera']),
-    async openScanner() {
-      this.$nuxt.$loading.start();
+    async openScanner(): Promise<void> {
+      this.$nuxt.$loading.start()
       if (this.cameras === undefined) {
-        await this.initCameras();
+        await this.initCameras()
       }
 
-      this.initConfig();
+      this.initConfig()
 
       try {
         const param = (this.selectedCamera === undefined)
-          ? this.videoConstraints
-          : this.selectedCamera;
+          ? videoConstraints
+          : this.selectedCamera
 
-        this.scanner = new Html5Qrcode('scanner', this.qrcodeConfig );
-        await this.restartCamera(param);
+        scanner = new Html5Qrcode('scanner', qrcodeConfig)
+        await this.restartCamera(param)
       } catch (error) {
-        this.$refs.scanner.innerText = error;
+        if (error instanceof String) {
+          const scannerDiv = this.$refs.scanner as HTMLDivElement
+          scannerDiv.innerText = error.toString()
+        }
       }
 
-      this.loading = false;
-      this.$nuxt.$loading.finish();
+      this.loading = false
+      this.$nuxt.$loading.finish()
     },
-    async initCameras() {
-      let cameras;
+    async initCameras(): Promise<void> {
+      let cameras: CameraDevice[]
       try {
-        cameras = await Html5Qrcode.getCameras();
+        cameras = await Html5Qrcode.getCameras()
 
-        const constraints = { audio: false, video: this.videoConstraints };
-        const streams = await navigator.mediaDevices.getUserMedia(constraints);
-        const tracks = streams.getVideoTracks();
+        const constraints = { audio: false, video: videoConstraints }
+        const streams = await navigator.mediaDevices.getUserMedia(constraints)
+        const tracks = streams.getVideoTracks()
 
         if (tracks.length > 0) {
-          const settings = tracks[0].getSettings();
-          this.setSelectedCamera(settings.deviceId);
+          const settings = tracks[0].getSettings()
+          this.setSelectedCamera(settings.deviceId)
         }
       } catch (error) {
-        console.error('Error getting camera devices:', error);
-        cameras = [];
+        console.error('Error getting camera devices:', error)
+        cameras = []
       }
-      this.setCameras(cameras);
+      this.setCameras(cameras)
     },
-    initConfig() {
-      const scannerWidth = this.$refs.scanner.clientWidth;
-      if (scannerWidth < this.config.qrbox.width) {
-        const width = Math.floor(scannerWidth * 2 / 3);
-        const height = Math.floor(width * 3 / 8);
-        this.config.qrbox = { width, height };
+    initConfig(): void {
+      const scannerDiv = this.$refs.scanner as HTMLDivElement
+      const qrBox = config.qrbox as QrDimensions
+
+      const scannerWidth = scannerDiv.clientWidth
+      if (scannerWidth < qrBox.width) {
+        const width = Math.floor(scannerWidth * 2 / 3)
+        const height = Math.floor(width * 3 / 8)
+        config.qrbox = { width, height }
       }
     },
-    async changeCamera(cameraId) {
+    async changeCamera(cameraId: string): Promise<void> {
       try {
-        await this.restartCamera(cameraId);
-        this.setSelectedCamera(cameraId);
+        await this.restartCamera(cameraId)
+        this.setSelectedCamera(cameraId)
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     },
-    async restartCamera(cameraIdOrConfig) {
-      await this.stopScanner();
-      await this.scanner.start(cameraIdOrConfig, this.config, this.onScanSuccess);
+    async restartCamera(cameraIdOrConfig: string): Promise<void> {
+      await this.stopScanner()
+      if (scanner) {
+        await scanner.start(cameraIdOrConfig, config, this.onScanSuccess, undefined)
+      }
     },
-    async cancel() {
-      await this.stopScanner();
-      this.$emit('onScanCancel');
+    async cancel(): Promise<void> {
+      await this.stopScanner()
+      this.$emit('onScanCancel')
     },
-    async onScanSuccess(decodedText, _decodedResult) {
-      await this.stopScanner();
-      this.$emit('onScanSuccess', decodedText);
+    async onScanSuccess(decodedText: string, _decodedResult: Html5QrcodeResult): Promise<void> {
+      await this.stopScanner()
+      this.$emit('onScanSuccess', decodedText)
     },
-    async stopScanner() {
-      if (this.scanner && this.scanner.getState() !== Html5QrcodeScannerState.NOT_STARTED) {
-        await this.scanner.stop();
+    async stopScanner(): Promise<void> {
+      if (scanner && scanner.getState() !== Html5QrcodeScannerState.NOT_STARTED) {
+        await scanner.stop()
       }
     }
   }
-}
+})
 </script>
 
 <template>

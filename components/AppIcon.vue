@@ -1,10 +1,14 @@
-<script>
-export default {
+<script lang="ts">
+import Vue, { PropType } from 'vue'
+
+type ReturnType = string | undefined
+
+export default Vue.extend({
   name: 'AppIcon',
 
   props: {
     icon: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true
     },
     size: {
@@ -15,28 +19,32 @@ export default {
   },
 
   computed: {
-    iconPack() {
-      return (this.icon === undefined) ? undefined : this.icon[0];
+    iconIsArray(): boolean {
+      return (Array.isArray(this.icon))
     },
-    iconName() {
-      return (this.icon === undefined) ? undefined : this.icon[1];
+    iconPack(): ReturnType {
+      return (this.iconIsArray && this.icon.length >= 1)
+        ? this.icon[0]
+        : undefined
     },
-    iconId() {
-      if (this.iconPack === undefined || this.iconName === undefined) {
-        return undefined;
+    iconName(): ReturnType {
+      return (this.iconIsArray && this.icon.length >= 2)
+        ? this.icon[1]
+        : undefined
+    },
+    iconId(): ReturnType {
+      if (this.iconPack !== 'bitesize' || this.iconName === undefined) {
+        return undefined
       }
-      if (this.iconPack !== 'bitesize') {
-        return undefined;
-      }
-      return this.getIconId(this.iconName);
+      return this.getIconId(this.iconName)
     },
-    isKnownIcon() {
-      return this.iconId !== undefined;
+    isKnownIcon(): boolean {
+      return this.iconId !== undefined
     }
   },
 
   methods: {
-    getIconId(iconName) {
+    getIconId(iconName: string): ReturnType {
       const knownIcons = [
         'i-alert',
         'i-arrow-bottom',
@@ -54,16 +62,16 @@ export default {
         'i-info',
         'i-minus',
         'i-plus',
-        'i-trash',
-      ];
+        'i-trash'
+      ]
 
       if (knownIcons.includes(iconName)) {
-        return iconName;
+        return iconName
       }
-      return undefined;
+      return undefined
     }
   }
-}
+})
 </script>
 
 <template>

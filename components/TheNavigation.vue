@@ -1,28 +1,31 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import TheLogo from './TheLogo'
+import TheLogo from '~/components/TheLogo.vue'
 
-export default {
+type NavbarType = 'is-light' | 'is-warning'
+
+export default Vue.extend({
   components: {
     TheLogo
   },
   computed: {
     ...mapState(['categories']),
-    type() {
-      if ($nuxt.isOnline) {
-        return 'is-light';
+    type(): NavbarType {
+      if (this.$nuxt.isOnline) {
+        return 'is-light'
       } else {
-        return 'is-warning';
+        return 'is-warning'
       }
     }
   },
   methods: {
-    getIsActive(path) {
-      return (path === this.$route.path);
+    getIsActive(path: string): boolean {
+      return (path === this.$route.path)
     }
   }
-}
+})
 </script>
 
 <template>

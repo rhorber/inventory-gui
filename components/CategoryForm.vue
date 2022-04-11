@@ -1,26 +1,30 @@
-<script>
-export default {
+<script lang="ts">
+import Vue, { PropType } from 'vue'
+
+import { Category } from '~/types/entities'
+
+export default Vue.extend({
   props: {
     category: {
-      type: Object,
+      type: Object as PropType<Category>,
       required: true
     }
   },
-  data() {
+  data: function () {
     return {
       dataCategory: this.category
     }
   },
   methods: {
-    back() {
-      this.$router.go(-1);
+    back(): void {
+      this.$router.go(-1)
     },
-    submit(event) {
-      event.preventDefault();
-      this.$emit('formSubmitted', this.dataCategory);
+    submit(event: MouseEvent): void {
+      event.preventDefault()
+      this.$emit('formSubmitted', this.dataCategory)
     }
   }
-}
+})
 </script>
 
 <template>
