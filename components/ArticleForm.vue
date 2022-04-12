@@ -461,16 +461,16 @@ export default Vue.extend({
         group-multiline
       >
         <div
-          v-for="gtin in dataArticle.gtins"
-          :key="gtin"
+          v-for="g in dataArticle.gtins"
+          :key="g"
           class="control"
         >
           <b-tag
             attached
             closable
-            @close="removeGtin(gtin)"
+            @close="removeGtin(g)"
           >
-            {{ gtin }}
+            {{ g }}
           </b-tag>
         </div>
       </b-field>
