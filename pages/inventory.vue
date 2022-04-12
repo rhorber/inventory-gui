@@ -1,37 +1,40 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapActions, mapState } from 'vuex'
 
-export default {
-  data() {
+import { EmptyResponse } from '~/types/api'
+
+export default Vue.extend({
+  data: function () {
     return {
-      isLoading: false,
-    };
+      isLoading: false
+    }
   },
   computed: {
     ...mapState(['isInventoryActive'])
   },
   methods: {
     ...mapActions(['saveIsInventoryActive']),
-    startInventory() {
-      this.isLoading = true;
-      this.$axios.$post('/v3/inventories')
-        .then((_result) => {
-          this.isLoading = false;
-          this.saveIsInventoryActive(true);
+    startInventory(): void {
+      this.isLoading = true
+      this.$axios.$post<EmptyResponse>('/v3/inventories')
+        .then((_result: EmptyResponse): void => {
+          this.isLoading = false
+          this.saveIsInventoryActive(true)
         })
-        .catch(console.error);
+        .catch(console.error)
     },
-    stopInventory() {
-      this.isLoading = true;
-      this.$axios.$delete('/v3/inventories')
-        .then((_result) => {
-          this.isLoading = false;
-          this.saveIsInventoryActive(false);
+    stopInventory(): void {
+      this.isLoading = true
+      this.$axios.$delete<EmptyResponse>('/v3/inventories')
+        .then((_result: EmptyResponse): void => {
+          this.isLoading = false
+          this.saveIsInventoryActive(false)
         })
-        .catch(console.error);
-    },
+        .catch(console.error)
+    }
   }
-}
+})
 </script>
 
 <template>

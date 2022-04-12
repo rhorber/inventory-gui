@@ -1,69 +1,72 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapActions, mapMutations } from 'vuex'
 
-import AppLayoutForm from '~/components/AppLayoutForm'
-import ArticleForm from '~/components/ArticleForm'
+import AppLayoutForm from '~/components/AppLayoutForm.vue'
+import ArticleForm from '~/components/ArticleForm.vue'
+import { Article } from '~/types/entities'
+import { EmptyResponse } from '~/types/api'
 
-export default {
+export default Vue.extend({
   components: {
     ArticleForm,
-    AppLayoutForm,
+    AppLayoutForm
   },
 
-  data() {
-    let emptyArticle = {
+  data: function () {
+    const emptyArticle = {
       category: 0,
       name: '',
       size: '',
       unit: '',
-      gtin: '',
-      lots: []
-    };
+      lots: [],
+      gtins: []
+    }
 
     if (Object.prototype.hasOwnProperty.call(this.$route.query, 'category')) {
-      emptyArticle.category = this.$route.query.category;
+      const category = this.$route.query.category
+      if (typeof category === 'string') {
+        emptyArticle.category = Number.parseInt(category, 10)
+      }
     }
 
     return {
       emptyArticle
-    };
-  },
-
-  mounted() {
+    }
   },
 
   methods: {
-    ...mapMutations({resetArticles: 'resetArticles', addToStore: 'addArticle'}),
+    ...mapMutations({ resetArticles: 'resetArticles', addToStore: 'addArticle' }),
     ...mapActions(['addToSyncQueue']),
-    addArticle(data) {
+    addArticle(data: Article): void {
       // TODO: Can that be combined with the saveArticle method in the edit page?
-      const article = {
+      const article: Article = {
         category: data.category,
         name: data.name,
         size: data.size,
         unit: data.unit,
         lots: data.lots,
-        gtins: data.gtins,
-      };
+        gtins: data.gtins
+      }
 
-      const url = '/v3/articles';
-      const path = `/category/${data.category}/#bottom`;
+      const url = '/v3/articles'
+      const path = `/category/${data.category}/#bottom`
 
-      if ($nuxt.isOnline) {
-        this.$axios.$post(url, article)
-          .then(() => {
-            this.resetArticles();
-            this.$router.push({path: path});
+      if (this.$nuxt.isOnline) {
+        this.$axios.$post<EmptyResponse>(url, article)
+          .then((): void => {
+            this.resetArticles()
+            this.$router.push({ path })
           })
-          .catch(console.error);
+          .catch(console.error)
       } else {
-        this.addToSyncQueue({method: 'post', url: url, payload: article});
-        this.addToStore(article);
-        this.$router.push({path: path});
+        this.addToSyncQueue({ method: 'post', url: url, payload: article })
+        this.addToStore(article)
+        this.$router.push({ path })
       }
     }
   }
-}
+})
 </script>
 
 <template>

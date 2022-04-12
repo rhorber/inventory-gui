@@ -1,76 +1,84 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapActions, mapMutations } from 'vuex'
+import { Context } from '@nuxt/types'
 
-import AppLayoutForm from '~/components/AppLayoutForm'
-import ArticleForm from '~/components/ArticleForm'
+import AppLayoutForm from '~/components/AppLayoutForm.vue'
+import ArticleForm from '~/components/ArticleForm.vue'
+import { Article } from '~/types/entities'
+import { EmptyResponse } from '~/types/api'
 
-export default {
+type AsyncData = {
+  article: Article
+}
+
+export default Vue.extend({
   components: {
     ArticleForm,
-    AppLayoutForm,
+    AppLayoutForm
   },
 
-  validate({params}) {
-    return /^\d+$/.test(params.id);
+  validate: function ({ params }: Context): boolean {
+    return /^\d+$/.test(params.id)
   },
 
-  asyncData({app, store, params}) {
-    const articleId = parseInt(params.id, 10);
+  asyncData: function ({ app, store, params }: Context): AsyncData | Promise<AsyncData> {
+    const articleId = parseInt(params.id, 10)
 
     if ($nuxt.isOnline) {
-      return app.$axios.$get(`/v3/articles/${articleId}`)
-        .then((result) => {
-          return {article: result}
-        });
+      return app.$axios.$get<Article>(`/v3/articles/${articleId}`)
+        .then((result: Article): AsyncData => {
+          return { article: result }
+        })
     } else {
-      let articles = store.state.articles.filter((article) => {
-        return (article.id === articleId);
-      });
-      let article = Object.assign({}, articles[0]);
-      return {article: article};
+      const articles = store.state.articles.filter((article: Article): boolean => {
+        return (article.id === articleId)
+      })
+      const article = Object.assign({}, articles[0])
+      return { article }
     }
   },
 
-  data() {
+  data: function () {
     return {
       articleId: this.$route.params.id
-    };
+    }
   },
 
   methods: {
     ...mapMutations(['resetArticles', 'replaceArticle']),
     ...mapActions(['addToSyncQueue']),
-    saveArticle(data) {
+    saveArticle(data: Article): void {
       // TODO: Can that be combined with the addArticle method in the add page?
-      const article = {
+      const article: Article = {
         category: data.category,
         name: data.name,
         size: data.size,
         unit: data.unit,
         lots: data.lots,
-        gtins: data.gtins,
-      };
+        gtins: data.gtins
+      }
 
-      const url = `/v3/articles/${this.articleId}`;
-      const path = `/category/${data.category}/#article-${this.articleId}`;
+      const url = `/v3/articles/${this.articleId}`
+      const path = `/category/${data.category}/#article-${this.articleId}`
 
-      if ($nuxt.isOnline) {
-        this.$axios.$put(url, article)
-          .then(() => {
-            this.resetArticles();
-            this.$router.push({path: path});
+      if (this.$nuxt.isOnline) {
+        this.$axios.$put<EmptyResponse>(url, article)
+          .then((): void => {
+            this.resetArticles()
+            this.$router.push({ path })
           })
-          .catch(console.error);
+          .catch(console.error)
       } else {
-        this.addToSyncQueue({method: 'put', url: url, payload: article});
-        article.id = this.articleId;
-        article.position = this.article.position;
-        this.replaceArticle(article);
-        this.$router.push({path: path});
+        this.addToSyncQueue({ method: 'put', url: url, payload: article })
+        article.id = data.id
+        article.position = data.position
+        this.replaceArticle(article)
+        this.$router.push({ path })
       }
     }
   }
-}
+})
 </script>
 
 <template>

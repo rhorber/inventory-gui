@@ -1,46 +1,50 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapMutations, mapState } from 'vuex'
 
-import AppLayoutList from '~/components/AppLayoutList'
+import AppLayoutList from '~/components/AppLayoutList.vue'
+import { Category } from '~/types/entities'
+import { CategoryMoveResponse } from '~/types/api'
+import { BTableColumn, HtmlAttrs } from '~/types/buefy'
 
-export default {
+export default Vue.extend({
   components: {
-    AppLayoutList,
+    AppLayoutList
   },
 
   computed: {
     ...mapState(['categories']),
-    highestCategoryIndex() {
-      return (this.categories.length - 1);
+    highestCategoryIndex(): number {
+      return (this.categories.length - 1)
     }
   },
 
   methods: {
     ...mapMutations(['replaceCategory']),
-    vCenteredAttrs(_row, _column) {
+    vCenteredAttrs(_row: Category, _column: BTableColumn): HtmlAttrs {
       return {
-        class: 'is-vcentered',
-      };
+        class: 'is-vcentered'
+      }
     },
-    moveDown(category) {
-      this.$axios.$put(`/v3/categories/${category.id}/move-down`)
-        .then((result) => {
-          this.replaceCategories(result.categories);
+    moveDown(category: Category): void {
+      this.$axios.$put<CategoryMoveResponse>(`/v3/categories/${category.id}/move-down`)
+        .then((result: CategoryMoveResponse): void => {
+          this.replaceCategories(result.categories)
         })
-        .catch(console.error);
+        .catch(console.error)
     },
-    moveUp(category) {
-      this.$axios.$put(`/v3/categories/${category.id}/move-up`)
-        .then((result) => {
-          this.replaceCategories(result.categories);
+    moveUp(category: Category): void {
+      this.$axios.$put<CategoryMoveResponse>(`/v3/categories/${category.id}/move-up`)
+        .then((result: CategoryMoveResponse): void => {
+          this.replaceCategories(result.categories)
         })
-        .catch(console.error);
+        .catch(console.error)
     },
-    replaceCategories(categories) {
-      categories.forEach(this.replaceCategory);
+    replaceCategories(categories: Category[]): void {
+      categories.forEach(this.replaceCategory)
     }
   }
-}
+})
 </script>
 
 <template>

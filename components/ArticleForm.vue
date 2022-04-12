@@ -3,12 +3,8 @@ import Vue, { PropType } from 'vue'
 import { mapState } from 'vuex'
 
 import GtinScanner from '~/components/GtinScanner.vue'
-import { Article, Lot } from '~/types/entities'
+import { Article, ArticleProperty, Lot } from '~/types/entities'
 import { BTableColumn, HtmlAttrs } from '~/types/buefy'
-
-type ArticleProperty = Omit<Article, 'size'> & {
-  size: number | string
-}
 
 type BestBeforeObject = {
   text: string

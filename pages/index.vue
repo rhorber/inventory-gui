@@ -1,58 +1,60 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
 
-import ArticlesPage from '~/components/ArticlesPage'
+import ArticlesPage from '~/components/ArticlesPage.vue'
+import { Article, Lot } from '~/types/entities'
 
-export default {
+export default Vue.extend({
   components: {
     ArticlesPage
   },
 
-  data() {
+  data: function () {
     return {
       hideStockZero: false
-    };
+    }
   },
 
   computed: {
     ...mapState(['articles']),
     ...mapGetters(['categoriesMap']),
-    filteredArticles() {
+    filteredArticles(): Article[] {
       if (this.hideStockZero === false) {
-        return this.articles;
+        return this.articles
       }
 
       return this.articles.filter(
-        (article) => {
-          if (article.hasOwnProperty('lots') === false) {
-            return false;
+        (article: Article): boolean => {
+          if (Object.prototype.hasOwnProperty.call(article, 'lots') === false) {
+            return false
           }
 
-          let stock = article.lots.reduce(
-            (value, lot) => (parseInt(lot.stock, 10) + value),
+          const stock = article.lots.reduce(
+            (value: number, lot: Lot): number => (lot.stock + value),
             0
-          );
+          )
 
-          return stock > 0;
+          return stock > 0
         }
-      );
+      )
     },
-    sortedArticles() {
+    sortedArticles(): Article[] {
       return [...this.filteredArticles].sort(
-        (article1, article2) => {
+        (article1: Article, article2: Article): number => {
           if (article1.category === article2.category) {
-            return (article1.position - article2.position)
+            return ((article1.position || 0) - (article2.position || 0))
           } else {
-            let category1 = this.categoriesMap[article1.category];
-            let category2 = this.categoriesMap[article2.category];
+            const category1 = this.categoriesMap[article1.category]
+            const category2 = this.categoriesMap[article2.category]
 
-            return (category1.position - category2.position);
+            return (category1.position - category2.position)
           }
         }
-      );
+      )
     }
   }
-}
+})
 </script>
 
 <template>

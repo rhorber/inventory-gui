@@ -1,20 +1,33 @@
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import { mapActions, mapMutations } from 'vuex'
 
-import AppLayoutForm from '~/components/AppLayoutForm'
-import ArticleForm from '~/components/ArticleForm'
-import GtinScanner from '~/components/GtinScanner'
+import AppLayoutForm from '~/components/AppLayoutForm.vue'
+import ArticleForm from '~/components/ArticleForm.vue'
+import GtinScanner from '~/components/GtinScanner.vue'
+import { Article, ArticleProperty } from '~/types/entities'
+import { EmptyResponse, GtinQueryResponse } from '~/types/api'
 
-export default {
+type Data = {
+  pageTitle: string
+  gtin: string
+  scanner: boolean
+  loading: boolean
+  notFound: boolean
+  error: string
+  article: ArticleProperty | undefined
+}
+
+export default Vue.extend({
   name: 'Gtin',
 
   components: {
     ArticleForm,
     AppLayoutForm,
-    GtinScanner,
+    GtinScanner
   },
 
-  data() {
+  data: function (): Data {
     return {
       pageTitle: 'GTIN eingeben',
       gtin: '',
@@ -22,98 +35,101 @@ export default {
       loading: false,
       notFound: false,
       error: '',
-      article: undefined,
-    };
+      article: undefined
+    }
   },
 
   methods: {
-    ...mapMutations({resetArticles: 'resetArticles', addToStore: 'addArticle'}),
+    ...mapMutations({ resetArticles: 'resetArticles', addToStore: 'addArticle' }),
     ...mapActions(['addToSyncQueue']),
-    openScanner() {
-      this.scanner = true;
+    openScanner(): void {
+      this.scanner = true
     },
-    onScanCancel() {
-      this.scanner = false;
+    onScanCancel(): void {
+      this.scanner = false
     },
-    onScanSuccess(decodedText, _decodedResult) {
-      this.scanner = false;
-      this.gtin = decodedText;
+    onScanSuccess(decodedText: string): void {
+      this.scanner = false
+      this.gtin = decodedText
     },
-    back() {
-      this.$router.go(-1);
+    back(): void {
+      this.$router.go(-1)
     },
-    send(event) {
-      event.preventDefault();
+    send(event: MouseEvent): void {
+      event.preventDefault()
 
-      this.loading = true;
-      this.notFound = false;
-      this.error = "";
-      this.gtin = this.gtin.trim();
+      this.loading = true
+      this.notFound = false
+      this.error = ''
+      this.gtin = this.gtin.trim()
 
-      this.$axios.get('/v3/gtin/' + this.gtin)
-        .then((response) => {
-          this.handleResponse(response.data);
-          this.loading = false;
+      this.$axios.$get<GtinQueryResponse>('/v3/gtin/' + this.gtin)
+        .then((response: GtinQueryResponse): void => {
+          this.handleResponse(response)
+          this.loading = false
         })
-        .catch((error) => {
-          console.error(error);
-          this.error = error;
-          this.loading = false;
-        });
+        .catch((error): void => {
+          console.error(error)
+          this.error = error
+          this.loading = false
+        })
     },
-    handleResponse(response) {
+    handleResponse(response: GtinQueryResponse): void {
       switch (response.type) {
-        case "existing":
-          this.$router.push(`/article/edit/${response.articleId}`);
-          return;
+        case 'existing':
+          this.$router.push(`/article/edit/${response.articleId}`)
+          return
 
-        case "found":
-          this.pageTitle = 'GTIN eingeben: Artikel erstellen';
+        case 'found':
+          this.pageTitle = 'GTIN eingeben: Artikel erstellen'
           this.article = {
+            category: -1,
             name: response.name,
             size: response.quantity,
-            gtins: [this.gtin],
-          };
-          return;
+            unit: '',
+            lots: [],
+            gtins: [this.gtin]
+          } as ArticleProperty
+          return
 
-        case "notFound":
-          this.notFound = true;
-          return;
+        case 'notFound':
+          this.notFound = true
+          return
 
-        case "error":
-          this.error = response.error;
-          return;
+        case 'error':
+          this.error = response.error
+          return
       }
     },
-    addArticle(data) {
+    addArticle(data: Article): void {
       // TODO: Can that be combined with the saveArticle method in the edit page?
-      const article = {
+      const article: Article = {
         category: data.category,
         name: data.name,
         size: data.size,
         unit: data.unit,
-        gtin: data.gtin,
-        lots: data.lots
-      };
+        lots: data.lots,
+        gtins: data.gtins
+      }
 
-      const url = '/v3/articles';
-      const path = `/category/${data.category}`;
+      const url = '/v3/articles'
+      const path = `/category/${data.category}/#bottom`
 
-      if ($nuxt.isOnline) {
-        this.$axios.$post(url, article)
-          .then(() => {
-            this.resetArticles();
-            this.$router.push({path: path});
+      if (this.$nuxt.isOnline) {
+        this.$axios.$post<EmptyResponse>(url, article)
+          .then((): void => {
+            this.resetArticles()
+            this.$router.push({ path })
           })
-          .catch(console.error);
+          .catch(console.error)
       } else {
-        this.addToSyncQueue({method: 'post', url: url, payload: article});
-        this.addToStore(article);
-        this.$router.push({path: path});
+        this.addToSyncQueue({ method: 'post', url: url, payload: article })
+        this.addToStore(article)
+        this.$router.push({ path })
       }
     }
   }
-}
+})
 </script>
 
 <template>

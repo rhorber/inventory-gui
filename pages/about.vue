@@ -1,12 +1,14 @@
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
   data() {
     return {
       accessToken: this.$store.state.accessToken,
       isSyncPending: this.$store.state.isSyncPending
-    };
+    }
   }
-};
+})
 </script>
 
 <template>

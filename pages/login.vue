@@ -1,20 +1,22 @@
-<script>
-export default {
-  layout: "login",
-  data() {
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  layout: 'login',
+  data: function () {
     return {
       accessToken: ''
-    };
+    }
   },
   methods: {
-    login() {
+    login(): void {
       this.$store.dispatch('saveAccessToken', this.accessToken)
-        .then(() => {
-          this.$router.push('/');
-        });
+        .then((): void => {
+          this.$router.push('/')
+        })
     }
   }
-};
+})
 </script>
 
 <template>
