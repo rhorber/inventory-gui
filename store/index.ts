@@ -4,6 +4,20 @@ import { Article, Category, Lot } from '~/types/entities'
 import { CategoryMap, RootState, SyncItemParameter, SyncItemStorage } from '~/types/store'
 import { ArticlesResponse, CategoriesResponse, InventoriesResponse } from '~/types/api'
 
+const sortCategories = (category1: Category, category2: Category): number => {
+  // Put categories without a position at the top.
+  if (category1.position === undefined && category2.position === undefined) {
+    return 0
+  }
+  if (category1.position === undefined) {
+    return -1
+  }
+  if (category2.position === undefined) {
+    return 1
+  }
+  return (category1.position - category2.position)
+}
+
 // Initial state
 const state = function (): RootState {
   return {
@@ -22,7 +36,9 @@ const getters: GetterTree<RootState, RootState> = {
   categoriesMap(state: RootState): CategoryMap {
     const map: CategoryMap = {}
     state.categories?.forEach((category: Category): void => {
-      map[category.id] = category
+      if (category.id !== undefined) {
+        map[category.id] = category
+      }
     })
     return map
   }
@@ -65,9 +81,7 @@ const mutations: MutationTree<RootState> = {
     }
   },
   setCategories(state: RootState, categories: Category[]): void {
-    state.categories = categories.sort(
-      (category1: Category, category2: Category): number => (category1.position - category2.position)
-    )
+    state.categories = categories.sort(sortCategories)
   },
   replaceCategory(state: RootState, category: Category): void {
     if (state.categories === null) {
@@ -77,9 +91,7 @@ const mutations: MutationTree<RootState> = {
       ...state.categories.filter((c: Category): boolean => c.id !== category.id),
       category
     ]
-    state.categories.sort(
-      (category1: Category, category2: Category): number => (category1.position - category2.position)
-    )
+    state.categories.sort(sortCategories)
   },
   resetCategories(state: RootState): void {
     state.categories = null
