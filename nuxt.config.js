@@ -1,10 +1,10 @@
 import pkg from './package.json'
 
-const isProduction = (process.env.NODE_ENV === 'production');
+const isProduction = (process.env.NODE_ENV === 'production')
 
 if (isProduction === false) {
   import('dotenv')
-    .then(dotenv => dotenv.config());
+    .then(dotenv => dotenv.config())
 }
 
 export default {
@@ -87,4 +87,4 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
-};
+}
