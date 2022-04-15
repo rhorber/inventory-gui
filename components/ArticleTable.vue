@@ -29,6 +29,16 @@ export default Vue.extend({
         class: 'is-hidden'
       }
     },
+    getLotRowClass(articleIndex: number, lotIndex: number): string {
+      if (articleIndex % 2 === 0) {
+        return ''
+      }
+      if (lotIndex % 2 === 0) {
+        return 'lot-is-striped-even'
+      } else {
+        return 'lot-is-striped-odd'
+      }
+    },
     bestBeforeColumnAttrs(_row: Lot, _column: BTableColumn): HtmlAttrs {
       return {
         class: ['is-hidden-touch', 'is-vcentered', 'has-text-right'],
@@ -106,7 +116,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div>
+  <div class="article-table">
     <b-table
       :data="articles"
       striped
@@ -146,7 +156,7 @@ export default Vue.extend({
       </b-table-column>
 
       <b-table-column
-        v-slot="{ row: articleRow}"
+        v-slot="{ row: articleRow, index }"
         field="lots"
         label="Charge(n)"
       >
@@ -154,9 +164,9 @@ export default Vue.extend({
           v-if="hasLots(articleRow)"
           :data="articleRow.lots"
           :default-sort="['position', 'asc']"
-          striped
           hoverable
           narrowed
+          :row-class="(_row, lotIndex) => getLotRowClass(index, lotIndex)"
         >
           <b-table-column
             v-slot="{ row: lotRow }"
@@ -246,21 +256,37 @@ export default Vue.extend({
   </div>
 </template>
 
-<style scoped>
-.amount {
+<style>
+.article-table .amount {
   display: inline-block;
   min-width: 2.5rem;
   text-align: center;
 }
 
-p.tag.custom-height {
+.article-table p.tag.custom-height {
   height: 1.5rem;
 }
 
-span.article-anchor {
+.article-table span.article-anchor {
   display: block;
   visibility: hidden;
   margin-top: -5rem;
   padding-top: 5rem;
+}
+
+.article-table .lot-is-striped-even {
+  background-color: #fafafa !important;
+}
+
+.article-table .lot-is-striped-even:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.article-table .lot-is-striped-odd {
+  background-color: #ffffff !important;
+}
+
+.article-table .lot-is-striped-odd:hover {
+  background-color: #fafafa !important;
 }
 </style>
