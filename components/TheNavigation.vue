@@ -1,3 +1,33 @@
+<script lang="ts">
+import Vue from 'vue'
+import { mapState } from 'vuex'
+
+import TheLogo from '~/components/TheLogo.vue'
+
+type NavbarType = 'is-light' | 'is-warning'
+
+export default Vue.extend({
+  components: {
+    TheLogo
+  },
+  computed: {
+    ...mapState(['categories']),
+    type(): NavbarType {
+      if (this.$nuxt.isOnline) {
+        return 'is-light'
+      } else {
+        return 'is-warning'
+      }
+    }
+  },
+  methods: {
+    getIsActive(path: string): boolean {
+      return (path === this.$route.path)
+    }
+  }
+})
+</script>
+
 <template>
   <b-navbar
     :type="type"
@@ -8,7 +38,7 @@
         tag="nuxt-link"
         to="/"
       >
-        <Logo />
+        <TheLogo />
       </b-navbar-item>
     </template>
 
@@ -81,30 +111,3 @@
     </template>
   </b-navbar>
 </template>
-
-<script>
-import { mapState } from 'vuex'
-
-import Logo from './Logo'
-
-export default {
-  components: {
-    Logo
-  },
-  computed: {
-    ...mapState(['categories']),
-    type() {
-      if ($nuxt.isOnline) {
-        return 'is-light';
-      } else {
-        return 'is-warning';
-      }
-    }
-  },
-  methods: {
-    getIsActive(path) {
-      return (path === this.$route.path);
-    }
-  }
-}
-</script>

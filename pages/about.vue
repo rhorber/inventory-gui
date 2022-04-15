@@ -1,3 +1,16 @@
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  data() {
+    return {
+      accessToken: this.$store.state.accessToken,
+      isSyncPending: this.$store.state.isSyncPending
+    }
+  }
+})
+</script>
+
 <template>
   <div>
     <img
@@ -18,17 +31,6 @@
     </p>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      accessToken: this.$store.state.accessToken,
-      isSyncPending: this.$store.state.isSyncPending
-    };
-  }
-};
-</script>
 
 <style scoped>
 .title {

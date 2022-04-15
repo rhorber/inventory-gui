@@ -1,3 +1,110 @@
+<script lang="ts">
+import Vue, { PropType } from 'vue'
+import { mapActions, mapMutations, mapState } from 'vuex'
+
+import { Article, Lot } from '~/types/entities'
+import { ArticlesMoveResponse } from '~/types/api'
+import { BTableColumn, HtmlAttrs } from '~/types/buefy'
+
+export default Vue.extend({
+  props: {
+    articles: {
+      type: Array as PropType<Article[]>,
+      required: true
+    }
+  },
+
+  computed: {
+    ...mapState(['isInventoryActive']),
+    highestArticleIndex(): number {
+      return (this.articles.length - 1)
+    }
+  },
+
+  methods: {
+    ...mapMutations(['replaceArticle', 'replaceLot']),
+    ...mapActions(['addToSyncQueue']),
+    hiddenAttrs(_column: BTableColumn): HtmlAttrs {
+      return {
+        class: 'is-hidden'
+      }
+    },
+    bestBeforeColumnAttrs(_row: Lot, _column: BTableColumn): HtmlAttrs {
+      return {
+        class: ['is-hidden-touch', 'is-vcentered', 'has-text-right'],
+        style: { 'white-space': 'nowrap' }
+      }
+    },
+    stockColumnAttrs(_row: Lot, _column: BTableColumn): HtmlAttrs {
+      return {
+        style: { width: '150px' }
+      }
+    },
+    getNameClasses(row: Article): string[] {
+      let classes: string[] = []
+
+      if (this.isInventoryActive) {
+        const statusClass = (row.inventoried === 1) ? 'is-success' : 'is-danger'
+
+        classes = ['tag', statusClass, 'is-medium', 'custom-height', 'px-2']
+      }
+
+      return classes
+    },
+    hasLots(article: Article): boolean {
+      return (Object.prototype.hasOwnProperty.call(article, 'lots')
+        && article.lots.length > 0
+      )
+    },
+    hasBestBefore(article: Article): boolean {
+      return (this.hasLots(article)
+        && article.lots[0].best_before !== ''
+      )
+    },
+    decreaseStock(lot: Lot): void {
+      this.$axios.$put<Lot>(`/v3/lots/${lot.id}/decrement`)
+        .then(this.replaceLot)
+        .catch(console.error)
+    },
+    increaseStock(lot: Lot): void {
+      this.$axios.$put<Lot>(`/v3/lots/${lot.id}/increment`)
+        .then(this.replaceLot)
+        .catch(console.error)
+    },
+    moveDown(article: Article): void {
+      this.$axios.$put<ArticlesMoveResponse>(`/v3/articles/${article.id}/move-down`)
+        .then((result: ArticlesMoveResponse): void => {
+          this.replaceArticles(result.articles)
+        })
+        .catch(console.error)
+    },
+    moveUp(article: Article): void {
+      this.$axios.$put<ArticlesMoveResponse>(`/v3/articles/${article.id}/move-up`)
+        .then((result: ArticlesMoveResponse): void => {
+          this.replaceArticles(result.articles)
+        })
+        .catch(console.error)
+    },
+    resetArticle(article: Article): void {
+      const url = `/v3/articles/${article.id}/reset`
+      if (this.$nuxt.isOnline) {
+        this.$axios.$put<Article>(url)
+          .then(this.replaceArticle)
+          .catch(console.error)
+      } else {
+        this.addToSyncQueue({ method: 'put', url: url, payload: {} })
+        const newArticle = Object.assign({}, article)
+        newArticle.lots = []
+        this.replaceArticle(newArticle)
+      }
+    },
+    replaceArticles(articles: Article[]): void {
+      articles.forEach(this.replaceArticle)
+    }
+  }
+})
+</script>
+
 <template>
   <div>
     <b-table
@@ -135,111 +242,9 @@
       id="bottom"
       class="article-anchor"
       style="visibility: hidden;"
-    ></span>
+    />
   </div>
 </template>
-
-<script>
-import { mapActions, mapMutations, mapState } from 'vuex'
-
-export default {
-  props: {
-    articles: {
-      type: Array,
-      required: true
-    }
-  },
-
-  computed: {
-    ...mapState(['isInventoryActive']),
-    highestArticleIndex() {
-      return (this.articles.length - 1);
-    }
-  },
-
-  methods: {
-    ...mapMutations(['replaceArticle', 'replaceLot']),
-    ...mapActions(['addToSyncQueue']),
-    hiddenAttrs(_row, _column) {
-      return {
-        class: 'is-hidden',
-      };
-    },
-    bestBeforeColumnAttrs(_row, _column) {
-      return {
-        class: ['is-hidden-touch', 'is-vcentered', 'has-text-right'],
-        style: {'white-space': 'nowrap'},
-      };
-    },
-    stockColumnAttrs(_row, _column) {
-      return {
-        style: {'width': '150px'},
-      };
-    },
-    getNameClasses(row) {
-      let classes = [];
-
-      if (this.isInventoryActive) {
-        let statusClass = (parseInt(row.inventoried, 10) === 1) ? 'is-success' : 'is-danger';
-
-        classes = ['tag', statusClass, 'is-medium', 'custom-height', 'px-2'];
-      }
-
-      return classes;
-    },
-    hasLots(article) {
-      return (article.hasOwnProperty('lots')
-        && article.lots.length > 0
-      );
-    },
-    hasBestBefore(article) {
-      return (this.hasLots(article)
-        && article.lots[0].best_before !== ''
-      );
-    },
-    decreaseStock(lot) {
-      this.$axios.$put(`/v3/lots/${lot.id}/decrement`)
-        .then(this.replaceLot)
-        .catch(console.error);
-    },
-    increaseStock(lot) {
-      this.$axios.$put(`/v3/lots/${lot.id}/increment`)
-        .then(this.replaceLot)
-        .catch(console.error);
-    },
-    moveDown(article) {
-      this.$axios.$put(`/v3/articles/${article.id}/move-down`)
-        .then((result) => {
-          this.replaceArticles(result.articles);
-        })
-        .catch(console.error);
-    },
-    moveUp(article) {
-      this.$axios.$put(`/v3/articles/${article.id}/move-up`)
-        .then((result) => {
-          this.replaceArticles(result.articles);
-        })
-        .catch(console.error);
-    },
-    resetArticle(article) {
-      const url = `/v3/articles/${article.id}/reset`;
-      if ($nuxt.isOnline) {
-        this.$axios.$put(url)
-          .then(this.replaceArticle)
-          .catch(console.error);
-      } else {
-        this.addToSyncQueue({method: 'put', url: url, payload: {}});
-        let newArticle = Object.assign({}, article);
-        newArticle.lots = [];
-        this.replaceArticle(newArticle);
-      }
-    },
-    replaceArticles(articles) {
-      articles.forEach(this.replaceArticle);
-    }
-  }
-}
-</script>
 
 <style scoped>
 .amount {

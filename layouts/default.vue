@@ -1,6 +1,54 @@
+<script lang="ts">
+import Vue from 'vue'
+import { mapActions, mapMutations, mapState } from 'vuex'
+import { AxiosPromise } from 'axios'
+
+import TheNavigation from '~/components/TheNavigation.vue'
+import { SyncItemStorage } from '~/types/store'
+import { EmptyResponse } from '~/types/api'
+
+export default Vue.extend({
+  components: {
+    TheNavigation
+  },
+  middleware: 'populateStore',
+  computed: {
+    ...mapState(['isSyncPending', 'isSyncing'])
+  },
+  methods: {
+    ...mapMutations(['setIsSyncing']),
+    ...mapActions(['getSyncQueue', 'resetSyncQueue']),
+    async synchronize(): Promise<void> {
+      this.setIsSyncing(true)
+
+      const queue = await this.getSyncQueue()
+
+      const promises = queue.map((job: SyncItemStorage): AxiosPromise<EmptyResponse> => {
+        const data = Object.assign(job.payload, { timestamp: job.timestamp })
+
+        return this.$axios({
+          url: job.url,
+          method: job.method,
+          data: data
+        })
+      })
+
+      try {
+        await Promise.all(promises)
+        await this.resetSyncQueue()
+      } catch (err) {
+        console.error('synchronization failed', err)
+      }
+
+      this.setIsSyncing(false)
+    }
+  }
+})
+</script>
+
 <template>
   <div>
-    <navigation />
+    <TheNavigation />
     <section class="mx-3">
       <b-message
         v-if="$nuxt.isOffline"
@@ -38,50 +86,6 @@
     </section>
   </div>
 </template>
-
-<script>
-import { mapActions, mapMutations, mapState } from 'vuex'
-
-import Navigation from '../components/Navigation';
-
-export default {
-  components: {
-    Navigation
-  },
-  middleware: 'populateStore',
-  computed: {
-    ...mapState(['isSyncPending', 'isSyncing'])
-  },
-  methods: {
-    ...mapMutations(['setIsSyncing']),
-    ...mapActions(['getSyncQueue', 'resetSyncQueue']),
-    async synchronize() {
-      this.setIsSyncing(true);
-
-      const queue = await this.getSyncQueue();
-
-      const promises = queue.map((job) => {
-        const data = Object.assign(job.payload, {timestamp: job.timestamp});
-
-        return this.$axios({
-          url: job.url,
-          method: job.method,
-          data: data
-        });
-      });
-
-      try {
-        await Promise.all(promises);
-        await this.resetSyncQueue();
-      } catch (err) {
-        console.error('synchronization failed', err);
-      }
-
-      this.setIsSyncing(false);
-    }
-  }
-}
-</script>
 
 <style>
 html {
