@@ -14,7 +14,7 @@ module.exports = {
   // https://github.com/vuejs/eslint-plugin-vue/tree/4.x
   // The TypeScript ESLint Rules are added manually, because extending it leads to parsing errors.
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? ['error', { allow: ['warn', 'error'] }] : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'object-shorthand': ['error', 'consistent-as-needed'],
     'space-before-function-paren': ['error', { anonymous: 'always', named: 'never', asyncArrow: 'always' }],

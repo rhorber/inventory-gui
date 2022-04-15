@@ -20,6 +20,29 @@ type ArticleEditing = Omit<ArticleProperty, 'lots'> & {
   lots: LotEditing[]
 }
 
+function parseDate(dateString: string): BestBeforeObject {
+  const match = dateString.match(/(\d{2})?\.?(\d{2})\.(\d{4})/)
+  const date = new Date()
+  let isMonth = false
+
+  if (match !== null) {
+    date.setFullYear(Number.parseInt(match[3], 10))
+    date.setMonth(Number.parseInt(match[2], 10) - 1)
+
+    if (match[1] === undefined) {
+      isMonth = true
+    } else {
+      date.setDate(Number.parseInt(match[1], 10))
+    }
+  }
+
+  return {
+    text: dateString,
+    date: date,
+    isMonth: isMonth
+  }
+}
+
 export default Vue.extend({
   components: {
     GtinScanner
@@ -40,7 +63,7 @@ export default Vue.extend({
       this.article.lots.forEach((lot: Lot): void => {
         const lotEditing: LotEditing = Object.assign({}, lot, { best_before: undefined })
 
-        lotEditing.best_before = this.parseDate(lot.best_before)
+        lotEditing.best_before = parseDate(lot.best_before)
         article.lots.push(lotEditing)
       })
     }
@@ -86,7 +109,7 @@ export default Vue.extend({
       bestBefore.text = this.formatDate(bestBefore.date, bestBefore.isMonth)
     },
     setBestBeforeDate(bestBefore: BestBeforeObject): void {
-      const parsed = this.parseDate(bestBefore.text)
+      const parsed = parseDate(bestBefore.text)
 
       bestBefore.date = parsed.date
     },
@@ -207,28 +230,6 @@ export default Vue.extend({
       article.size = Number.parseInt(size, 10)
 
       this.$emit('formSubmitted', article)
-    },
-    parseDate(dateString: string): BestBeforeObject {
-      const match = dateString.match(/(\d{2})?\.?(\d{2})\.(\d{4})/)
-      const date = new Date()
-      let isMonth = false
-
-      if (match !== null) {
-        date.setFullYear(Number.parseInt(match[3], 10))
-        date.setMonth(Number.parseInt(match[2], 10) - 1)
-
-        if (match[1] === undefined) {
-          isMonth = true
-        } else {
-          date.setDate(Number.parseInt(match[1], 10))
-        }
-      }
-
-      return {
-        text: dateString,
-        date: date,
-        isMonth: isMonth
-      }
     },
     formatDate(date: Date, isMonth: boolean): string {
       if (typeof date === 'object') {
