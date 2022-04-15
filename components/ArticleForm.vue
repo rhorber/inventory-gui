@@ -45,9 +45,7 @@ export default Vue.extend({
       })
     }
 
-    if (typeof article.size === 'string'
-      && Object.prototype.hasOwnProperty.call(article, 'unit') === false
-    ) {
+    if (typeof article.size === 'string' && article.unit === '') {
       const match = article.size.match(/(\d+) ?(\w+)/)
 
       // TODO: Should be handled on GTIN page.
@@ -154,7 +152,7 @@ export default Vue.extend({
       }
 
       if (/\d{1,14}/.test(this.gtin)) {
-        if (this.dataArticle.gtins.includes(this.gtin) === true) {
+        if (this.dataArticle.gtins.includes(this.gtin) === false) {
           this.dataArticle.gtins.push(this.gtin)
         }
       }
@@ -190,6 +188,10 @@ export default Vue.extend({
       const article: Article = Object.assign({}, this.dataArticle, { lots: [], size: 0 })
       const timestamp = Math.floor(Date.now() / 1000)
       const size = this.dataArticle.size as string
+
+      if (article.category === undefined || article.category === -1) {
+        return
+      }
 
       this.dataArticle.lots.forEach((lotEditing: LotEditing): void => {
         const lot: Lot = Object.assign({}, lotEditing, { best_before: '' })
