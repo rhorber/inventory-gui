@@ -1,5 +1,44 @@
+<script lang="ts">
+import Vue, { PropType } from 'vue'
+
+import AppLayoutList from '~/components/AppLayoutList.vue'
+import ArticleTable from '~/components/ArticleTable.vue'
+import { Article } from '~/types/entities'
+
+export default Vue.extend({
+  name: 'ArticlesPage',
+  components: {
+    ArticleTable,
+    AppLayoutList
+  },
+  props: {
+    pageTitle: {
+      type: String,
+      required: true
+    },
+    articles: {
+      type: Array as PropType<Article[]>,
+      required: true
+    },
+    addArticleButtonLink: {
+      type: String,
+      required: true
+    },
+    value: {
+      type: Boolean,
+      required: true
+    }
+  },
+  methods: {
+    onInput(value: InputEvent): void {
+      this.$emit('input', value)
+    }
+  }
+})
+</script>
+
 <template>
-  <BaseLayoutList
+  <AppLayoutList
     :page-title="pageTitle"
   >
     <template #header>
@@ -26,7 +65,7 @@
     </template>
 
     <template #default>
-      <article-table
+      <ArticleTable
         :articles="articles"
       />
     </template>
@@ -40,45 +79,5 @@
         Artikel erstellen
       </b-button>
     </template>
-  </BaseLayoutList>
+  </AppLayoutList>
 </template>
-
-<script>
-import BaseLayoutList from '~/components/BaseLayoutList'
-import ArticleTable from '~/components/ArticleTable'
-
-export default {
-  name: 'PageArticles',
-  components: {
-    ArticleTable,
-    BaseLayoutList,
-  },
-  props: {
-    pageTitle: {
-      type: String,
-      required: true,
-    },
-    articles: {
-      type: Array,
-      required: true
-    },
-    addArticleButtonLink: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: Boolean,
-      required: true
-    }
-  },
-  methods: {
-    onInput(value) {
-      this.$emit('input', value)
-    }
-  }
-}
-</script>
-
-<style scoped>
-
-</style>

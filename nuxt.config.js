@@ -1,10 +1,10 @@
 import pkg from './package.json'
 
-const isProduction = (process.env.NODE_ENV === 'production');
+const isProduction = (process.env.NODE_ENV === 'production')
 
 if (isProduction === false) {
   import('dotenv')
-    .then(dotenv => dotenv.config());
+    .then(dotenv => dotenv.config())
 }
 
 export default {
@@ -55,6 +55,8 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    // https://go.nuxtjs.dev/typescript
+    '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module'
   ],
@@ -72,7 +74,17 @@ export default {
     debug: !isProduction
   },
 
+  // TypeScript module configuration: https://typescript.nuxtjs.org/guide/setup/#module-options
+  typescript: {
+    // Enable runtime line (https://typescript.nuxtjs.org/guide/lint/#runtime-lint)
+    typeCheck: {
+      eslint: {
+        files: './**/*.{ts,js,vue}'
+      }
+    }
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
-};
+}
