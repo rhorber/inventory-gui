@@ -25,7 +25,7 @@ export default Vue.extend({
   asyncData: function ({ app, store, params }: Context): AsyncData | Promise<AsyncData> {
     const articleId = parseInt(params.id, 10)
 
-    if ($nuxt.isOnline) {
+    if (window.$nuxt.isOnline) {
       return app.$axios.$get<Article>(`/v3/articles/${articleId}`)
         .then((result: Article): AsyncData => {
           return { article: result }
