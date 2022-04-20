@@ -1,11 +1,14 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 import { Html5Qrcode, Html5QrcodeScannerState, Html5QrcodeSupportedFormats } from 'html5-qrcode'
 import { Html5QrcodeResult, QrDimensions } from 'html5-qrcode/es2015/core'
 import { Html5QrcodeCameraScanConfig, Html5QrcodeFullConfig } from 'html5-qrcode/es2015/html5-qrcode'
 
+import { useScannerStore } from '~/stores/scanner'
 import { CameraDevice } from '~/types/store'
+
+type StartScannerParam = string | MediaTrackConstraints
 
 const videoConstraints: MediaTrackConstraints = {
   facingMode: 'environment'
@@ -47,7 +50,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState('scanner', ['cameras', 'selectedCamera'])
+    ...mapState(useScannerStore, ['cameras', 'selectedCamera'])
   },
 
   watch: {
@@ -59,7 +62,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapMutations('scanner', ['setCameras', 'setSelectedCamera']),
+    ...mapActions(useScannerStore, ['setCameras', 'setSelectedCamera']),
     async openScanner(): Promise<void> {
       this.$nuxt.$loading.start()
       if (this.cameras === undefined) {
@@ -96,7 +99,9 @@ export default Vue.extend({
 
         if (tracks.length > 0) {
           const settings = tracks[0].getSettings()
-          this.setSelectedCamera(settings.deviceId)
+          if (settings.deviceId !== undefined) {
+            this.setSelectedCamera(settings.deviceId)
+          }
         }
       } catch (error) {
         console.error('Error getting camera devices:', error)
@@ -123,7 +128,7 @@ export default Vue.extend({
         console.error(error)
       }
     },
-    async restartCamera(cameraIdOrConfig: string): Promise<void> {
+    async restartCamera(cameraIdOrConfig: StartScannerParam): Promise<void> {
       await this.stopScanner()
       if (scanner) {
         await scanner.start(cameraIdOrConfig, config, this.onScanSuccess, undefined)
