@@ -1,7 +1,8 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 
+import { useRootStore } from '~/stores/root'
 import { EmptyResponse } from '~/types/api'
 
 export default Vue.extend({
@@ -11,10 +12,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['isInventoryActive'])
+    ...mapState(useRootStore, ['isInventoryActive'])
   },
   methods: {
-    ...mapActions(['saveIsInventoryActive']),
+    ...mapActions(useRootStore, ['saveIsInventoryActive']),
     startInventory(): void {
       this.isLoading = true
       this.$axios.$post<EmptyResponse>('/v3/inventories')

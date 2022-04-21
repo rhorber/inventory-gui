@@ -1,8 +1,9 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 
 import TheLogo from '~/components/TheLogo.vue'
+import { useRootStore } from '~/stores/root'
 
 type NavbarType = 'is-light' | 'is-warning'
 
@@ -11,7 +12,7 @@ export default Vue.extend({
     TheLogo
   },
   computed: {
-    ...mapState(['categories']),
+    ...mapState(useRootStore, ['categories']),
     type(): NavbarType {
       if (this.$nuxt.isOnline) {
         return 'is-light'

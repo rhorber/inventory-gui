@@ -1,9 +1,10 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 import { AxiosPromise } from 'axios'
 
 import TheNavigation from '~/components/TheNavigation.vue'
+import { useRootStore } from '~/stores/root'
 import { SyncItemStorage } from '~/types/store'
 import { EmptyResponse } from '~/types/api'
 
@@ -13,11 +14,10 @@ export default Vue.extend({
   },
   middleware: 'populateStore',
   computed: {
-    ...mapState(['isSyncPending', 'isSyncing'])
+    ...mapState(useRootStore, ['isSyncPending', 'isSyncing'])
   },
   methods: {
-    ...mapMutations(['setIsSyncing']),
-    ...mapActions(['getSyncQueue', 'resetSyncQueue']),
+    ...mapActions(useRootStore, ['getSyncQueue', 'resetSyncQueue', 'setIsSyncing']),
     async synchronize(): Promise<void> {
       this.setIsSyncing(true)
 

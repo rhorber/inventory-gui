@@ -1,8 +1,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapState } from 'vuex'
+import { mapState } from 'pinia'
 
 import GtinScanner from '~/components/GtinScanner.vue'
+import { useRootStore } from '~/stores/root'
 import { Article, ArticleProperty, Lot } from '~/types/entities'
 import { BTableColumn, HtmlAttrs } from '~/types/buefy'
 
@@ -89,7 +90,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(['categories']),
+    ...mapState(useRootStore, ['categories']),
     articleLots(): LotEditing[] {
       const lots = this.dataArticle.lots.slice(0)
       return lots.sort((lot1: LotEditing, lot2: LotEditing): number => lot1.position - lot2.position)

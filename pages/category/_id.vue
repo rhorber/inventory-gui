@@ -1,9 +1,10 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'pinia'
 import { Context } from '@nuxt/types'
 
 import ArticlesPage from '~/components/ArticlesPage.vue'
+import { useRootStore } from '~/stores/root'
 import { Article, Category, Lot } from '~/types/entities'
 
 export default Vue.extend({
@@ -16,15 +17,16 @@ export default Vue.extend({
   },
 
   data: function () {
+    const categoryId = Number.parseInt(this.$route.params.id, 10)
+
     return {
-      categoryId: this.$route.params.id,
+      categoryId: categoryId,
       hideStockZero: false
     }
   },
 
   computed: {
-    ...mapState(['articles']),
-    ...mapGetters(['categoriesMap']),
+    ...mapState(useRootStore, ['articles', 'categoriesMap']),
     selectedCategory(): Category {
       return this.categoriesMap[this.categoryId]
     },
@@ -32,6 +34,10 @@ export default Vue.extend({
       return 'Kategorie: ' + this.selectedCategory.name
     },
     filteredArticles(): Article[] {
+      if (this.articles === null) {
+        return []
+      }
+
       return this.articles.filter(
         (article: Article): boolean => {
           if (article.category !== this.selectedCategory.id) {
