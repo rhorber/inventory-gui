@@ -1,10 +1,11 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'pinia'
 import { Context } from '@nuxt/types'
 
 import AppLayoutForm from '~/components/AppLayoutForm.vue'
 import CategoryForm from '~/components/CategoryForm.vue'
+import { useRootStore } from '~/stores/root'
 import { Category } from '~/types/entities'
 import { EmptyResponse } from '~/types/api'
 
@@ -32,7 +33,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapMutations(['resetCategories']),
+    ...mapActions(useRootStore, ['resetCategories']),
     saveCategory(data: Category): void {
       // TODO: Can that be combined with the addCategory method in the add page?
       const category: Category = {

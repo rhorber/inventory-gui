@@ -1,10 +1,11 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions } from 'pinia'
 
 import AppLayoutForm from '~/components/AppLayoutForm.vue'
 import ArticleForm from '~/components/ArticleForm.vue'
 import GtinScanner from '~/components/GtinScanner.vue'
+import { useRootStore } from '~/stores/root'
 import { Article, ArticleProperty } from '~/types/entities'
 import { EmptyResponse, GtinQueryResponse } from '~/types/api'
 
@@ -40,8 +41,11 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapMutations({ resetArticles: 'resetArticles', addToStore: 'addArticle' }),
-    ...mapActions(['addToSyncQueue']),
+    ...mapActions(useRootStore, {
+      addToStore: 'addArticle',
+      addToSyncQueue: 'addToSyncQueue',
+      resetArticles: 'resetArticles'
+    }),
     openScanner(): void {
       this.scanner = true
     },

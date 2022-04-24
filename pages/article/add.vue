@@ -1,9 +1,10 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions } from 'pinia'
 
 import AppLayoutForm from '~/components/AppLayoutForm.vue'
 import ArticleForm from '~/components/ArticleForm.vue'
+import { useRootStore } from '~/stores/root'
 import { Article } from '~/types/entities'
 import { EmptyResponse } from '~/types/api'
 
@@ -36,8 +37,11 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapMutations({ resetArticles: 'resetArticles', addToStore: 'addArticle' }),
-    ...mapActions(['addToSyncQueue']),
+    ...mapActions(useRootStore, {
+      addToStore: 'addArticle',
+      addToSyncQueue: 'addToSyncQueue',
+      resetArticles: 'resetArticles'
+    }),
     addArticle(data: Article): void {
       // TODO: Can that be combined with the saveArticle method in the edit page?
       const article: Article = {
