@@ -1,24 +1,27 @@
 import { Context, Middleware } from '@nuxt/types'
 
-const populateStore: Middleware = async function ({ store }: Context): Promise<void> {
+import { useRootStore } from '~/stores/root'
+
+const populateStore: Middleware = async function ({ $pinia }: Context): Promise<void> {
+  const store = useRootStore($pinia)
   const promises: Promise<void>[] = []
 
-  if (store.state.accessToken === null) {
-    await store.dispatch('loadAccessToken')
+  if (store.accessToken === null) {
+    await store.loadAccessToken()
   }
 
-  if (store.state.isSyncPending === null) {
-    await store.dispatch('loadIsSyncPending')
+  if (store.isSyncPending === null) {
+    await store.loadIsSyncPending()
   }
 
-  if (store.state.articles === null) {
-    promises.push(store.dispatch('fetchArticles'))
+  if (store.articles === null) {
+    promises.push(store.fetchArticles())
   }
-  if (store.state.categories === null) {
-    promises.push(store.dispatch('fetchCategories'))
+  if (store.categories === null) {
+    promises.push(store.fetchCategories())
   }
-  if (store.state.isInventoryActive === null) {
-    promises.push(store.dispatch('fetchIsInventoryActive'))
+  if (store.isInventoryActive === null) {
+    promises.push(store.fetchIsInventoryActive())
   }
 
   return Promise.all(promises)

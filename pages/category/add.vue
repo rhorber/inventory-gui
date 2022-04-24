@@ -1,9 +1,10 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'pinia'
 
 import AppLayoutForm from '~/components/AppLayoutForm.vue'
 import CategoryForm from '~/components/CategoryForm.vue'
+import { useRootStore } from '~/stores/root'
 import { Category } from '~/types/entities'
 import { EmptyResponse } from '~/types/api'
 
@@ -13,7 +14,7 @@ export default Vue.extend({
     CategoryForm
   },
   methods: {
-    ...mapMutations(['resetCategories']),
+    ...mapActions(useRootStore, ['resetCategories']),
     addCategory(data: Category): void {
       // TODO: Can that be combined with the saveCategory method in the edit page?
       const category: Category = {

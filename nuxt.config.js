@@ -58,7 +58,10 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    // https://composition-api.nuxtjs.org/getting-started/setup#quick-start
+    '@nuxtjs/composition-api/module',
+    ['@pinia/nuxt']
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

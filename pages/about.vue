@@ -1,12 +1,12 @@
 <script lang="ts">
 import Vue from 'vue'
+import { mapState } from 'pinia'
+
+import { useRootStore } from '~/stores/root'
 
 export default Vue.extend({
-  data() {
-    return {
-      accessToken: this.$store.state.accessToken,
-      isSyncPending: this.$store.state.isSyncPending
-    }
+  computed: {
+    ...mapState(useRootStore, ['accessToken', 'isSyncPending'])
   }
 })
 </script>

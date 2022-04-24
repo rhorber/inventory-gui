@@ -1,8 +1,9 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 
 import AppLayoutList from '~/components/AppLayoutList.vue'
+import { useRootStore } from '~/stores/root'
 import { Category } from '~/types/entities'
 import { CategoryMoveResponse } from '~/types/api'
 import { BTableColumn, HtmlAttrs } from '~/types/buefy'
@@ -13,14 +14,14 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(['categories']),
+    ...mapState(useRootStore, ['categories']),
     highestCategoryIndex(): number {
-      return (this.categories.length - 1)
+      return ((this.categories?.length ?? 0) - 1)
     }
   },
 
   methods: {
-    ...mapMutations(['replaceCategory']),
+    ...mapActions(useRootStore, ['replaceCategory']),
     vCenteredAttrs(_row: Category, _column: BTableColumn): HtmlAttrs {
       return {
         class: 'is-vcentered'

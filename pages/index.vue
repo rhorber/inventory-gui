@@ -1,8 +1,9 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'pinia'
 
 import ArticlesPage from '~/components/ArticlesPage.vue'
+import { useRootStore } from '~/stores/root'
 import { Article, Lot } from '~/types/entities'
 
 export default Vue.extend({
@@ -17,9 +18,12 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(['articles']),
-    ...mapGetters(['categoriesMap']),
+    ...mapState(useRootStore, ['articles', 'categoriesMap']),
     filteredArticles(): Article[] {
+      if (this.articles === null) {
+        return []
+      }
+
       if (this.hideStockZero === false) {
         return this.articles
       }
@@ -43,12 +47,12 @@ export default Vue.extend({
       return [...this.filteredArticles].sort(
         (article1: Article, article2: Article): number => {
           if (article1.category === article2.category) {
-            return ((article1.position || 0) - (article2.position || 0))
+            return ((article1.position ?? 0) - (article2.position ?? 0))
           } else {
             const category1 = this.categoriesMap[article1.category]
             const category2 = this.categoriesMap[article2.category]
 
-            return (category1.position - category2.position)
+            return ((category1.position ?? 0) - (category2.position ?? 0))
           }
         }
       )

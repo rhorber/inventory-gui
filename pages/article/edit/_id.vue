@@ -1,10 +1,11 @@
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions } from 'pinia'
 import { Context } from '@nuxt/types'
 
 import AppLayoutForm from '~/components/AppLayoutForm.vue'
 import ArticleForm from '~/components/ArticleForm.vue'
+import { useRootStore } from '~/stores/root'
 import { Article } from '~/types/entities'
 import { EmptyResponse } from '~/types/api'
 
@@ -46,8 +47,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapMutations(['resetArticles', 'replaceArticle']),
-    ...mapActions(['addToSyncQueue']),
+    ...mapActions(useRootStore, ['addToSyncQueue', 'replaceArticle', 'resetArticles']),
     saveArticle(data: Article): void {
       // TODO: Can that be combined with the addArticle method in the add page?
       const article: Article = {

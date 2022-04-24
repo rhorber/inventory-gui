@@ -1,5 +1,8 @@
 <script lang="ts">
 import Vue from 'vue'
+import { mapActions } from 'pinia'
+
+import { useRootStore } from '~/stores/root'
 
 export default Vue.extend({
   layout: 'login',
@@ -9,8 +12,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    ...mapActions(useRootStore, ['saveAccessToken']),
     login(): void {
-      this.$store.dispatch('saveAccessToken', this.accessToken)
+      this.saveAccessToken(this.accessToken)
         .then((): void => {
           this.$router.push('/')
         })

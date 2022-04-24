@@ -1,7 +1,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
 
+import { useRootStore } from '~/stores/root'
 import { Article, Lot } from '~/types/entities'
 import { ArticlesMoveResponse } from '~/types/api'
 import { BTableColumn, HtmlAttrs } from '~/types/buefy'
@@ -15,15 +16,14 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState(['isInventoryActive']),
+    ...mapState(useRootStore, ['isInventoryActive']),
     highestArticleIndex(): number {
       return (this.articles.length - 1)
     }
   },
 
   methods: {
-    ...mapMutations(['replaceArticle', 'replaceLot']),
-    ...mapActions(['addToSyncQueue']),
+    ...mapActions(useRootStore, ['addToSyncQueue', 'replaceArticle', 'replaceLot']),
     hiddenAttrs(_column: BTableColumn): HtmlAttrs {
       return {
         class: 'is-hidden'
