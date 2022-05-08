@@ -211,7 +211,13 @@ export default Vue.extend({
 
       const article: Article = Object.assign({}, this.dataArticle, { lots: [], size: 0 })
       const timestamp = Math.floor(Date.now() / 1000)
-      const size = this.dataArticle.size as string
+
+      let size: number
+      if (typeof this.dataArticle.size === 'string') {
+        size = Number.parseFloat(this.dataArticle.size)
+      } else {
+        size = this.dataArticle.size
+      }
 
       if (article.category === undefined || article.category === -1) {
         return
@@ -228,7 +234,7 @@ export default Vue.extend({
       article.lots.sort(
         (lot1: Lot, lot2: Lot): number => lot1.position - lot2.position
       )
-      article.size = Number.parseInt(size, 10)
+      article.size = size
 
       this.$emit('formSubmitted', article)
     },
