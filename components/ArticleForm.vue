@@ -81,9 +81,17 @@ export default Vue.extend({
       }
     }
 
+    // Set date range from 01.01. of current year - 4 at 00:00:00
+    // to 31.12. of current year + 5 at 23:59:59 (+6 years -1 second).
+    const currentYear = new Date().getFullYear()
+    const minDate = new Date(currentYear - 4, 0)
+    const maxDate = new Date(currentYear + 6, 0, 1, 0, 0, -1)
+
     return {
       dataArticle: article,
       units: units,
+      bestBeforeMinDate: minDate,
+      bestBeforeMaxDate: maxDate,
       gtin: '',
       scanner: false
     }
@@ -334,6 +342,8 @@ export default Vue.extend({
               v-model="row.best_before.date"
               :type="row.best_before.isMonth ? 'month' : undefined"
               :mobile-native="false"
+              :min-date="bestBeforeMinDate"
+              :max-date="bestBeforeMaxDate"
               append-to-body
               @input="setBestBeforeText(row.best_before)"
             >
