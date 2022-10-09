@@ -15,7 +15,7 @@
     "precommit": "npm run lint"
   },
   "engines": {
-    "node": "14.x || 16.x",
+    "node": "16.x",
     "yarn": "1.x"
   },
   "dependencies": {
