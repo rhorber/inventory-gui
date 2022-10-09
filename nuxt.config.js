@@ -77,6 +77,13 @@ export default {
     debug: !isProduction
   },
 
+  // Runtime config: https://nuxtjs.org/docs/directory-structure/nuxt-config#runtimeconfig
+  publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.API_BASE_URL || 'http://inventory-api.example.com/api/'
+    }
+  },
+
   // TypeScript module configuration: https://typescript.nuxtjs.org/guide/setup/#module-options
   typescript: {
     // Enable runtime line (https://typescript.nuxtjs.org/guide/lint/#runtime-lint)
