@@ -1,4 +1,4 @@
-import { CameraDevice } from 'html5-qrcode/core'
+import { CameraDevice } from 'html5-qrcode/camera/core'
 
 import { Article, Category } from '~/types/entities'
 
