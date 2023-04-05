@@ -23,7 +23,6 @@
     "@nuxtjs/composition-api": "^0.33.1",
     "@pinia/nuxt": "0.2.1",
     "buefy": "^0.9.23",
-    "core-js": "^3.19.3",
     "html5-qrcode": "^2.3.7",
     "nuxt": "2.16.3",
     "pinia": "^2.0.33",
@@ -39,7 +38,6 @@
     "eslint": "^8.37.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-vue": "^9.10.0",
-    "event-stream": "4.0.1",
     "sass": "^1.49.9",
     "sass-loader": "^10.1.1"
   }
